@@ -483,7 +483,7 @@ AIO_fnc_spawnHCGroups =
 	{
 		private "_name";
 		_unit = _groups select _i;
-		_dist = player distance2D (leader _unit);
+		_dist = floor (player distance2D (leader _unit));
 		_mod = (_i + 1) mod 11;
 		if (_mod == 0) then {_mod = 11};
 		_text = format ["%1 - %2 m", _unit, _dist];
