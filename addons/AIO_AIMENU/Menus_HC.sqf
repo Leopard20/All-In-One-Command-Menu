@@ -5,6 +5,7 @@ AIO_recruit_array = [];
 AIO_dismiss_array = [];
 AIO_leader_array = [];
 AIO_monitor_array = [];
+AIO_HCgroup_array = [];
 
 _cntMenus = floor (_cntU/11) + 1;
 for "_i" from 1 to (_cntMenus) do
@@ -20,14 +21,14 @@ for "_i" from 0 to (_cntU - 1) do
 	_mod = (_i + 1) mod 11;
 	if (_mod == 0) then {_mod = 11};
 	_text = format ["%1 - %2", _number, name _unit];
-	AIO_dismiss_array set [_i, _unit];
-	_text1 = format ['AIO_squadDismiss_subMenu%1 set [%2, ["%3", [], "", -5, [["expression", "[%5] call AIO_fnc_dismiss; [%1, %2, 0] call AIO_disableMenu"]], "1", "1"]]', _menuNum , _mod, _text, _unit, _i];
-	_text2 = format ['AIO_squadDismiss_subMenu%1 set [%2, ["%3", [], "", -5, [["expression", ""]], "1", "0"]]', _menuNum , _mod, _text];
+	AIO_dismiss_array pushBack _unit;
+	_text1 = format ['AIO_squadDismiss_subMenu%1 pushBack ["%3", [], "", -5, [["expression", "[%5] call AIO_fnc_dismiss; [%1, %2, 0] call AIO_disableMenu"]], "1", "1"]', _menuNum , _mod, _text, _unit, _i];
+	_text2 = format ['AIO_squadDismiss_subMenu%1 pushBack ["%3", [], "", -5, [["expression", ""]], "1", "0"]', _menuNum , _mod, _text];
 	if (_unit != player) then {call compile _text1} else {call compile _text2};
 	if (_mod == 11 && (_cntU - 1) != _i) then {
-		_text1 = format ['AIO_squadDismiss_subMenu%1 set [%2, ["___________", [], "", -5, [["expression", ""]], "1", "0"]]', _menuNum , 12];
+		_text1 = format ['AIO_squadDismiss_subMenu%1 pushBack ["___________", [], "", -5, [["expression", ""]], "1", "0"]', _menuNum , 12];
 		call compile _text1;
-		_text2 = format ['AIO_squadDismiss_subMenu%1 set [%2, ["Next >>", [], "#USER:AIO_squadDismiss_subMenu%3", -5, [["expression", ""]], "1", "1"]]', _menuNum , 13 , (_menuNum + 1)];
+		_text2 = format ['AIO_squadDismiss_subMenu%1 pushBack ["Next >>", [], "#USER:AIO_squadDismiss_subMenu%3", -5, [["expression", ""]], "1", "1"]', _menuNum , 13 , (_menuNum + 1)];
 		_menuNum = _menuNum + 1;
 		call compile _text2;
 	};	
@@ -40,19 +41,21 @@ for "_i" from 1 to (_cntMenus) do
 };
 for "_i" from 0 to (_cntU - 1) do
 {
+	private "_name";
 	_unit = _units select _i;
 	_number = [_unit] call AIO_getUnitNumber;
 	_mod = (_i + 1) mod 11;
 	if (_mod == 0) then {_mod = 11};
-	_text = format ["%1 - %2", _number, name _unit];
-	AIO_leader_array set [_i, _unit];
-	_text1 = format ['AIO_giveLead_subMenu%1 set [%2, ["%3", [], "", -5, [["expression", "[%5] call AIO_fnc_makeLeader"]], "1", "1"]]', _menuNum , _mod, _text, _unit, _i];
-	_text2 = format ['AIO_giveLead_subMenu%1 set [%2, ["%3", [], "", -5, [["expression", ""]], "1", "0"]]', _menuNum , _mod, _text];
+	if (_unit == player) then {_name = format ["%1 (Player)", (name _unit)]} else {_name = name _unit};
+	_text = format ["%1 - %2", _number, _name];
+	AIO_leader_array pushBack _unit;
+	_text1 = format ['AIO_giveLead_subMenu%1 pushBack ["%3", [], "", -5, [["expression", "[%5] call AIO_fnc_makeLeader"]], "1", "1"]', _menuNum , _mod, _text, _unit, _i];
+	_text2 = format ['AIO_giveLead_subMenu%1 pushBack ["%3", [], "", -5, [["expression", ""]], "1", "0"]', _menuNum , _mod, _text];
 	if (_unit != leader (group player)) then {call compile _text1} else {call compile _text2};
 	if (_mod == 11 && (_cntU - 1) != _i) then {
-		_text1 = format ['AIO_giveLead_subMenu%1 set [%2, ["___________", [], "", -5, [["expression", ""]], "1", "0"]]', _menuNum , 12];
+		_text1 = format ['AIO_giveLead_subMenu%1 pushBack ["___________", [], "", -5, [["expression", ""]], "1", "0"]', _menuNum , 12];
 		call compile _text1;
-		_text2 = format ['AIO_giveLead_subMenu%1 set [%2, ["Next >>", [], "#USER:AIO_giveLead_subMenu%3", -5, [["expression", ""]], "1", "1"]]', _menuNum , 13 , (_menuNum + 1)];
+		_text2 = format ['AIO_giveLead_subMenu%1 pushBack ["Next >>", [], "#USER:AIO_giveLead_subMenu%3", -5, [["expression", ""]], "1", "1"]', _menuNum , 13 , (_menuNum + 1)];
 		_menuNum = _menuNum + 1;
 		call compile _text2;
 	};	
@@ -71,14 +74,14 @@ for "_i" from 0 to (_cntU - 1) do
 	_mod = (_i + 1) mod 11;
 	if (_mod == 0) then {_mod = 11};
 	_text = format ["%1 - %2", _number, name _unit];
-	AIO_monitor_array set [_i, _unit];
-	_text1 = format ['AIO_monitor_subMenu%1 set [%2, ["%3", [], "", -5, [["expression", "[%5] spawn AIO_fnc_monitorUnit; hint ""Press the Menu Key again to Exit"" "]], "1", "1"]]', _menuNum , _mod, _text, _unit, _i];
-	_text2 = format ['AIO_monitor_subMenu%1 set [%2, ["%3", [], "", -5, [["expression", ""]], "1", "0"]]', _menuNum , _mod, _text];
+	AIO_monitor_array pushBack _unit;
+	_text1 = format ['AIO_monitor_subMenu%1 pushBack ["%3", [], "", -5, [["expression", "[%5] spawn AIO_fnc_monitorUnit; hint ""Press the Menu Key again to Exit"" "]], "1", "1"]', _menuNum , _mod, _text, _unit, _i];
+	_text2 = format ['AIO_monitor_subMenu%1 pushBack ["%3", [], "", -5, [["expression", ""]], "1", "0"]', _menuNum , _mod, _text];
 	if (_unit != leader (group player)) then {call compile _text1} else {call compile _text2};
 	if (_mod == 11 && (_cntU - 1) != _i) then {
-		_text1 = format ['AIO_monitor_subMenu%1 set [%2, ["___________", [], "", -5, [["expression", ""]], "1", "0"]]', _menuNum , 12];
+		_text1 = format ['AIO_monitor_subMenu%1 pushBack ["___________", [], "", -5, [["expression", ""]], "1", "0"]', _menuNum , 12];
 		call compile _text1;
-		_text2 = format ['AIO_monitor_subMenu%1 set [%2, ["Next >>", [], "#USER:AIO_monitor_subMenu%3", -5, [["expression", ""]], "1", "1"]]', _menuNum , 13 , (_menuNum + 1)];
+		_text2 = format ['AIO_monitor_subMenu%1 pushBack ["Next >>", [], "#USER:AIO_monitor_subMenu%3", -5, [["expression", ""]], "1", "1"]', _menuNum , 13 , (_menuNum + 1)];
 		_menuNum = _menuNum + 1;
 		call compile _text2;
 	};	
@@ -105,13 +108,13 @@ for "_i" from 0 to (_cntU - 1) do
 	_mod = ((_i + 1) mod 8) + 3;
 	if (_mod == 3) then {_mod = 11};
 	_text = format ["%3 m - %1 - %2", name _unit, _group, floor(_unit distance player)];
-	AIO_recruit_array set [_i, _unit];
-	_text1 = format ['AIO_recruit_subMenu%1 set [%2, ["%3", [], "", -5, [["expression", "[%6] call AIO_fnc_recruit1; [%1, %2, 1] call AIO_disableMenu"]], "1", "1"]]', _menuNum , _mod, _text, _unit, _group, _i];
+	AIO_recruit_array pushBack _unit;
+	_text1 = format ['AIO_recruit_subMenu%1 pushBack ["%3", [], "", -5, [["expression", "[%6] call AIO_fnc_recruit1; [%1, %2, 1] call AIO_disableMenu"]], "1", "1"]', _menuNum , _mod, _text, _unit, _group, _i];
 	call compile _text1;
 	if (_mod == 11 && (_cntU - 1) != _i) then {
-		_text1 = format ['AIO_recruit_subMenu%1 set [%2, ["__________________", [], "", -5, [["expression", ""]], "1", "0"]]', _menuNum , 12];
+		_text1 = format ['AIO_recruit_subMenu%1 pushBack ["__________________", [], "", -5, [["expression", ""]], "1", "0"]', _menuNum , 12];
 		call compile _text1;
-		_text2 = format ['AIO_recruit_subMenu%1 set [%2, ["Next >>", [], "#USER:AIO_recruit_subMenu%3", -5, [["expression", ""]], "1", "1"]]', _menuNum , 13, (_menuNum + 1)];
+		_text2 = format ['AIO_recruit_subMenu%1 pushBack ["Next >>", [], "#USER:AIO_recruit_subMenu%3", -5, [["expression", ""]], "1", "1"]', _menuNum , 13, (_menuNum + 1)];
 		_menuNum = _menuNum + 1;
 		call compile _text2;
 	};	
@@ -160,9 +163,10 @@ AIO_HighCommand_Menu =
 	["Recruit Units", [3], "#USER:AIO_recruit_subMenu1", -5, [["expression", ""]], "1", "1"],
 	["Create Support Group", [4], "#USER:AIO_supportTypes_subMenu", -5, [["expression", ""]], "1", "1"],
 	["Select Squad Leader", [5], "#USER:AIO_giveLead_subMenu1", -5, [["expression", ""]], "1", "1"],
+	["Add HC Group To Player", [6], "", -5, [["expression", "[] spawn AIO_fnc_spawnHCGroups"]], "1", "1"],
 	["_____________", [], "", -5, [["expression", ""]], "1", "0"],
-	["Monitor Squad Units", [6], "#USER:AIO_monitor_subMenu1", -5, [["expression", ""]], "1", "1"],
+	["Monitor Squad Units", [7], "#USER:AIO_monitor_subMenu1", -5, [["expression", ""]], "1", "1"],
 	["_____________", [], "", -5, [["expression", ""]], "1", "0"],
-	["Backup Mode", [7], "#USER:AIO_backup_subMenu", -5, [["expression", ""]], "1", "1"]
+	["Backup Mode", [8], "#USER:AIO_backup_subMenu", -5, [["expression", ""]], "1", "1"]
 ];
 showCommandingMenu "#USER:AIO_HighCommand_Menu";
