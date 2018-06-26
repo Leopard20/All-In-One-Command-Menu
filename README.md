@@ -9,6 +9,7 @@ You can contribute to the project by:
 2. Submitting issues and bugs
 3. Submitting feature requests
 
-Fixing bugs is always welcome! If you want to add a new feature yourself, remember to:
-1. Create a Feature Request in the issues section, and mention the changes you want to make.
-2. Make sure your changes do minimal changes to the original scripts (those made by WindWalking)
+Fixing bugs is always welcome! If you want to add a new feature yourself, be sure to:
+1. Remember the limitations of the mod. This mod uses simple CommandingMenus and not all features can be implemented.
+2. Create a Feature Request in the issues section, and mention the changes you want to make.
+3. Make sure your changes do minimal changes to the original scripts (those made by WindWalking)
