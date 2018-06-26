@@ -3,26 +3,23 @@ private ["_selectedUnits", "_target", "_leader"];
 _selectedUnits = _this select 0;
 _target = _this select 1;
 
-_leader = _selectedUnits select 0;
-//_selectedUnits commandFollow _target;
+_AIO_followFnc =
 {
-	if(_leader != _x) then
+	params ["_unit", "_target"];
+	doStop _unit;
+	sleep 0.5;
+	private _tarPos = getPos _target;
+	_unit moveTo _tarPos;
+	while {(alive _unit) && (alive _target) && (_unit distance _target > 0)} do
 	{
-		_x doFollow _leader;
+		if (currentCommand _unit != "STOP") exitWith {_unit doFollow player};
+		if (_target distance _tarPos > 5) then {
+			_tarPos = getPos _target;
+			_unit moveTo _tarPos;
+			sleep 1;
+		};
 	};
-	//_x commandFollow _target;
-}foreach _selectedUnits;
-
-while {true} do
-{
-	//hint str(expectedDestination (_selectedUnits select 1));
-	if (formationLeader (_selectedUnits select 1) == _leader) then
-	{
-		hint "following";
-	}
-	else
-	{
-		hint "returning";
-	};
-	sleep 1;
 };
+{
+[_x, _target] spawn _AIO_followFnc;
+} forEach _selectedUnits;

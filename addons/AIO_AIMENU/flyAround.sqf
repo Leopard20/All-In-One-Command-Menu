@@ -4,11 +4,11 @@ _selectedUnits = _this select 0;
 _radius = _this select 1;
 _selectedVehicles = [];
 
-openMap true;
+if !(visibleMap) then {openMap true};
 
 titleText ["Click on the map to select Area to fly around", "PLAIN"];
 
-ww_flyAroundHeli =
+AIO_flyAroundHeli =
 {
 	private ["_heli", "_pos", "_inc", "_many", "_wppos", "_cnt", "_cancelFlyAround", "_marker"];
 	
@@ -20,21 +20,21 @@ ww_flyAroundHeli =
 
 	_ang = 360 - (getDir _heli);
 	
-	_rad = (_heli getVariable ["ww_flyAroundRadius", 200])+100;
+	_rad = (_heli getVariable ["AIO_flyAroundRadius", 200])+100;
 	
 	_cancelFlyAround = false;
 	
 	_wppos = [];
 	//_heli doMove (_pos);
 	
-	_marker  =  createMarker [format["ww_flyAround_%1", random 100],_pos];
+	_marker  =  createMarker [format["AIO_flyAround_%1", random 100],_pos];
 	_marker setMarkerShape "ELLIPSE";
 	_marker setMarkerSize [_rad-100, _rad-100];
 	
 	
 	for "_x" from 1 to _many do 
 	{
-		_rad = (_heli getVariable ["ww_flyAroundRadius", 200])+100;
+		_rad = (_heli getVariable ["AIO_flyAroundRadius", 200])+100;
 		
 		_a = (_pos select 0)+(sin(_ang)*_rad);
 		_b = (_pos select 1)+(cos(_ang)*_rad);
@@ -50,13 +50,13 @@ ww_flyAroundHeli =
 		sleep 0.05;
 	};
 	
-	_heli doMove [(_wppos select 0) select 0,(_wppos select 0) select 1, _heli getVariable["ww_flightHeight", 100]];
+	_heli doMove [(_wppos select 0) select 0,(_wppos select 0) select 1, _heli getVariable["AIO_flightHeight", 100]];
 	waitUntil {(expectedDestination (driver _heli)) select 1 != "DoNotPlan"};
 	
 	while {!_cancelFlyAround} do{
 		_cnt = 1;
 		{
-			_heli doMove [_x select 0,_x select 1, _heli getVariable["ww_flightHeight", 100]];
+			_heli doMove [_x select 0,_x select 1, _heli getVariable["AIO_flightHeight", 100]];
 			waitUntil {(expectedDestination (driver _heli)) select 1 != "DoNotPlan"};
 			while {((getPos _heli) distance [_x select 0,_x select 1, (getPos _heli) select 2]) >120 && alive _heli} do {
 				_destination = expectedDestination (driver _heli);
@@ -85,7 +85,7 @@ ww_flyAroundHeli =
 	};
 };
 
-ww_organizeFlyingAround =
+AIO_organizeFlyingAround =
 {
 	private ["_pos", "_selectedVehicles"];
 	_pos = _this select 0;
@@ -95,7 +95,7 @@ ww_organizeFlyingAround =
 	titleFadeOut 2;
 	
 	{
-		[_x, _pos] spawn ww_flyAroundHeli;
+		[_x, _pos] spawn AIO_flyAroundHeli;
 	} foreach _selectedVehicles;
 	
 	true;
@@ -107,15 +107,16 @@ ww_organizeFlyingAround =
 		if(!((vehicle _x) in _selectedVehicles) && (vehicle _x) isKindOf "Air") then
 		{
 			_selectedVehicles set [count _selectedVehicles, vehicle _x];
-			_x setVariable ["ww_flyAroundRadius", _radius];
+			_x setVariable ["AIO_flyAroundRadius", _radius];
 		};
 	}
 } foreach _selectedUnits;
 
-ww_selectedAircrafts= _selectedVehicles;
-
-onMapSingleClick "[_pos, ww_selectedAircrafts] call ww_organizeFlyingAround;";
+AIO_selectedAircrafts= _selectedVehicles;
+private _units = [];
+["AIO_organizeFlyingAround_singleClick", "onMapSingleClick", {private _cnt = count _this; [_this select 1, _this select (_cnt - 1)] spawn AIO_organizeFlyingAround}, (_this + [AIO_selectedAircrafts])] call BIS_fnc_addStackedEventHandler;
+//onMapSingleClick "[_pos, AIO_selectedAircrafts] call AIO_organizeFlyingAround;";
 
 waitUntil {!visibleMap};
-
-onMapSingleClick "";
+["AIO_organizeFlyingAround_singleClick", "onMapSingleClick"] call BIS_fnc_removeStackedEventHandler;
+//onMapSingleClick "";

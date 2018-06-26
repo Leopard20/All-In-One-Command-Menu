@@ -4,16 +4,16 @@ private ["_marker1","_unit"];
 //_marker1 = _this select 0;
 //_unit = _this select 1;
 
-ww_unitLineEvents =
+AIO_unitLineEvents =
 {
 	_unit = _this select 0;
 	
-	_marker1 = _unit getVariable ["ww_destinationWP", "none"];
+	_marker1 = _unit getVariable ["AIO_destinationWP", "none"];
 	
 	_str = format["[%1,%2] call drawLineToUnit;",str(getMarkerPos _marker1),str(getPos _unit) ];
     _eventID = ((findDisplay 12) displayCtrl 51) ctrlAddEventHandler  [ "Draw", _str ];
 	
-	/*if( ((findDisplay 12) displayCtrl 51) != ((findDisplay 12) displayCtrl 51) || (((getMarkerPos _marker1)select 0) == 0 && ((getMarkerPos _marker1)select 1) == 0) || _unit getVariable["ww_wpActive",0]!=1) exitWith
+	/*if( ((findDisplay 12) displayCtrl 51) != ((findDisplay 12) displayCtrl 51) || (((getMarkerPos _marker1)select 0) == 0 && ((getMarkerPos _marker1)select 1) == 0) || _unit getVariable["AIO_wpActive",0]!=1) exitWith
 	{
 		((findDisplay 12) displayCtrl 51) ctrlRemoveEventHandler ["Draw",_eventID];
 	};*/
@@ -21,7 +21,7 @@ ww_unitLineEvents =
 	((findDisplay 12) displayCtrl 51) ctrlRemoveEventHandler ["Draw",_eventID];
 };
 
-ww_drawLinesUnit =
+AIO_drawLinesUnit =
 {
 
 private ["_marker1","_unit"];
@@ -42,7 +42,7 @@ drawLineToUnit = {
 while {true} do
 {
 	{
-		[_x] spawn ww_unitLineEvents;
+		[_x] spawn AIO_unitLineEvents;
 	}foreach (units (group player));
 	sleep 0.5;
 
@@ -50,4 +50,4 @@ while {true} do
 
 };
 
-[] spawn ww_drawLinesUnit;
+[] spawn AIO_drawLinesUnit;

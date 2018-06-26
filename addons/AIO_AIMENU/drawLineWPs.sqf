@@ -38,11 +38,11 @@ drawLineToWP = {
 			};
 			
 		};
-	}foreach ww_WayPoint_markers ;
+	}foreach AIO_WayPoint_markers ;
 	
 };
 
-ww_drawLines =
+AIO_drawLines =
 {
 
 while {true} do
@@ -60,4 +60,4 @@ while {true} do
 
 };
 
-[] spawn ww_drawLines;
+[] spawn AIO_drawLines;

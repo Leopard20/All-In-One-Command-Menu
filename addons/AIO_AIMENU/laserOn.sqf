@@ -4,5 +4,5 @@ _selectedUnits = _this select 0;
 _isOn = _this select 1;
 
 {
-	(_x) enableIRLasers _isOn;
+	_x enableIRLasers _isOn;
 }foreach _selectedUnits;

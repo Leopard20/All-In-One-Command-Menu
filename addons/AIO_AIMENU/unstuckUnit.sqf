@@ -4,7 +4,7 @@ private ["_selectedUnits","_selectedVehicles"];
 _selectedUnits = _this select 0;
 _selectedVehicles = [];
 
-ww_unstuckPlayer =
+AIO_unstuckPlayer =
 {
 	_position = (getPos player) findEmptyPosition[ 5 , 100 , typeOf _unit ];
 	_ATLPosition = ASLToATL _position;
@@ -12,7 +12,7 @@ ww_unstuckPlayer =
 	player setPos _position;
 };
 
-ww_unstuckUnit = 
+AIO_unstuckUnit = 
 {
 	private ["_unit","_position"];
 	
@@ -36,7 +36,7 @@ ww_unstuckUnit =
 	};
 };
 
-ww_unstuckVehicle = 
+AIO_unstuckVehicle = 
 {
 	private ["_vehicle","_position"];
 	
@@ -60,7 +60,7 @@ ww_unstuckVehicle =
 	}
 	else
 	{
-		[_x] spawn ww_unstuckUnit;
+		[_x] spawn AIO_unstuckUnit;
 	};
 } foreach _selectedUnits;
 
@@ -75,12 +75,12 @@ if(count _selectedUnits == 0) then
 	}
 	else
 	{
-		[player] spawn ww_unstuckUnit;
+		[player] spawn AIO_unstuckUnit;
 	};
 };
 
 {
 	//_vehicle = (vehicle _x);
-	[_x] spawn ww_unstuckVehicle;
+	[_x] spawn AIO_unstuckVehicle;
 	sleep 2;
 } foreach _selectedVehicles;

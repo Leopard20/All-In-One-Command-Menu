@@ -1,44 +1,22 @@
 disableSerialization;
-waitUntil {!isNull(findDisplay 46)};  
-_display = findDisplay 46;
-_display displayAddEventHandler ["KeyDown","_this call ww_keyspressed"];
-
-ww_key = getnumber(configfile>> "WW_AIMENU_Key_Setting"  >> "ww_key");
 
 waitUntil {!isNull(findDisplay 12)}; 
 
-ww_WayPoint_markers = [ [[["",[]]],[],"empty"],
+AIO_WayPoint_markers = [ [[["",[]]],[],"empty"],
 						[[["",[]]],[],"empty"],[[["",[]]],[],"empty"],[[["",[]]],[],"empty"],[[["",[]]],[],"empty"],
 						[[["",[]]],[],"empty"],[[["",[]]],[],"empty"],[[["",[]]],[],"empty"],[[["",[]]],[],"empty"],
 						[[["",[]]],[],"empty"],[[["",[]]],[],"empty"],[[["",[]]],[],"empty"],[[["",[]]],[],"empty"],
 						[[["",[]]],[],"empty"],[[["",[]]],[],"empty"],[[["",[]]],[],"empty"],[[["",[]]],[],"empty"],[[["",[]]],[],"empty"]];
-//ww_key = 73;
 
-ww_keyspressed = {
-	private['_handled',"_key"];
-	_handled = false;
-	
-	_key = _this select 0;
-	
-	switch (_this select 1) do
-	{
-		case ww_key: 
-		{
-            [] execVM "WW_AIMENU\Menus.sqf";
-		};
-		
-		/*case 73: 
-		{
-            [] execVM "WW_AIMENU\Menus.sqf";
-		};*/
-	};
-	_handled;
+AIO_keyspressed = {
+	if (AIO_monitoring_enabled) exitWith {AIO_monitoring_disabled = true};
+	if (hcShownBar) then {[] execVM "AIO_AIMENU\Menus_HC.sqf"} else {[] execVM "AIO_AIMENU\Menus.sqf"};
 };
 
-[_this select 0] execVM "WW_AIMENU\reloadMenu.sqf";
+[_this select 0] execVM "AIO_AIMENU\reloadMenu.sqf";
 
-0 = [] execVM "WW_AIMENU\drawLineWPs.sqf";
-0 = [] execVM "WW_AIMENU\drawLineUnitMarker.sqf";
+0 = [] execVM "AIO_AIMENU\drawLineWPs.sqf";
+0 = [] execVM "AIO_AIMENU\drawLineUnitMarker.sqf";
 
-sleep 5;
-player sideChat format["%1", "initialized"]; 
+sleep 4;
+player sideChat "AIO Initialized"; 

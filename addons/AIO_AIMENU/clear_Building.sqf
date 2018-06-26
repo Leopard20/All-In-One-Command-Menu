@@ -3,7 +3,7 @@ private ["_selectedUnits","_target", "_pos","_house","_m","_cnt"];
 _selectedUnits = _this select 0;
 _target = _this select 1;
 
-ww_clearBuilding =
+AIO_clearBuilding =
 {
 	private["_unit","_buildingPosCnt", "_currentBP", "_building"];
 	_unit = _this select 0;
@@ -38,6 +38,6 @@ _m = _m - 1;
 if (_m > 0) then
 {
 	{
-		[_x, _m, _target] spawn ww_clearBuilding;
+		[_x, _m, _target] spawn AIO_clearBuilding;
 	}foreach _selectedUnits;
 };

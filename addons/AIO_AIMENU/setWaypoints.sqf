@@ -1,30 +1,31 @@
+params ["_selectedUnits", "_cursorT"];
 private ["_selectedUnits", "_wayPoints", "_unitReachedWP", "_cancelWP", "_currentEmptySlot", "_formationLeader"];
 
-_selectedUnits = _this select 0;
+//_selectedUnits = _this select 0;
 _wayPoints = [];
 _unitReachedWP = [];
 
-ww_cancelWP = false;
+AIO_cancelWP = false;
 _cancelWP = false;
 openMap true;
 
-titleText ["Click on the map to set way points in order. Close map when done to execute.", "PLAIN"];
+titleText ["Click on the map to set waypoints in order. Close map when done to execute.", "PLAIN"];
 
-ww_createWayPoint =
+AIO_createWayPoint =
 {
 	private ["_pos","_currentEmptySlot", "_selectedUnits", "_wpGroup"];
 	_pos = _this select 0;
 	_currentEmptySlot = _this select 1;
 	_selectedUnits = _this select 2;
 	
-	if((ww_WayPoint_markers select _currentEmptySlot) select 2 == "pending") then
+	if((AIO_WayPoint_markers select _currentEmptySlot) select 2 == "pending") then
 	{
-		(ww_WayPoint_markers select _currentEmptySlot) set [2,"wp"];
+		(AIO_WayPoint_markers select _currentEmptySlot) set [2,"wp"];
 	};
 	
-	_wpGroup = (ww_WayPoint_markers select _currentEmptySlot) select 0;
+	_wpGroup = (AIO_WayPoint_markers select _currentEmptySlot) select 0;
 	
-	_markerName =  format["ww_wayPoint_%1_%2", _currentEmptySlot, count _wpGroup];
+	_markerName =  format["AIO_wayPoint_%1_%2", _currentEmptySlot, count _wpGroup];
 	
 	_marker = createMarkerLocal [_markerName,_pos];
 	
@@ -36,8 +37,8 @@ ww_createWayPoint =
 	
 	/*if(count _wpGroup>0) then
 	{
-		//getMarkerPos (ww_WayPoint_markers select (count ww_WayPoint_markers - 1))
-		[_wpGroup select (count _wpGroup- 1) select 0, _marker] execVM "WW_AIMENU\drawLineWPs.sqf";
+		//getMarkerPos (AIO_WayPoint_markers select (count AIO_WayPoint_markers - 1))
+		[_wpGroup select (count _wpGroup- 1) select 0, _marker] execVM "AIO_AIMENU\drawLineWPs.sqf";
 	};*/
 	
 	_wpGroup set [count _wpGroup, [_markerName,[["move","none"]] ]];
@@ -45,7 +46,7 @@ ww_createWayPoint =
 	true;
 };
 
-//ww_map ctrlMapCursor ["Track","HC_overFriendly"];
+//AIO_map ctrlMapCursor ["Track","HC_overFriendly"];
 
 _currentEmptySlot = 0;
 
@@ -54,23 +55,22 @@ _currentEmptySlot = 0;
 	{
 	};
 	_currentEmptySlot = _currentEmptySlot + 1;
-}forEach ww_WayPoint_markers;
+}forEach AIO_WayPoint_markers;
 
-ww_WayPoint_markers set [_currentEmptySlot, [[],_selectedUnits,"pending"]];
+AIO_WayPoint_markers set [_currentEmptySlot, [[],_selectedUnits,"pending"]];
 
-_onClick = format["[_pos, %1] call ww_createWayPoint;", _currentEmptySlot];
-
-onMapSingleClick _onClick;
+["AIO_createWayPoint_singleClick", "onMapSingleClick", {private _cnt = count _this; [_this select 1, _this select (_cnt - 1)] call AIO_createWayPoint}, (_this + [_currentEmptySlot])] call BIS_fnc_addStackedEventHandler;
 
 
 
 waitUntil {!visibleMap};
 
-onMapSingleClick "";
+//onMapSingleClick "";
+["AIO_createWayPoint_singleClick", "onMapSingleClick"] call BIS_fnc_removeStackedEventHandler;
 
-if ((ww_WayPoint_markers select _currentEmptySlot) select 2 == "pending") then
+if ((AIO_WayPoint_markers select _currentEmptySlot) select 2 == "pending") then
 {
-	ww_WayPoint_markers set [_currentEmptySlot, [["",[]],[],"empty"]];
+	AIO_WayPoint_markers set [_currentEmptySlot, [["",[]],[],"empty"]];
 };
 
 titleFadeOut 1;
@@ -103,13 +103,13 @@ while {true} do
 	_reachedWP = false;
 	
 	{
-		_x setVariable["ww_wpActive",1];
+		_x setVariable["AIO_wpActive",1];
 	}foreach _selectedUnits;
 	
 	if(!_cancelWPs && (((getMarkerPos _wp)select 0) != 0 && ((getMarkerPos _wp)select 1) != 0)) then
 	{
 			_formationLeader doMove (getMarkerPos _wp);
-			_formationLeader setVariable ["ww_destinationWP", _wp];
+			_formationLeader setVariable ["AIO_destinationWP", _wp];
 	};
 	_reachedWP = false;
 	while {!_reachedWP && !_cancelWP && (((getMarkerPos _wp)select 0) != 0 && ((getMarkerPos _wp)select 1) != 0)} do
@@ -122,10 +122,10 @@ while {true} do
 			{
 				//_cancelWP = true;
 				_selectedUnits = _selectedUnits - [_x];
-				(ww_WayPoint_markers select _currentEmptySlot) set [1, ((ww_WayPoint_markers select _currentEmptySlot) select 1)-[_x]];
-				_x setVariable["ww_wpActive",0];
+				(AIO_WayPoint_markers select _currentEmptySlot) set [1, ((AIO_WayPoint_markers select _currentEmptySlot) select 1)-[_x]];
+				_x setVariable["AIO_wpActive",0];
 				
-				if(count ((ww_WayPoint_markers select _currentEmptySlot) select 1) == 0) exitWith
+				if(count ((AIO_WayPoint_markers select _currentEmptySlot) select 1) == 0) exitWith
 				{
 					{
 						doStop _x;
@@ -135,7 +135,7 @@ while {true} do
 					_cancelWPs = true;
 					{
 						deleteMarker (_x select 0);
-					}foreach ((ww_WayPoint_markers select _currentEmptySlot) select 0);
+					}foreach ((AIO_WayPoint_markers select _currentEmptySlot) select 0);
 					sleep 1;
 				};
 			}
@@ -192,20 +192,20 @@ while {true} do
 		{
 		};
 		
-		if (((ww_WayPoint_markers select _currentEmptySlot) select 2) != "cycle") then
+		if (((AIO_WayPoint_markers select _currentEmptySlot) select 2) != "cycle") then
 		{
 			deleteMarker _wp;
 		};
 	};
-}foreach ((ww_WayPoint_markers select _currentEmptySlot) select 0);
+}foreach ((AIO_WayPoint_markers select _currentEmptySlot) select 0);
 
-if (((ww_WayPoint_markers select _currentEmptySlot) select 2) != "cycle" || _cancelWP) exitWith
+if (((AIO_WayPoint_markers select _currentEmptySlot) select 2) != "cycle" || _cancelWP) exitWith
 {
 	{
-		_x setVariable ["ww_destinationWP", "none"];
+		_x setVariable ["AIO_destinationWP", "none"];
 	}foreach _selectedUnits;
 };
 
 };
 
-ww_WayPoint_markers set [_currentEmptySlot, [[],[],"empty"]];
+AIO_WayPoint_markers set [_currentEmptySlot, [[],[],"empty"]];

@@ -1,6 +1,6 @@
-openMap true;
+if !(visibleMap) then {openMap true};
 
-ww_selectWP =
+AIO_selectWP =
 {
 	private ["_pos", "_flags", "_wpGroup", "_wpNum", "_wpObject", "_selectedNode"];
 	_pos = _this select 0;
@@ -37,27 +37,28 @@ ww_selectWP =
 				_wpNum = _wpNum + 1;
 			}foreach (_x select 0);
 		};
-	}foreach ww_WayPoint_markers ;
+	}foreach AIO_WayPoint_markers ;
 	
 	if (count _selectedNode!= 0) then
 	{
-		_marker = createMarkerLocal ["ww_wpMove",(getMarkerPos (_selectedNode select 0))];		
-		"ww_wpMove" setMarkerTypeLocal "mil_circle";
-		"ww_wpMove" setMarkerSizeLocal [0.6, 0.6];
-		"ww_wpMove" setMarkerDirLocal 0;
-		"ww_wpMove" setMarkerColorLocal "ColorOrange";
+		_marker = createMarkerLocal ["AIO_wpMove",(getMarkerPos (_selectedNode select 0))];		
+		"AIO_wpMove" setMarkerTypeLocal "mil_circle";
+		"AIO_wpMove" setMarkerSizeLocal [0.6, 0.6];
+		"AIO_wpMove" setMarkerDirLocal 0;
+		"AIO_wpMove" setMarkerColorLocal "ColorOrange";
 		
 		titleFadeOut 0.5;
 		titleText ["Click on the map to select the new location.", "PLAIN"];
-		
-		_onClick = format["[_pos, %1] call ww_moveWP;", _selectedNode select 0];
-		onMapSingleClick format["[_pos, %1] call ww_moveWP;", str(_selectedNode select 0)];
+		private _units = [];
+		["AIO_moveWP_singleClick", "onMapSingleClick", {private _cnt = count _this; [_this select 1, _this select (_cnt - 1)] spawn AIO_moveWP}, (_this + [str(_selectedNode select 0)])] call BIS_fnc_addStackedEventHandler;
+		//_onClick = format["[_pos, %1] call AIO_moveWP;", _selectedNode select 0];
+		//onMapSingleClick format["[_pos, %1] call AIO_moveWP;", str(_selectedNode select 0)];
 	};
 	
 	true;
 };
 
-ww_moveWP =
+AIO_moveWP =
 {
 	private ["_pos","_marker"];
 	_pos = _this select 0;
@@ -66,24 +67,29 @@ ww_moveWP =
 	titleFadeOut 0.5;
 	titleText ["Click on a WP to move.", "PLAIN"];
 	
-	deleteMarker "ww_wpMove";
+	deleteMarker "AIO_wpMove";
 	
 	_marker setMarkerPos _pos;
 	
-	_onClick = format["[_pos] spawn ww_selectWP;"];
-	onMapSingleClick _onClick;
+	//_onClick = format["[_pos] spawn AIO_selectWP;"];
+	//onMapSingleClick _onClick;
+	private _units = [];
+	["AIO_selectWP_singleClick", "onMapSingleClick", {[_this select 1] spawn AIO_selectWP}, _this] call BIS_fnc_addStackedEventHandler;
+		
 };
 
 titleText ["Click on a WP to move.", "PLAIN"];
 
-_onClick = format["[_pos] spawn ww_selectWP;"];
+//_onClick = format["[_pos] spawn AIO_selectWP;"];
 
-onMapSingleClick _onClick;
-
+//onMapSingleClick _onClick;
+private _units = [];
+["AIO_selectWP_singleClick", "onMapSingleClick", {[_this select 1] spawn AIO_selectWP}, _this] call BIS_fnc_addStackedEventHandler;
 
 
 waitUntil {!visibleMap};
 
-onMapSingleClick "";
-
+//onMapSingleClick "";
+["AIO_moveWP_singleClick", "onMapSingleClick"] call BIS_fnc_removeStackedEventHandler;
+["AIO_selectWP_singleClick", "onMapSingleClick"] call BIS_fnc_removeStackedEventHandler;
 titleFadeOut 0.5;

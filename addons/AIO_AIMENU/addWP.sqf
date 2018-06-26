@@ -1,10 +1,10 @@
 private ["_wpGrp", "_cnt", "_foundGrpNum"];
 
-openMap true;
+if !(visibleMap) then {openMap true};
 
 
 
-ww_selectWP =
+AIO_selectWP =
 {
 	private ["_pos", "_flags", "_wpGroup", "_wpNum", "_wpObject", "_wpGroupNum"];
 	_pos = _this select 0;
@@ -22,34 +22,20 @@ ww_selectWP =
 				if ((getMarkerPos (_x select 0)) distance _pos < 10) then
 				{
 					titleFadeOut 0.5;
-					titleText ["Click on the map to add Way points.", "PLAIN"];
+					titleText ["Click on the map to add Waypoints.", "PLAIN"];
 	
-					_onClick = format["[_pos, %1] spawn ww_createWayPoint;", _wpGroupNum];
-					onMapSingleClick _onClick;
+					//_onClick = format["[_pos, %1] spawn AIO_createWayPoint;", _wpGroupNum];
+					["AIO_createWayPoint_singleClick", "onMapSingleClick", {private _cnt = count _this; [_this select 1, _this select (_cnt - 1)] spawn AIO_createWayPoint}, (_this + [_wpGroupNum])] call BIS_fnc_addStackedEventHandler;
+					//onMapSingleClick _onClick;
 				};
 				_wpNum = _wpNum + 1;
 			}foreach (_x select 0);
 		};
 		_wpGroupNum = _wpGroupNum +1;
-	}foreach ww_WayPoint_markers ;
+	}foreach AIO_WayPoint_markers ;
 	
 	true;
 };
-
-/*ww_addWP =
-{
-	private ["_pos","_marker"];
-	_pos = _this select 0;
-	_marker = _this select 1;
-	
-	_marker setMarkerPos _pos;
-	
-	titleFadeOut 0.5;
-	titleText ["Click on the map to add WPs", "PLAIN"];
-	
-	_onClick = format["[_pos] spawn ww_selectWP;"];
-	onMapSingleClick _onClick;
-};*/
 
 _cnt = 0;
 _wpGrp = 0;
@@ -61,28 +47,31 @@ _foundGrpNum = 0;
 		_foundGrpNum = _wpGrp;
 	};
 	_wpGrp = _wpGrp + 1;
-}foreach ww_WayPoint_markers;
+}foreach AIO_WayPoint_markers;
 
 if (_cnt > 1) then
 {
 	titleFadeOut 0.5;
 	titleText ["Click on a WP to select its WP group to add to", "PLAIN"];
 	
-	_onClick = format["[_pos] spawn ww_selectWP;"];
-	onMapSingleClick _onClick;
+	//_onClick = format["[_pos] spawn AIO_selectWP;"];
+	["AIO_selectWP_singleClick", "onMapSingleClick", {[_this select 1] spawn AIO_selectWP}, _this] call BIS_fnc_addStackedEventHandler;
+	//onMapSingleClick _onClick;
 }
 else
 {
 	titleFadeOut 0.5;
 	titleText ["Click on the map to add Way points.", "PLAIN"];
-	_onClick = format["[_pos, %1] spawn ww_createWayPoint;", _foundGrpNum];
-	onMapSingleClick _onClick;
+	//_onClick = format["[_pos, %1] spawn AIO_createWayPoint;", _foundGrpNum];
+	["AIO_createWayPoint_singleClick", "onMapSingleClick",{private _cnt = count _this; [_this select 1, _this select (_cnt - 1)] spawn AIO_createWayPoint}, (_this + [_foundGrpNum])] call BIS_fnc_addStackedEventHandler;
+	//onMapSingleClick _onClick;
 };
 
 
 
 waitUntil {!visibleMap};
 
-onMapSingleClick "";
-
+//onMapSingleClick "";
+["AIO_selectWP_singleClick", "onMapSingleClick"] call BIS_fnc_removeStackedEventHandler;
+["AIO_createWayPoint_singleClick", "onMapSingleClick"] call BIS_fnc_removeStackedEventHandler;
 titleFadeOut 0.5;

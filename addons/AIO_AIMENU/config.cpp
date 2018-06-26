@@ -1,29 +1,42 @@
-// WW AIMenu version 1.00
-
 class CfgPatches
 {
-	class WW_AIMenu
-		{
-			units[] = { };
-			weapons[] = { };
-			requiredAddons[] = {"CBA_Extended_EventHandlers"};
-			version = "0.993";
-			versionStr = "0.993";
-			versionDesc= "WW AIMenu";
-			versionAr[] = {1,0,0};
-			author[] = {"Windwalking"};
-		};
-};
-
-class Extended_PostInit_EventHandlers 
+	class AIO_AIMenu
 	{
-    class WW_AIMenu 
+		author="Leopard20";
+		name="All-In-One Command Menu";
+		units[]={};
+		weapons[]={};
+		requiredAddons[]=
 		{
-			clientInit = "call compile preprocessFileLineNumbers '\WW_AIMENU\init.sqf'";
+			"CBA_MAIN",
+			"CBA_SETTINGS",
+			"CBA_KEYBINDING",
+			"CBA_XEH"
 		};
-	}; 
-
-class WW_AIMenu_Key_Setting 
-	{
-		#include "\userconfig\WW_AIMenu\WW_AIMenu.hpp"
+		requiredVersion=0.1;
+		versionDesc="All-In-One Command Menu";
+		versionAct="";
+		version="1.0.0";
+		versionStr="1.0.0";
+		versionAr[]={1,0,0};
+		authors[]=
+		{
+			"Leopard20",
+			"WindWalking"
+		};
 	};
+};
+class Extended_PreInit_EventHandlers
+{
+	class AIO_AIMenu_Init
+	{
+		clientInit="call compile preProcessFileLineNumbers '\AIO_AIMENU\XEH_preInit.sqf'";
+	};
+};
+class Extended_PostInit_EventHandlers
+{
+	class AIO_AIMenu
+	{
+		clientInit="call compile preprocessFileLineNumbers '\AIO_AIMENU\init.sqf'";
+	};
+};

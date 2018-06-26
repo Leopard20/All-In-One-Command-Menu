@@ -29,12 +29,12 @@ if (!isnull cursortarget) then { _movePos = getpos cursortarget};// building / o
 if(_deployed) then
 {
 	
-	if (_explosive in ww_explosives_remote) then
+	if (_explosive in AIO_explosives_remote) then
 	{
-		_chargeNumber = player getVariable["ww_activeChargeNumber",0];
-		player setVariable["ww_activeChargeNumber", _chargeNumber+1];
+		_chargeNumber = player getVariable["AIO_activeChargeNumber",0];
+		player setVariable["AIO_activeChargeNumber", _chargeNumber+1];
 		_actionName = format["<t color='#FF0000'>SetOff explosive Charge %1</t>", (_chargeNumber+1)];
-		player addAction [_actionName , "WW_AIMENU\setOffCharge.sqf" , _unit];
+		player addAction [_actionName , "AIO_AIMENU\setOffCharge.sqf" , _unit];
 	};
 }
 else

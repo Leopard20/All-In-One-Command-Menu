@@ -10,7 +10,7 @@
 	
 	//Hold fire to allow retreating
 	_unit doWatch objNull;
-	//[_unit] spawn ww_holdFireTemp;
+	//[_unit] spawn AIO_holdFireTemp;
 	
 	if(currentCommand _unit == "WAIT" || currentCommand _unit == "STOP") then
 	{
@@ -23,13 +23,6 @@
 				
 	if(!isNil {_movePosition}) then
 	{
-				/*if (ww_debug>0) then 
-				{
-					//sign_sphere100cm_F
-					_ballCover = "sign_Arrow_Large_Blue_F" createvehicle _movePosition;
-					_ballCover attachto [_movePosition,[0,0,245]];
-				};*/
-
 	dostop _unit;
 	_unit forceSpeed -1;
 	_unit doMove _movePosition;
@@ -58,7 +51,7 @@
 		if(_dist < 75 && !_poppedSmoke && ( alive _unit ) && _combat && (getDammage _targetUnit)>0.5) then
 		{
 			_poppedSmoke = true;
-			[_unit, _targetUnit] execVM "WW_AIMENU\popSmoke.sqf";
+			[_unit, _targetUnit] execVM "AIO_AIMENU\popSmoke.sqf";
 		};
 						
 		if ( !( unitReady _unit ) && ( alive _unit ) && ( _dist > 0.5 ) ) then
@@ -134,7 +127,7 @@
 		_unit setUnitPos "Auto"; 
 		_unit doWatch _targetUnit;
 	
-	/*if (ww_debug>0) then 
+	/*if (AIO_debug>0) then 
 	{
 		deleteVehicle _ballCover;
 		//deleteVehicle _ballSuppressed;
@@ -150,4 +143,3 @@
 		[_unit] joinSilent (group _unit);
 	};
 	
-	_unit setVariable["ww_coverActive",0,true];

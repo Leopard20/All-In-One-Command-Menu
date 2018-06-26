@@ -1,6 +1,6 @@
-openMap true;
+if !(visibleMap) then {openMap true};
 
-ww_waitOnWP =
+AIO_waitOnWP =
 {
 	private ["_pos", "_flags", "_wpGroup", "_wpNum", "_selectedNode"];
 	_pos = _this select 0;
@@ -31,7 +31,7 @@ ww_waitOnWP =
 		};
 		
 		
-	}foreach ww_WayPoint_markers ;
+	}foreach AIO_WayPoint_markers ;
 	
 	if (count _selectedNode!= 0) then
 	{
@@ -61,12 +61,13 @@ ww_waitOnWP =
 };
 
 
-_onClick = format["[_pos] spawn ww_waitOnWP;"];
+//_onClick = format["[_pos] spawn AIO_waitOnWP;"];
 
-onMapSingleClick _onClick;
-
+//onMapSingleClick _onClick;
+private _units = [];
+["AIO_waitOnWP_singleClick", "onMapSingleClick", {[_this select 1] spawn AIO_waitOnWP}, _this] call BIS_fnc_addStackedEventHandler;
 
 
 waitUntil {!visibleMap};
-
-onMapSingleClick "";
+["AIO_waitOnWP_singleClick", "onMapSingleClick"] call BIS_fnc_removeStackedEventHandler;
+//onMapSingleClick "";
