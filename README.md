@@ -29,5 +29,5 @@ ARMA Tools
 Building is fairly straight-forward and no different than making other ARMA mods.
 1. Convert the folder `AIO_AIMENU` to .pbo using ARMA Tools.
 2. Create a folder called `@AIO_AIMenu`, and inside this folder create another folder called `addons`.
-3. Place the .pbo file inside the `addons folder`.
+3. Place the .pbo file inside the `addons` folder.
 4. Move the `AIO_AIMENU` folder to your ARMA 3 installation directory.
