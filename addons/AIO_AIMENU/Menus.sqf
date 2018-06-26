@@ -304,7 +304,6 @@ AIO_vehicle_subMenu =
 	["Taxi Aircraft", [8], "#USER:AIO_Taxi_subMenu", -5, [["expression", ""]], "1", "0"],
 	["", [], "", -5, [["expression", ""]], "1", "0"],
 	["Create High Command Driver", [9], "", -5, [["expression", "[(groupSelectedUnits player)] call AIO_create_HC_Driver"]], "1", "0"],
-	["", [], "", -5, [["expression", ""]], "1", "0"],
 	["EJECT (parachute if Air)", [10], "", -5, [["expression", "[(groupSelectedUnits player)] execVM ""AIO_AIMENU\eject.sqf"" "]], "1", "1"]
 ];
 
