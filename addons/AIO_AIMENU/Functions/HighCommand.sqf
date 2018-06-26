@@ -488,7 +488,7 @@ AIO_fnc_spawnHCGroups =
 		if (_mod == 0) then {_mod = 11};
 		_text = format ["%1 - %2 m", _unit, _dist];
 		AIO_HCgroup_array pushBack _unit;
-		_text1 = format ['AIO_allHCgroups_subMenu%1 pushBack ["%3", [], "", -5, [["expression", "[%5] spawn AIO_addHCGroup_fnc_Alt; ; [%1, %2, 3] call AIO_disableMenu"]], "1", "1"]', _menuNum , _mod, _text, _unit, _i];
+		_text1 = format ['AIO_allHCgroups_subMenu%1 pushBack ["%3", [], "", -5, [["expression", "[%5] spawn AIO_addHCGroup_fnc_Alt; [%1, %2, 3] call AIO_disableMenu"]], "1", "1"]', _menuNum , _mod, _text, _unit, _i];
 		_text2 = format ['AIO_allHCgroups_subMenu%1 pushBack ["%3", [], "", -5, [["expression", ""]], "1", "0"]', _menuNum , _mod, _text];
 		if (_unit != (group player) && player != hcLeader _unit) then {call compile _text1} else {call compile _text2};
 		if (_mod == 11 && (_cntGrps - 1) != _i) then {
