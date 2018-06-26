@@ -6,7 +6,7 @@ This is a remake of the popular -but sadly abandoned- WW AI Menu mod for ARMA 3 
 # Want to contribute?
 You can contribute to the project by:
 1. Fixing bugs and making pull requests
-2. Submitting issues
+2. Submitting issues and bugs
 3. Submitting feature requests
 
 Fixing bugs is always welcome! If you want to add a new feature yourself, remember to:
