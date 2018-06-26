@@ -3,6 +3,13 @@ By Leopard20
 ________
 This is a remake of the popular -but sadly abandoned- WW AI Menu mod for ARMA 3 by WindWalking, with lots of improvements and new features!
 
+# Installation:
+1. Download the latest build from the Releases tab. 
+2. Copy the contents of the .zip file to your ARMA 3 installation directory.
+3. Activate the mod using one of the following methods:
+* Add the mod using the ARMA Launcher (Recommended)
+* In your ARMA 3 shortcut, add this line to the Target textbox: `-mod @AIO_AIMenu'
+
 # Want to contribute?
 You can contribute to the project by:
 1. Fixing bugs and making pull requests
@@ -13,3 +20,14 @@ Fixing bugs is always welcome! If you want to add a new feature yourself, be sur
 1. Remember the limitations of the mod. This mod uses simple CommandingMenus and not all features can be implemented.
 2. Create a Feature Request in the issues section, and mention the changes you want to make.
 3. Make minimal changes to the original scripts (those made by WindWalking)
+
+# Build Instructions:
+**Required Tools:**
+ARMA Tools
+
+**Build Steps:**
+Building is fairly straight-forward and no different that making other ARMA mods.
+1. Convert the folder `AIO_AIMENU` to .pbo using ARMA Tools.
+2. Create a folder called `@AIO_AIMenu`, and inside this folder create another folder called `addons`.
+3. Place the .pbo file inside the `addons folder`.
+4. Move the `AIO_AIMENU` folder to your ARMA 3 installation directory.
