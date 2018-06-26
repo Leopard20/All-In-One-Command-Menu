@@ -26,7 +26,7 @@ Fixing bugs is always welcome! If you want to add a new feature yourself, be sur
 ARMA Tools
 
 **Build Steps:**
-Building is fairly straight-forward and no different that making other ARMA mods.
+Building is fairly straight-forward and no different than making other ARMA mods.
 1. Convert the folder `AIO_AIMENU` to .pbo using ARMA Tools.
 2. Create a folder called `@AIO_AIMenu`, and inside this folder create another folder called `addons`.
 3. Place the .pbo file inside the `addons folder`.
