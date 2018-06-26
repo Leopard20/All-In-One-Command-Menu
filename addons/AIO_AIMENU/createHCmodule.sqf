@@ -1,8 +1,8 @@
 private ["_allMod", "_HC", "_HighCommand", "_HighCommandSubordinate", "_AIC"];
-if (WW_HC_Module_Enabled) then {
+if (AIO_HC_Module_Enabled) then {
 	_allMod = synchronizedObjects player;
 	_HC = _allMod select {typeOf _x == "HighCommandSubordinate"};
-	_AIC = isClass (configfile >> "CfgPatches" >> "AICommand");
+	//_AIC = isClass (configfile >> "CfgPatches" >> "AICommand");
 	if (count _HC == 0) then {
 		_group = createGroup (sideLogic); 
 		_HighCommand = _group createUnit ["HighCommand", [0, 0, 0], [], 0, "NONE"];
