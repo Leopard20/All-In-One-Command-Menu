@@ -4,7 +4,7 @@ ________
 This is a remake of the popular -but sadly abandoned- WW AI Menu mod for ARMA 3 by WindWalking, with lots of improvements and new features!
 
 # Installation:
-1. Download the latest build from the Releases tab. 
+1. [Download the latest build](https://github.com/leopard20/All-In-One-Command-Menu/releases/latest) from the Releases tab. 
 2. Copy the contents of the .zip file to your ARMA 3 installation directory.
 3. [Activate the mod](http://www.armaholic.com/page.php?id=29755) using one of the following methods:
 * Add the mod using the ARMA Launcher (Recommended)
