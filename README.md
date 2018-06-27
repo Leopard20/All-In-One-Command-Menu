@@ -6,7 +6,7 @@ This is a remake of the popular -but sadly abandoned- WW AI Menu mod for ARMA 3 
 # Installation:
 1. Download the latest build from the Releases tab. 
 2. Copy the contents of the .zip file to your ARMA 3 installation directory.
-3. Activate the mod using one of the following methods:
+3. [Activate the mod](http://www.armaholic.com/page.php?id=29755) using one of the following methods:
 * Add the mod using the ARMA Launcher (Recommended)
 * In your ARMA 3 shortcut, add this line to the Target textbox: `-mod=@AIO_AIMenu;@mod2`etc.
 
