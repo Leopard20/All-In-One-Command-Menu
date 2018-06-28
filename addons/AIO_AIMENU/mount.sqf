@@ -74,7 +74,9 @@ _getInFnc =
 		sleep 1;
 	};
 	
-	if (_unit distance _target > _distance OR !(alive _unit) OR !(alive _target)) exitWith {_unit doMove (position _unit); _unit setVariable ["AIO_Mount_Canceled", 1]};
+	if (_unit distance _target > _distance OR !(alive _unit) OR !(alive _target)) exitWith {_unit setVariable ["AIO_Mount_Canceled", 1]};
+	_unit doFollow player;
+	_unit doMove (getPos _unit);
 	if (_getInAs == 1) then {
 		_unit assignAsDriver _target;
 		_unit action ["getinDriver", _target];
