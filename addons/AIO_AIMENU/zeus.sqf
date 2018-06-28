@@ -1,8 +1,9 @@
 params ["_mode"];
 private ["_sync", "_classes", "_text", "_side", "_curators", "_group"];
 
-if (AIO_Zeus_Enabled && _mode == 1) then {
-	//_group = createGroup (sideLogic); 
+AIO_createZeusFnc =
+{
+	 //_group = createGroup (sideLogic); 
 	//AIO_curator_module = _group createUnit ["ModuleCurator_F", [0, 0, 0], [], 0, "NONE"];
 	AIO_curator_module = "ModuleCurator_F" createVehicleLocal [0, 0, 0];
 	AIO_curator_module setVariable ["owner", (name player)];
@@ -44,19 +45,18 @@ if (AIO_Zeus_Enabled && _mode == 1) then {
 	}; 
 	if (AIO_Zeus_delete_Enabled) then {AIO_curator_module setCuratorCoef ["delete",0]} else {AIO_curator_module setCuratorCoef ["delete",-1e9]};  
 	if (AIO_Zeus_destroy_Enabled) then {AIO_curator_module setCuratorCoef ["destroy", 0]} else {AIO_curator_module setCuratorCoef ["destroy",-1e9]}; 
-	
+
 	AIO_curator_module setCuratorCoef ["group",0]; 
 	AIO_curator_module setCuratorCoef ["synchronize",0];
 };
-if (_mode != 1) then {
-	_sync = synchronizedObjects player;
-	_curators = _sync select {(typeOf _x) == "ModuleCurator_F"};
-	if (isNil "AIO_curator_module") exitWith {};
-	if (isNull AIO_curator_module) exitWith {};
-	{
-		if (_x != AIO_curator_module) then {deleteVehicle _x};
-	} forEach _curators;
-	unassignCurator AIO_curator_module;
+
+AIO_refreshZeusFnc = 
+{
+	if (isNil "AIO_curator_module") exitWith {call AIO_createZeusFnc};
+	if (isNull AIO_curator_module) exitWith {call AIO_createZeusFnc};
+	_curator = getAssignedCuratorLogic player;
+	unassignCurator _curator;
+	_curator setVariable ["owner", ""];
 	AIO_curator_module setVariable ["owner", (name player)];
 	player assignCurator AIO_curator_module;
 	
@@ -82,4 +82,12 @@ if (_mode != 1) then {
 		AIO_curator_module addCuratorEditableObjects [_objs, true];  
 		player synchronizeObjectsAdd [AIO_curator_module];
 	};
+};
+
+if (AIO_Zeus_Enabled && _mode == 1) then {
+	call AIO_createZeusFnc;
+};
+
+if (_mode != 1) then {
+	call AIO_refreshZeusFnc;
 };
