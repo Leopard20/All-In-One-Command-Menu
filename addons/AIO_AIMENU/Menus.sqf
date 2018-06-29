@@ -127,7 +127,17 @@ AIO_defRadius_subMenu =
 AIO_defense_subMenu =
 [
 	["Defense",true],
-	["Take Cover", [2], "", -5, [["expression", "[(groupSelectedUnits player), 30, 0] execVM ""AIO_AIMENU\moveToCover.sqf"" "]], "1", "1"],
+	["Take Cover", [2], "", -5, [["expression", "
+	[(groupSelectedUnits player), 30, 0] execVM ""AIO_AIMENU\moveToCover.sqf"";
+	if (AIO_useVoiceChat) then {
+	[] spawn {
+	private _dummy = ""#particlesource"" createVehicleLocal ASLToAGL getPosWorld player;
+	_dummy say2D 'AIO_say_TakeCover';
+	sleep 2; 
+	deleteVehicle _dummy;
+	};
+	};
+	"]], "1", "1"],
 	["360 Formation *", [3], "", -5, [["expression", "
 	AIO_selectedUnits = groupSelectedUnits player;
 	[AIO_selectedUnits, screenToWorld [0.5, 0.5], 1] execVM ""AIO_AIMENU\cursorTargetCheck.sqf"" "]], "1", "CursorOnGround", "\a3\Ui_f\data\IGUI\Cfg\Cursors\iconCursorSupport_ca.paa"],
@@ -138,8 +148,9 @@ AIO_defense_subMenu =
 
 AIO_limitSpeed1_subMenu =
 [
-	["Limit Unit Speed",true],
-	["Unlimited", [], "", -5, [["expression", "[(groupSelectedUnits player), -1] execVM ""AIO_AIMENU\limitSpeed.sqf"" "]], "1", "1"],
+	["Set Unit Speed",true],
+	["Sprint Mode", [2], "#USER:AIO_sprintMenu", -5, [["expression", ""]], "1", "1"],
+	["Auto", [3], "", -5, [["expression", "[(groupSelectedUnits player), -1] execVM ""AIO_AIMENU\limitSpeed.sqf"" "]], "1", "1"],
 	["1  m/s", [], "", -5, [["expression", "[(groupSelectedUnits player), 1] execVM ""AIO_AIMENU\limitSpeed.sqf"" "]], "1", "1"],
 	["5  m/s", [], "", -5, [["expression", "[(groupSelectedUnits player), 5] execVM ""AIO_AIMENU\limitSpeed.sqf"" "]], "1", "1"],
 	["10  m/s", [], "", -5, [["expression", "[(groupSelectedUnits player), 10] execVM ""AIO_AIMENU\limitSpeed.sqf"" "]], "1", "1"],
@@ -150,12 +161,12 @@ AIO_limitSpeed1_subMenu =
 	["35  m/s", [], "", -5, [["expression", "[(groupSelectedUnits player), 35] execVM ""AIO_AIMENU\limitSpeed.sqf"" "]], "1", "1"],
 	["40  m/s", [], "", -5, [["expression", "[(groupSelectedUnits player), 40] execVM ""AIO_AIMENU\limitSpeed.sqf"" "]], "1", "1"],
 	["45  m/s", [], "", -5, [["expression", "[(groupSelectedUnits player), 45] execVM ""AIO_AIMENU\limitSpeed.sqf"" "]], "1", "1"],
-	["50  m/s", [], "", -5, [["expression", "[(groupSelectedUnits player), 50] execVM ""AIO_AIMENU\limitSpeed.sqf"" "]], "1", "1"],
 	["More", [], "#USER:AIO_limitSpeed2_subMenu", -5, [["expression", ""]], "1", "1"]
 ];
 AIO_limitSpeed2_subMenu =
 [
 	["Limit Unit Speed",true],
+	["50  m/s", [], "", -5, [["expression", "[(groupSelectedUnits player), 50] execVM ""AIO_AIMENU\limitSpeed.sqf"" "]], "1", "1"],
 	["55  m/s", [], "", -5, [["expression", "[(groupSelectedUnits player), 55] execVM ""AIO_AIMENU\limitSpeed.sqf"" "]], "1", "1"],
 	["60  m/s", [], "", -5, [["expression", "[(groupSelectedUnits player), 60] execVM ""AIO_AIMENU\limitSpeed.sqf"" "]], "1", "1"],
 	["65  m/s", [], "", -5, [["expression", "[(groupSelectedUnits player), 65] execVM ""AIO_AIMENU\limitSpeed.sqf"" "]], "1", "1"],
@@ -164,7 +175,6 @@ AIO_limitSpeed2_subMenu =
 	["80  m/s", [], "", -5, [["expression", "[(groupSelectedUnits player), 80] execVM ""AIO_AIMENU\limitSpeed.sqf"" "]], "1", "1"],
 	["85  m/s", [], "", -5, [["expression", "[(groupSelectedUnits player), 85] execVM ""AIO_AIMENU\limitSpeed.sqf"" "]], "1", "1"],
 	["90  m/s", [], "", -5, [["expression", "[(groupSelectedUnits player), 90] execVM ""AIO_AIMENU\limitSpeed.sqf"" "]], "1", "1"],
-	["95  m/s", [], "", -5, [["expression", "[(groupSelectedUnits player), 95] execVM ""AIO_AIMENU\limitSpeed.sqf"" "]], "1", "1"],
 	["100  m/s", [], "", -5, [["expression", "[(groupSelectedUnits player), 100] execVM ""AIO_AIMENU\limitSpeed.sqf"" "]], "1", "1"],
 	["150  m/s", [], "", -5, [["expression", "[(groupSelectedUnits player), 150] execVM ""AIO_AIMENU\limitSpeed.sqf"" "]], "1", "1"],
 	["200  m/s", [], "", -5, [["expression", "[(groupSelectedUnits player), 200] execVM ""AIO_AIMENU\limitSpeed.sqf"" "]], "1", "1"],
@@ -184,7 +194,8 @@ AIO_infantry_subMenu =
 	["Clear Building", [7], "", -5, [["expression", "[(groupSelectedUnits player), cursorTarget] execVM ""AIO_AIMENU\clear_Building.sqf"" "]], "1", "CursorOnGround", "\a3\Ui_f\data\IGUI\Cfg\Cursors\iconCursorSupport_ca.paa"],
 	["", [], "", -5, [["expression", ""]], "1", "0"],
 	["Follow Target", [8], "", -5, [["expression", "[(groupSelectedUnits player), cursorTarget] execVM ""AIO_AIMENU\follow.sqf"" "]], "1", "CursorOnGround", "\a3\Ui_f\data\IGUI\Cfg\Cursors\iconCursorSupport_ca.paa"],
-	["Limit Unit Speed", [9], "#USER:AIO_limitSpeed1_subMenu", -5, [["expression", ""]], "1", "1"]
+	["Set Unit Speed", [9], "#USER:AIO_limitSpeed1_subMenu", -5, [["expression", ""]], "1", "1"],
+	["Sprint Mode", [10], "#USER:AIO_sprintMenu", -5, [["expression", ""]], "1", "1"]
 ];
 
 AIO_switchseat_subMenu =
@@ -417,6 +428,13 @@ AIO_MENU_GroupCommunication1 =
 	["Add/Refresh Zeus", [9], "", -5, [["expression", "[0] execVM ""AIO_AIMENU\zeus.sqf"" "]], "0", "1"]
 ];
 
+AIO_sprintMenu =
+[
+    ["Sprint Mode",true],
+	["Enable", [2], "", -5, [["expression", "[(groupSelectedUnits player), 1] execVM ""AIO_AIMENU\sprintMode.sqf"" "]], "1", "1"],
+	["Disable", [3], "", -5, [["expression", "[(groupSelectedUnits player), 0] execVM ""AIO_AIMENU\sprintMode.sqf""  "]], "1", "1"]
+];
+
 if (AIO_Zeus_Enabled) then {(AIO_MENU_GroupCommunication select 13) set [5, "1"]};
 if !(AIO_use_HC_driver) then {
 	(AIO_vehicle_subMenu select 12) set [0, "Create Driver"];
@@ -453,6 +471,9 @@ if (AIO_groupSelectedUnitsCnt == 0) then {
 		(AIO_vehicle_subMenu select 1) set [2, "#USER:AIO_switchseat_subMenu_player"];
 	};
 };
+(AIO_sprintMenu select 1) set [6, str (1-AIO_EnableSprintMode)];
+(AIO_sprintMenu select 2) set [6, str AIO_EnableSprintMode];
+
 
 if (AIO_groupSelectedUnitsCnt > 2 or AIO_groupSelectedUnitsCnt == 0) then {(AIO_infantry_subMenu select 4) set [6, "0"]};
 if (player != hcLeader group player) then {player hcSetGroup [group player]};
