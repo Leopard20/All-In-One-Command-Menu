@@ -76,7 +76,9 @@ _getInFnc =
 	
 	if (_unit distance _target > _distance OR !(alive _unit) OR !(alive _target)) exitWith {_unit setVariable ["AIO_Mount_Canceled", 1]};
 	_unit doFollow player;
+	sleep 0.2;
 	_unit doMove (getPos _unit);
+	sleep 0.1;
 	if (_getInAs == 1) then {
 		_unit assignAsDriver _target;
 		_unit action ["getinDriver", _target];
@@ -110,6 +112,15 @@ _getInFnc =
 		[_unit] orderGetIn true;
 	};
 };
+if (AIO_useVoiceChat) then {
+[] spawn {
+	private _dummy = "#particlesource" createVehicleLocal ASLToAGL getPosWorld player;
+	_dummy say2D "AIO_say_BoardVeh";
+	sleep 2; 
+	deleteVehicle _dummy;
+};
+};
+
 private _roleArray = ["" ,"as Driver","as Commander","as Gunner","as Passenger"];
 player groupChat (format ["Get in that %1 %2", _vehname, (_roleArray select _vehrole)]);
 _vehiclePositions = fullCrew [_veh, "", true];
