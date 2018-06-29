@@ -4,15 +4,25 @@ AIO_staticAssemble_Fnc = {
 	_units = _this select 0;
 	_pos = _this select 1;
 	_dir = getDir player;
-	if (_dir <= 22.5 OR _dir >= 337.5) then {_dirChat = "North."};
-	if (_dir > 22.5 AND _dir <= 67.5) then {_dirChat = "North-East."};
-	if (_dir > 292.5 AND _dir < 337.5) then {_dirChat = "North-West."};
-	if (_dir > 67.5 AND _dir <= 112.5) then {_dirChat = "East."};
-	if (_dir > 112.5 AND _dir <= 157.5) then {_dirChat = "South-East."};
-	if (_dir > 157.5 AND _dir <= 202.5) then {_dirChat = "South."};
-	if (_dir > 202.5 AND _dir <= 247.5) then {_dirChat = "South-West."};
-	if (_dir > 247.5 AND _dir <= 292.5) then {_dirChat = "West."};
+	if (_dir <= 22.5 OR _dir >= 337.5) then {_dirChat = "North"};
+	if (_dir > 22.5 AND _dir <= 67.5) then {_dirChat = "NorthEast"};
+	if (_dir > 292.5 AND _dir < 337.5) then {_dirChat = "NorthWest"};
+	if (_dir > 67.5 AND _dir <= 112.5) then {_dirChat = "East"};
+	if (_dir > 112.5 AND _dir <= 157.5) then {_dirChat = "SouthEast"};
+	if (_dir > 157.5 AND _dir <= 202.5) then {_dirChat = "South"};
+	if (_dir > 202.5 AND _dir <= 247.5) then {_dirChat = "SouthWest"};
+	if (_dir > 247.5 AND _dir <= 292.5) then {_dirChat = "West"};
 	_chat = format ["Assemble that weapon towards %1", _dirChat];
+	if (AIO_useVoiceChat) then {
+	_dirChat spawn {
+		private _dummy = "#particlesource" createVehicleLocal ASLToAGL getPosWorld player;
+		_dummy say2D "AIO_say_Assemble";
+		sleep 1.2;
+		_dummy say2D (format ["AIO_say_due_%1", _this]);
+		sleep 1.5;
+		deleteVehicle _dummy;
+	};
+	}; 
 	player groupChat _chat;
 	if (count _units == 2) then {
 		_unit1 = _units select 0;
