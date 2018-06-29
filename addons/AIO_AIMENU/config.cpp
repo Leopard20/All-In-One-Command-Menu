@@ -26,6 +26,9 @@ class CfgPatches
 		};
 	};
 };
+
+#include "CfgSounds.hpp"
+
 class Extended_PreInit_EventHandlers
 {
 	class AIO_AIMenu_Init
