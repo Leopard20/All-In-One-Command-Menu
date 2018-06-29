@@ -4,6 +4,14 @@ if !(_static isKindOf "StaticWeapon") exitWith {};
 _vehclass = typeOf _static;
 _vehname = getText (configFile >>  "CfgVehicles" >> _vehclass >> "displayName");
 player groupChat (format ["Disassemble that %1 .", _vehname]);
+if (AIO_useVoiceChat) then {
+[] spawn {
+	private _dummy = "#particlesource" createVehicleLocal ASLToAGL getPosWorld player;
+	_dummy say2D "AIO_say_Disassemble";
+	sleep 2; 
+	deleteVehicle _dummy;
+};
+};
 if (count _units == 2) then {
 	_unit1 = _units select 0;
 	_unit2 = _units select 1;
