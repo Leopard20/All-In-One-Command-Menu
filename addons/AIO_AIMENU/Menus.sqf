@@ -96,7 +96,7 @@ AIO_switchweapon_subMenu =
 
 AIO_unitTargeting_subMenu =
 [
-	["Unit Targeting",true],
+	["Auto Target",true],
 	["Disable", [2], "", -5, [["expression", "[(groupSelectedUnits player), 3] execVM ""AIO_AIMENU\setBehaviour.sqf"" "]], "1", "1"],
 	["Enable", [3], "", -5, [["expression", "[(groupSelectedUnits player), 4] execVM ""AIO_AIMENU\setBehaviour.sqf"" "]], "1", "1"]
 ];
@@ -107,7 +107,7 @@ AIO_behaviour_subMenu =
 	["Careless", [2], "", -5, [["expression", "[(groupSelectedUnits player), 1] execVM ""AIO_AIMENU\setBehaviour.sqf"" "]], "1", "1"],
 	["Fire On My Lead", [3], "", -5, [["expression", "[(groupSelectedUnits player), 2] execVM ""AIO_AIMENU\setBehaviour.sqf"" "]], "1", "1"],
 	["No Launcher", [4], "", -5, [["expression", "[(groupSelectedUnits player), 3] execVM ""AIO_AIMENU\switchweapon.sqf"" "]], "1", "1"],
-	["Unit Targeting", [5], "#USER:AIO_unitTargeting_subMenu", -5, [["expression", ""]], "1", "1"],
+	["Auto Target", [5], "#USER:AIO_unitTargeting_subMenu", -5, [["expression", ""]], "1", "1"],
 	["Retreat!", [6], "", -5, [["expression", "[(groupSelectedUnits player)] spawn AIO_retreatFnc "]], "1", "1"],
 	["", [], "", -5, [["expression", ""]], "1", "0"],
 	["Refresh", [], "", -5, [["expression", "[(groupSelectedUnits player), 5] execVM ""AIO_AIMENU\setBehaviour.sqf"" "]], "1", "1"]
