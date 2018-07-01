@@ -29,6 +29,19 @@ if (_index == -1) then {
 	if (AIO_useVoiceChat) then {
 		player groupRadio Format["SentUnitPos%1", AIO_posSelectIndex];
 	};
+	_currentComm = [];
+	for "_i" from 0 to (count _units - 1) do
+	{
+		_currentComm set [_i, [0]];
+		if (currentCommand (_units select _i) == "STOP") then {_currentComm set [_i, [1]]};
+		if (currentCommand (_units select _i) == "MOVE" OR currentCommand (_units select _i) == "") then {
+			_dest = expectedDestination (_units select _i);
+			if (_dest select 1 != "DoNotPlanFormation" OR formLeader (_units select _i)!= player) then {
+			_pos = _dest select 0;
+			_currentComm set [_i, [2, _pos]];
+			};
+		};
+	};
 	{
 		_team = assignedTeam _x;
 		_playerGrp = group player; 
@@ -43,6 +56,11 @@ if (_index == -1) then {
 		_playerGrp selectLeader _leader; 
 		deleteGroup _tempGrp;
 	} forEach _units;
+	for "_i" from 0 to (count _units) do
+	{
+		if ((_currentComm select _i) select 0 == 1) then {doStop (_units select _i)};
+		if ((_currentComm select _i) select 0 == 2) then {(_units select _i) doMove ((_currentComm select _i) select 1)};
+	};
 	sleep 1;
 	{
 		_stance = AIO_FullStanceArray select _index;

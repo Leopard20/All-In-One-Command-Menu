@@ -41,6 +41,19 @@ AIO_copy_my_stance_fnc =
 	};
 	AIO_playerStance = "";
 	if (AIO_copyExactStance) then {
+		_currentComm = [];
+		for "_i" from 0 to (count AIO_copyStanceUnits - 1) do
+		{
+			_currentComm set [_i, [0]];
+			if (currentCommand (AIO_copyStanceUnits select _i) == "STOP") then {_currentComm set [_i, [1]]};
+			if (currentCommand (AIO_copyStanceUnits select _i) == "MOVE" OR currentCommand (AIO_copyStanceUnits select _i) == "") then {
+				_dest = expectedDestination (AIO_copyStanceUnits select _i);
+				if (_dest select 1 != "DoNotPlanFormation" OR formLeader (AIO_copyStanceUnits select _i)!= player) then {
+				_pos = _dest select 0;
+				_currentComm set [_i, [2, _pos]];
+				};
+			};
+		};
 		{
 			_team = assignedTeam _x;
 			_playerGrp = group player; 
@@ -54,7 +67,12 @@ AIO_copy_my_stance_fnc =
 			_x assignTeam _team;
 			_playerGrp selectLeader _leader; 
 			deleteGroup _tempGrp;
-		} forEach (units group player - [player]);
+		} forEach AIO_copyStanceUnits;
+		for "_i" from 0 to (count AIO_copyStanceUnits) do
+		{
+			if ((_currentComm select _i) select 0 == 1) then {doStop (AIO_copyStanceUnits select _i)};
+			if ((_currentComm select _i) select 0 == 2) then {(AIO_copyStanceUnits select _i) doMove ((_currentComm select _i) select 1)};
+		};
 		sleep 1;
 		_stanceVar = player getVariable "AIO_StanceAnimChangedEH";
 		if (isNil "_stanceVar") then {

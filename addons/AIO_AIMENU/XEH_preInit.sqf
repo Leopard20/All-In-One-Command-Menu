@@ -51,7 +51,7 @@ Finally, to bind your function to a key, call CBA_fnc_addKeybind:
 */
 
 
-["AIO_useVoiceChat", "CHECKBOX", "Use Voice Chat", "All-In-One Command Menu" ,false, 1] call CBA_Settings_fnc_init;
+["AIO_useVoiceChat", "CHECKBOX", "Use Voice Chat", "All-In-One Command Menu" ,true, 1] call CBA_Settings_fnc_init;
 ["AIO_Init_Message", "CHECKBOX", "Show Initialization Message", "All-In-One Command Menu" ,true, 1] call CBA_Settings_fnc_init;
 ["AIO_Zeus_Enabled", "CHECKBOX", "Create Zeus Module", "All-In-One Command Menu" ,true, 1] call CBA_Settings_fnc_init;
 ["AIO_HC_Module_Enabled", "CHECKBOX", "Create High Command Module", "All-In-One Command Menu", false, 1] call CBA_Settings_fnc_init;
