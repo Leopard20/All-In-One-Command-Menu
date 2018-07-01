@@ -121,8 +121,8 @@ switch (_mode) do
 		for "_i" from 0 to ((count _units) -1) do
 		{
 			_unit = _units select _i;
-			_unit disableAI "TARGET";
 			_unit disableAI "AUTOTARGET";
+			_unit disableAI "AUTOCOMBAT";
 			_unit doWatch objNull;
 			_unit doTarget objNull;
 		};
@@ -132,17 +132,19 @@ switch (_mode) do
 			_behav set [_i, (behaviour (_units select _i))];
 		};
 
-		private _remUnits = _units;
-		private _delUnits = [];
 		_commStr = ["Cancel target.", "Disengage.", "Ignore all targets.", "Fire at my targets only.", "I'll call the targets."];
 		player groupChat (selectRandom _commStr);
 		AIO_targetting_disabled = true;
+		[_units, _behav] spawn {
+		params ["_units","_behav"];
+		private _remUnits = _units;
+		private _delUnits = [];
 		while {count _remUnits != 0 && AIO_targetting_disabled} do {
 			for "_i" from 0 to (count _units) do
 			{
 				if (!(alive (_units select _i)) OR (behaviour (_units select _i) == "COMBAT") OR (behaviour (_units select _i) != (_behav select _i))) then 
 				{
-					(_units select _i) enableAI "TARGET";
+					(_units select _i) enableAI "AUTOCOMBAT";
 					(_units select _i) enableAI "AUTOTARGET";
 					_delUnits = _delUnits + [(_units select _i)];
 				};
@@ -152,18 +154,19 @@ switch (_mode) do
 		};
 		_commStr = ["Check for targets.", "Auto-targetting allowed.", "Target the enemy at will."];
 		player groupChat (selectRandom _commStr);
+		};
 	};
 	case 4:
 	{
+		AIO_targetting_disabled = false;
 		for "_i" from 0 to ((count _units) -1) do
 		{
 			_unit = _units select _i;
-			_unit enableAI "TARGET";
+			_unit enableAI "AUTOCOMBAT";
 			_unit enableAI "AUTOTARGET";
 		};
 		_commStr = ["Check for targets.", "Auto-targetting allowed.", "Target the enemy at will."];
 		player groupChat (selectRandom _commStr);
-		AIO_targetting_disabled = false;
 	};
 	case 5:
 	{
