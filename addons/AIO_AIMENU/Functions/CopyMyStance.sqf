@@ -18,7 +18,9 @@ AIO_copyFullStance =
 	_move = AIO_FullStanceArray select _stanceIndex;
 	if ((_stance select [0,3]) isEqualTo "aad") then {AIO_playerStance = _move};
 	{
-		_x playMoveNow _move;
+		if (speed _x >= 2) then {
+			_x setVariable ["AIO_pooledAnim", _move];
+		} else {_x playMoveNow _move};
 	} forEach AIO_copyStanceUnits;
 
 };
@@ -27,7 +29,6 @@ AIO_copy_my_stance_fnc =
 {
 	private ["_EHArray","_pos", "_stanceArray", "_posIndex", "_units", "_posArray","_EH", "_stanceVar"];
 	AIO_copy_my_stance = true;
-	player groupChat "Copy my stance.";
 	_units = groupSelectedUnits player;
 	if (count _units == 0) then {_units = (units group player) - [player]};
 	AIO_copyStanceUnits = _units select {vehicle _x == _x};
@@ -36,15 +37,25 @@ AIO_copy_my_stance_fnc =
 	_animArray = ["amovpercmstpsraswrfldnon", "amovpknlmstpsraswrfldnon", "amovppnemstpsraswrfldnon", ""];
 	_EHArray = [];
 	if (AIO_useVoiceChat) then {
-		[] spawn {
-			private _dummy = "#particlesource" createVehicleLocal ASLToAGL getPosWorld player;
-			_dummy say2D "AIO_say_CopyStance";
-			sleep 2.5; 
-			deleteVehicle _dummy;
-		};
+		player groupRadio "SentUnitPosAuto";
 	};
 	AIO_playerStance = "";
 	if (AIO_copyExactStance) then {
+		{
+			_team = assignedTeam _x;
+			_playerGrp = group player; 
+			_leader = leader _playerGrp; 
+			_tempGrp = createGroup (side player); 
+			_x disableAI "AUTOCOMBAT";
+			[_x] joinSilent _tempGrp;
+			_tempGrp setBehaviour "AWARE";
+			_playerGrp setBehaviour "AWARE";
+			[_x] joinSilent _playerGrp; 
+			_x assignTeam _team;
+			_playerGrp selectLeader _leader; 
+			deleteGroup _tempGrp;
+		} forEach (units group player - [player]);
+		sleep 1;
 		_stanceVar = player getVariable "AIO_StanceAnimChangedEH";
 		if (isNil "_stanceVar") then {
 			_EH = player addEventHandler ["AnimChanged", 
@@ -52,7 +63,7 @@ AIO_copy_my_stance_fnc =
 				private _player = _this select 0;
 				private _anim = _this select 1; 
 				if (count _anim > 25) exitWith {};
-				if (_anim in AIO_FullStanceArray) then {[] spawn AIO_copyFullStance};
+				if (_anim in AIO_FullStanceArray) then {[] spawn AIO_copyFullStance;};
 			}];
 			player setVariable ["AIO_StanceAnimChangedEH", _EH];
 		};
@@ -63,8 +74,22 @@ AIO_copy_my_stance_fnc =
 				{
 					private _unit = _this select 0;
 					private _anim = _this select 1; 
-					_unitAnimChanged = 1;
+					_pooled = _unit getVariable "AIO_pooledAnim";
 					_unit setVariable ["AIO_AnimStateChanging", 1];
+					if !(isNil "_pooled") then {
+						[_unit, _pooled] spawn {
+							params ["_unit", "_anim"];
+							waitUntil {speed _unit < 2};
+							_unit playMoveNow _anim;
+							_unit setVariable ["AIO_AnimStateChanging", 0];
+							sleep 1.5;
+							_var = _unit getVariable "AIO_AnimStateChanging";
+							if (_var == 0) then {
+								_unit switchMove _anim;
+								_unit setVariable ["AIO_pooledAnim", nil];
+							};
+						};
+					};
 					if (_anim isEqualTo AIO_playerStance) then {
 						[_unit, _anim] spawn {
 							params ["_unit", "_anim"];
@@ -96,6 +121,7 @@ AIO_copy_my_stance_fnc =
 		_EH = _x getVariable "AIO_StanceAnimChangedEH";
 		if ((format["%1",_EH]) != "<null>") then {_x removeEventHandler ["AnimChanged", _EH]; _x setVariable ["AIO_StanceAnimChangedEH", nil]};
 	} forEach AIO_copyStanceUnits;
+	AIO_copy_my_stance = false;
 	sleep 1.7;
 	{
 		if (alive _x) then {
@@ -105,6 +131,7 @@ AIO_copy_my_stance_fnc =
 			_x setUnitPos _pos;
 			_pos = _animArray select _posIndex;
 			_x switchMove _pos;
+			_x enableAI "AUTOCOMBAT";
 		};
 	} forEach AIO_copyStanceUnits;
 	AIO_copyStanceUnits =[];

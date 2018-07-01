@@ -88,12 +88,12 @@ AIO_resupply_fnc =
 	_action = (_this select 1) select 1;
 	if (AIO_useVoiceChat) then {
 	_action spawn {
-		private _dummy = "#particlesource" createVehicleLocal ASLToAGL getPosWorld player;
-		if (_this == 1) then {_dummy say2D "AIO_say_Rearm"};
-		if (_this == 2) then {_dummy say2D "AIO_say_RefuelVeh"};
-		if (_this == 3) then {_dummy say2D "AIO_say_RepairVeh"};
-		sleep 2; 
-		deleteVehicle _dummy;
+		//private _dummy = "#particlesource" createVehicleLocal ASLToAGL getPosWorld player;
+		if (_this == 1) then {player groupRadio "SentCmdRearm";};
+		if (_this == 2) then {player groupRadio "SentCmdRefuel";};
+		if (_this == 3) then {player groupRadio "SentCmdRepair";};
+		//sleep 2; 
+		//deleteVehicle _dummy;
 	};
 	};
 	_veh = vehicle _unit;

@@ -5,7 +5,7 @@ AIO_fireOnMyLead =
 {
 	private ["_dest", "_pos", "_currentComm", "_currentPos", "_assignedTeam", "_unit", "_commStr"];
 	_currentComm = [];
-	_commStr = ["Light 'em up!", "Open up!", "Open fire!", "Give 'em hell!"];
+	_commStr = ["", "inCombat"];
 	for "_i" from 0 to (count AIO_unitsToHoldFire - 1) do
 	{
 		_currentComm set [_i, [0]];
@@ -34,7 +34,7 @@ AIO_fireOnMyLead =
 		if ((_currentComm select _i) select 0 == 1) then {doStop (AIO_unitsToHoldFire select _i)};
 		if ((_currentComm select _i) select 0 == 2) then {(AIO_unitsToHoldFire select _i) doMove ((_currentComm select _i) select 1)};
 	};
-	player groupChat (selectRandom _commStr);
+	player groupRadio format["SentOpenFire%1",(selectRandom _commStr)];
 	player removeEventHandler ["fired", AIO_fireOnMyLeadEvent];
 	AIO_unitsToHoldFire = [];
 };
@@ -111,6 +111,8 @@ switch (_mode) do
 			if !(_x in AIO_unitsToHoldFire) then {AIO_unitsToHoldFire = AIO_unitsToHoldFire + [_x]};
 		} forEach _units;
 		_commStr = ["Wait for my shot.", "Fire on my lead.", "Open fire on my command."];
+		//player groupRadio "SentCeaseFireInsideGroup";
+		player groupRadio "SentHoldFireInCombat";
 		player groupChat (selectRandom _commStr);
 		AIO_fireOnMyLeadEvent = player addeventhandler ["fired",{_this call AIO_fireOnMyLead}];
 	};

@@ -5,6 +5,7 @@ _unit = _grp select 0;
 _veh = vehicle _unit;
 if (_vehrole == 1) then {
 	_unit action ["movetoDriver", _veh];
+	if (_unit != player && AIO_useVoiceChat) then {player groupRadio "SentCmdSwitchToDriver";};
 	_unitrole = assignedVehicleRole _unit;
 	_unitrole1 = _unitrole select 0;
 	if (_unitrole1 != "Driver") then {
@@ -21,6 +22,7 @@ if (_vehrole == 1) then {
 };
 if (_vehrole == 2) then {
 	private _switched = false;
+	if (_unit != player && AIO_useVoiceChat) then {player groupRadio "SentCmdSwitchToCommander";};
 	private _numcopilot = count(allTurrets [_veh, true]);
 	private _numcommander = count(fullCrew [_veh, "commander", true]);
 	if (_numcopilot!=0) then {
@@ -60,6 +62,7 @@ if (_vehrole == 2) then {
 };
 if (_vehrole == 3) then {
 	private _switched = false;
+	if (_unit != player && AIO_useVoiceChat) then {player groupRadio "SentCmdSwitchToGunner";};
 	private _turretPaths = allTurrets [_veh, true];
 	if (count(fullCrew [_veh, "Gunner", true])!=0) then {
 		_unit action ["movetogunner", _veh];
@@ -105,6 +108,7 @@ if (_vehrole == 3) then {
 
 if (_vehrole == 4) then {
 	_unit action ["MovetoCargo", _veh, 0];
+	if (_unit != player && AIO_useVoiceChat) then {player groupRadio "SentCmdSwitchToCargo";};
 	_unitrole = assignedVehicleRole _unit;
 	_unitrole1 = _unitrole select 0;
 	if (_unitrole1 != "Cargo") then {

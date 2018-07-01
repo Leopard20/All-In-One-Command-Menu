@@ -28,6 +28,7 @@ class CfgPatches
 };
 
 #include "CfgSounds.hpp"
+#include "CustomMenus.hpp"
 
 class Extended_PreInit_EventHandlers
 {

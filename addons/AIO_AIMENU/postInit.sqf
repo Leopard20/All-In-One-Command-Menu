@@ -53,6 +53,7 @@ call compile preprocessFileLineNumbers "AIO_AIMENU\Functions\Mount.sqf";
 call compile preprocessFileLineNumbers "AIO_AIMENU\Functions\Rearm.sqf";
 call compile preprocessFileLineNumbers "AIO_AIMENU\Functions\SlingLoadingMenu.sqf";
 call compile preprocessFileLineNumbers "AIO_AIMENU\Functions\Taxi.sqf";
+AIO_retreatFnc = compile preprocessFileLineNumbers "AIO_AIMENU\Functions\Retreat.sqf";
 
 //Call main script, which opens the menu
 call compile preprocessFileLineNumbers "AIO_AIMENU\Aimenu.sqf";

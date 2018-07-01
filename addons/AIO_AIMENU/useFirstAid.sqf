@@ -3,7 +3,7 @@ private ["_unit","_target", "_cover", "_tarPos", "_combat", "_pos", "_dest", "_c
 _unit = _this select 0;
 _target = _this select 1;
 _cover = _this select 2;
-
+_behav = behaviour _unit;
 _target setVariable["AIO_beingHealed",1];
 
 if (_cover == 1) then {_combat = true} else {_combat = false}; //enables combat healing in Combat Modes other than "Combat"

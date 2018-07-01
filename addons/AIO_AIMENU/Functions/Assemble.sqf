@@ -12,18 +12,22 @@ AIO_staticAssemble_Fnc = {
 	if (_dir > 157.5 AND _dir <= 202.5) then {_dirChat = "South"};
 	if (_dir > 202.5 AND _dir <= 247.5) then {_dirChat = "SouthWest"};
 	if (_dir > 247.5 AND _dir <= 292.5) then {_dirChat = "West"};
-	_chat = format ["Assemble that weapon towards %1", _dirChat];
 	if (AIO_useVoiceChat) then {
 	_dirChat spawn {
 		private _dummy = "#particlesource" createVehicleLocal ASLToAGL getPosWorld player;
-		_dummy say2D "AIO_say_Assemble";
-		sleep 1.2;
-		_dummy say2D (format ["AIO_say_due_%1", _this]);
+		player groupRadio "SentAssemble";
+		_chat = format ["Assemble that weapon towards %1", _this];
+		player groupChat _chat;
+		_faction = faction player;
+		_useDir = false;
+		_lang = "";
+		if (_faction isEqualTo "BLU_F" OR _faction isEqualTo "BLU_F_T" OR _faction isEqualTo "BLU_CTRG_F") then {_lang = "ENG"; _useDir = true};
+		if (_faction isEqualTo "OPF_F") then {_lang = "PER"; _useDir = true};
+		if (_useDir) then {_dummy say2D (format ["AIO_say_due_%1_%2", _this, _lang])};
 		sleep 1.5;
 		deleteVehicle _dummy;
 	};
 	}; 
-	player groupChat _chat;
 	if (count _units == 2) then {
 		_unit1 = _units select 0;
 		_unit2 = _units select 1;
