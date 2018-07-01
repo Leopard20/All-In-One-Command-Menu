@@ -108,6 +108,7 @@ AIO_behaviour_subMenu =
 	["Fire On My Lead", [3], "", -5, [["expression", "[(groupSelectedUnits player), 2] execVM ""AIO_AIMENU\setBehaviour.sqf"" "]], "1", "1"],
 	["No Launcher", [4], "", -5, [["expression", "[(groupSelectedUnits player), 3] execVM ""AIO_AIMENU\switchweapon.sqf"" "]], "1", "1"],
 	["Unit Targeting", [5], "#USER:AIO_unitTargeting_subMenu", -5, [["expression", ""]], "1", "1"],
+	["Retreat!", [6], "", -5, [["expression", "[(groupSelectedUnits player)] spawn AIO_retreatFnc "]], "1", "1"],
 	["", [], "", -5, [["expression", ""]], "1", "0"],
 	["Refresh", [], "", -5, [["expression", "[(groupSelectedUnits player), 5] execVM ""AIO_AIMENU\setBehaviour.sqf"" "]], "1", "1"]
 ];
@@ -130,12 +131,7 @@ AIO_defense_subMenu =
 	["Take Cover", [2], "", -5, [["expression", "
 	[(groupSelectedUnits player), 30, 0] execVM ""AIO_AIMENU\moveToCover.sqf"";
 	if (AIO_useVoiceChat) then {
-	[] spawn {
-	private _dummy = ""#particlesource"" createVehicleLocal ASLToAGL getPosWorld player;
-	_dummy say2D 'AIO_say_TakeCover';
-	sleep 2; 
-	deleteVehicle _dummy;
-	};
+	player groupRadio ""SentCmdHide"";
 	};
 	"]], "1", "1"],
 	["360 Formation *", [3], "", -5, [["expression", "
@@ -195,8 +191,10 @@ AIO_infantry_subMenu =
 	["", [], "", -5, [["expression", ""]], "1", "0"],
 	["Follow Target", [8], "", -5, [["expression", "[(groupSelectedUnits player), cursorTarget] execVM ""AIO_AIMENU\follow.sqf"" "]], "1", "CursorOnGround", "\a3\Ui_f\data\IGUI\Cfg\Cursors\iconCursorSupport_ca.paa"],
 	["Set Unit Speed", [9], "#USER:AIO_limitSpeed1_subMenu", -5, [["expression", ""]], "1", "1"],
-	["Sprint Mode", [10], "#USER:AIO_sprintMenu", -5, [["expression", ""]], "1", "1"]
+	["Sprint Mode", [10], "#USER:AIO_sprintMenu", -5, [["expression", ""]], "1", "1"],
+	["Set Stance", [11], "AIO_stanceSubMenu", -5, [["expression", ""]], "1", "1"]
 ];
+
 
 AIO_switchseat_subMenu =
 [
@@ -431,8 +429,8 @@ AIO_MENU_GroupCommunication1 =
 AIO_sprintMenu =
 [
     ["Sprint Mode",true],
-	["Enable", [2], "", -5, [["expression", "[(groupSelectedUnits player), 1] execVM ""AIO_AIMENU\sprintMode.sqf"" "]], "1", "1"],
-	["Disable", [3], "", -5, [["expression", "[(groupSelectedUnits player), 0] execVM ""AIO_AIMENU\sprintMode.sqf""  "]], "1", "1"]
+	["Enable", [2], "", -5, [["expression", "AIO_EnableSprintMode = 1;[(groupSelectedUnits player), 1] execVM ""AIO_AIMENU\sprintModeFull.sqf"" "]], "1", "1"],
+	["Disable", [3], "", -5, [["expression", "AIO_EnableSprintMode = 0;[(groupSelectedUnits player), 0] execVM ""AIO_AIMENU\sprintModeFull.sqf"" "]], "1", "1"]
 ];
 
 if (AIO_Zeus_Enabled) then {(AIO_MENU_GroupCommunication select 13) set [5, "1"]};
@@ -471,8 +469,8 @@ if (AIO_groupSelectedUnitsCnt == 0) then {
 		(AIO_vehicle_subMenu select 1) set [2, "#USER:AIO_switchseat_subMenu_player"];
 	};
 };
-(AIO_sprintMenu select 1) set [6, str (1-AIO_EnableSprintMode)];
-(AIO_sprintMenu select 2) set [6, str AIO_EnableSprintMode];
+//(AIO_sprintMenu select 1) set [6, str (1-AIO_EnableSprintMode)];
+//(AIO_sprintMenu select 2) set [6, str AIO_EnableSprintMode];
 
 
 if (AIO_groupSelectedUnitsCnt > 2 or AIO_groupSelectedUnitsCnt == 0) then {(AIO_infantry_subMenu select 4) set [6, "0"]};
