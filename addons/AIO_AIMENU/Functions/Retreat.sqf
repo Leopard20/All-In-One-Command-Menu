@@ -1,9 +1,10 @@
 params ["_units"];
 AIO_selectedunits = _units;
+AIO_usingMap = true;
 if !(visibleMap) then {openMap true};
-
 AIO_retreatMapCMD =
 {
+	AIO_usingMap = false;
 	_pos = _this select 1;
 	_units = AIO_selectedunits;
 	_unitsToSprint = [];
@@ -55,3 +56,4 @@ AIO_retreatMapCMD =
 
 waitUntil {!(visibleMap)};
 ["AIO_MAP_MOUNT_singleClick", "onMapSingleClick"] call BIS_fnc_removeStackedEventHandler;
+AIO_usingMap = false;

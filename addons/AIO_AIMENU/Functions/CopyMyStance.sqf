@@ -27,9 +27,9 @@ AIO_copyFullStance =
 
 AIO_copy_my_stance_fnc =
 {
+	params ["_units"];
 	private ["_EHArray","_pos", "_stanceArray", "_posIndex", "_units", "_posArray","_EH", "_stanceVar"];
 	AIO_copy_my_stance = true;
-	_units = groupSelectedUnits player;
 	if (count _units == 0) then {_units = (units group player) - [player]};
 	AIO_copyStanceUnits = _units select {vehicle _x == _x};
 	_stanceArray = ["STAND", "CROUCH", "PRONE", "UNDEFINED"];

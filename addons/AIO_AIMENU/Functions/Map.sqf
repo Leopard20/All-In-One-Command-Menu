@@ -47,3 +47,14 @@ AIO_MAP_Mousectrl =
 	if (!(visibleMap) OR !(AIO_MAP_EMPTY_VEHICLES_MODE)) exitWith {_mapctrl ctrlMapCursor ["Track", "Track"]};
     _mapctrl ctrlMapCursor ["Track", _cursor];
 };
+
+addMissionEventHandler 
+[ "Map", 
+  {params ["_isOpened","_isForced"];
+	if (_isOpened && AIO_usingMap) then {
+	_world = worldSize;
+	((findDisplay 12) displayCtrl 51) ctrlMapAnimAdd [0,0.025*8192/_world,player];  
+	ctrlMapAnimCommit ((findDisplay 12) displayCtrl 51);
+	}
+  }
+];
