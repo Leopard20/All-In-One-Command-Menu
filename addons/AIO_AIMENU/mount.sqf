@@ -50,7 +50,7 @@ _getInFnc =
 		_unit moveTo _targetPos;
 	};
 	sleep 0.2;
-	_lastPos = getPos _unit;
+	_lastPos = getPos _target;
 	while {currentCommand _unit == "STOP" && !(moveToCompleted _unit) && (alive _unit) && (alive _target)} do 
 	{
 		if ((_target distance _lastPos) > 2) then {

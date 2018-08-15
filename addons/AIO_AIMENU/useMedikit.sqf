@@ -52,24 +52,25 @@ if (vehicle _target != _target && !(isPlayer _target)) then {
 };
 
 if (vehicle _unit != _unit) then {doGetOut _unit; waitUntil {!alive _unit OR vehicle _unit == _unit}; sleep 2};
-
-if !(_cover) then
-{
-	_unit doWatch objNull;
-	if (_target != player) then {
-	if (_combat) then {
-		_target forcespeed 1;
-		_unit setUnitPos "MIDDLE";
+if !(isPlayer _target) then {
+	if (!_cover) then
+	{
+		_unit doWatch objNull;
 		if (_target != player) then {
-			if (_currentComm == 2) then {_target doMove _pos};
-			if (_currentComm == 1) then {doStop _target};
+		if (_combat) then {
+			_target forcespeed 1;
+			_unit setUnitPos "MIDDLE";
+			if (_target != player) then {
+				if (_currentComm == 2) then {_target doMove _pos};
+				if (_currentComm == 1) then {doStop _target};
+			};
+		} else {doStop _target};
+		if (behaviour _target != "STEALTH") then {_target setUnitPos "MIDDLE"} else {_target setUnitPos "DOWN"};
 		};
-	} else {doStop _target};
-	if (behaviour _target != "STEALTH") then {_target setUnitPos "MIDDLE"} else {_target setUnitPos "DOWN"};
+		if (_unit distance _target > 2.5 && unitPos _unit == "DOWN" && _behav != "STEALTH" && !_combat) then {_unit setUnitPos "AUTO"};
+	} else {
+		_unit setUnitPos "MIDDLE";
 	};
-	if (_unit distance _target > 2.5 && unitPos _unit == "DOWN" && _behav != "STEALTH" && !_combat) then {_unit setUnitPos "AUTO"};
-} else {
-	_unit setUnitPos "MIDDLE";
 };
 if(_unit != _target) then
 {
@@ -93,7 +94,7 @@ if(_unit != _target) then
 		sleep 0.5;
 	 };
 };
-doStop _target;
+if !(isPlayer _target) then {doStop _target};
 if (alive _unit && alive _target && _unit distance _tarPos < 2.5) then {
 	_unit doMove (getPos _unit);
 	sleep 0.5;
