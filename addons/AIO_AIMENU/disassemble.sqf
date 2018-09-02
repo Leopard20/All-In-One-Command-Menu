@@ -29,13 +29,14 @@ if (count _units == 2) then {
 	_size = sizeOf (typeOf _static);
 	_distance = _size/3 + 5;
 	_posStatic = getPos _static;
-	while {!(unitReady _unit1) && (alive _unit1) && (alive _static)} do {
+	waitUntil {
+		sleep 1;
 		if (unitReady _unit2 OR (!alive _unit2)) exitWith {
 			_tempU = _unit2;
 			_unit2 = _unit1;
 			_unit1 = _tempU;
 		};
-		sleep 1;
+		!(!(unitReady _unit1) && (alive _unit1) && (alive _static))
 	};
 	if (_unit1 distance _static > _distance) exitWith {_units doMove (getpos _unit1)}; 
 	_pos1 = getPos _unit1;
@@ -68,7 +69,7 @@ if (count _units == 2) then {
 	_bb = [_bb,[],{_x distance _unit1},"ASCEND"] call BIS_fnc_sortBy;
 	_posStatic = (_bb select 0);
 	_unit1 doMove _posStatic;
-	while {!(unitReady _unit1) && (alive _unit1) && (alive _static)} do {sleep 1;};
+	waitUntil {sleep 1; !(!(unitReady _unit1) && (alive _unit1) && (alive _static))}
 	if (_unit1 distance _static > 10) exitWith {_units doMove (getpos _unit1)}; 
 	_unit1 action ["Disassemble", _static];
 };

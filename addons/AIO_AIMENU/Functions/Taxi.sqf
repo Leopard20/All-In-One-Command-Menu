@@ -1,3 +1,15 @@
+/*
+	_cfg = configfile >> "CfgWorlds" >> worldName;
+	_allAirPorts = [[(getArray (_cfg >> "ilsDirection")), (getArray (_cfg >> "ilsPosition")), (getArray (_cfg >> "ilsTaxiIn")), (getArray (_cfg >> "ilsTaxiOff"))]];
+	
+	_arr = "true" configclasses (_cfg >> "SecondaryAirports");
+	{
+		_cfg = _x;
+		_allAirPorts pushBack [(getArray (_cfg >> "ilsDirection")), (getArray (_cfg >> "ilsPosition")), (getArray (_cfg >> "ilsTaxiIn")), (getArray (_cfg >> "ilsTaxiOff"))]
+	} forEach _arr;
+	
+*/
+
 AIO_Plane_Taxi_move =
 {
 	params ["_veh", "_pointA", "_pointB", "_centPos", "_radius"];

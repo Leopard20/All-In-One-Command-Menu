@@ -20,6 +20,7 @@ if (currentCommand _target == "MOVE") then {
 	_tempGrp = createGroup (side _unit);
 	_assignedTeam2 = assignedTeam _target;
 	[_target] joinSilent _tempGrp;
+	if (_target in AIO_unitsToHoldFire) then {_tempGrp setCombatMode "BLUE"};
 	[_target] joinSilent _grp;
 	deleteGroup _tempGrp;
 	_target assignTeam _assignedTeam2;
@@ -27,6 +28,7 @@ if (currentCommand _target == "MOVE") then {
 _assignedTeam1 = assignedTeam _unit;
 _tempGrp = createGroup (side _unit);
 [_unit] joinSilent _tempGrp;
+if (_unit in AIO_unitsToHoldFire) then {_tempGrp setCombatMode "BLUE"};
 [_unit] joinSilent (group player);
 deleteGroup _tempGrp;
 _unit assignTeam _assignedTeam1;
@@ -119,6 +121,7 @@ _tempGrp = createGroup (side _unit);
 _assignedTeam1 = assignedTeam _unit;
 [_unit] joinSilent _tempGrp;
 _tempGrp setBehaviour _behav;
+if (_unit in AIO_unitsToHoldFire) then {_tempGrp setCombatMode "BLUE"};
 [_unit] joinSilent _grp;
 _unit assignTeam _assignedTeam1;
 deleteGroup _tempGrp;

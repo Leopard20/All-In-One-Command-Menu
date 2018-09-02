@@ -21,9 +21,9 @@ AIO_360_defense_fnc =
 		_unit setUnitPos "MIDDLE";
 		sleep 0.2;
 		_unit moveTo _pos;
-		while {alive _unit && !(moveToCompleted _unit)} do {sleep 1};
+		waitUntil {sleep 1; (!alive _unit || moveToCompleted _unit || currentCommand _unit != "STOP")};
 		_unit doWatch _watchPos;
-		while {currentCommand _unit == "STOP" && alive _unit} do {sleep 2};
+		waitUntil {sleep 1; (!alive _unit || currentCommand _unit != "STOP")};
 		_unit doWatch objNull;
 		_unit setUnitPos "AUTO";
 	};
@@ -68,10 +68,10 @@ AIO_fortify_pos_fnc =
 			_unit1 doMove _pos;
 			[_unit1] spawn {
 				params ["_unit1"];
-				if (_unit1 == effectiveCommander (vehicle _unit1)) then{
-					while {!unitReady _unit1 && alive _unit1} do {sleep 1};
+				if (_unit1 == effectiveCommander (vehicle _unit1)) then {
+					waitUntil {sleep 1; (!alive _unit1 || unitReady _unit1)};
 				} else {
-					while {currentCommand _unit1 == "MOVE" && alive _unit1} do {sleep 1};
+					waitUntil {sleep 1; (!alive _unit1 || currentCommand _unit1 != "MOVE")};
 				};
 				doGetOut (driver (vehicle _unit1));
 			};
@@ -97,7 +97,7 @@ AIO_fortify_pos_fnc =
 			if (unitPos _unit == "AUTO") then {_unit setUnitPos "MIDDLE"};
 			sleep 0.2;
 			_unit moveTo _pos;
-			while {alive _unit && !moveToCompleted _unit} do {sleep 1};
+			waitUntil {sleep 1; !(alive _unit && !moveToCompleted _unit)};
 			_unit doWatch _watchPos;
 			_unit doMove (getPos _unit);
 		};

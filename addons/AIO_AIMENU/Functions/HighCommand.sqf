@@ -471,6 +471,7 @@ AIO_fnc_spawnHCGroups =
 {
 	private ["_groups", "_cntGrps", "_menuNum", "_cntMenus", "_text"];
 	_groups = allGroups select {(side _x) == (side player)};
+	_groups = [_groups,[],{player distance (leader _x)},"ASCEND"] call BIS_fnc_sortBy;
 	_cntGrps = count _groups;
 	_cntMenus = floor (_cntGrps/11) + 1;
 	_menuNum = 1;
@@ -483,7 +484,7 @@ AIO_fnc_spawnHCGroups =
 	{
 		private "_name";
 		_unit = _groups select _i;
-		_dist = floor (player distance2D (leader _unit));
+		_dist = floor (player distance (leader _unit));
 		_mod = (_i + 1) mod 11;
 		if (_mod == 0) then {_mod = 11};
 		_text = format ["%1 - %2 m", _unit, _dist];

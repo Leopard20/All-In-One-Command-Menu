@@ -28,51 +28,50 @@ AIO_getUnitNumber =
 //Returns a list of nearby weapons according to their class (for taking weapons) 
 AIO_getName_weapons = 
 {
-	private ["_allItem","_ItemCnt","_dist","_className", "_displayName", "_dispNm", "_typeA", "_type", "_emptySlot", "_cntW"];
+	private ["_allItem","_ItemCnt","_dist","_className", "_displayName", "_dispNm", "_typeA", "_type", "_cntW"];
 	_allItem = _this select 0;
 	_ItemCnt = _this select 1;
 	_typeA = _this select 2;
 	_type = ["Rifle", "Pistol", "Launcher"] select _typeA;
-	_dispNm = [[""], [""], [""], [""], [""], [""], [""], [""], [""], [""], [""], [""], [""], [""], [""], [""], [""], [""], [""], [""]];
-	for "_i" from 0 to 12 do
+	_dispNm = [];
+	for "_i" from 0 to _ItemCnt-1 do
 	{
-		if (_ItemCnt > _i) then {
-			_dist = floor (player distance (_allItem select _i));
-			_cntW = count (weaponsItemsCargo (_allItem select _i)) - 1;
-			for "_k" from 0 to 12 do {
-				if ((_dispNm select _k) select 0 == "") exitWith {_emptySlot = _k};
-			};
-			for "_j" from 0 to _cntW do {
-				if (isNil "_emptySlot") exitWith {};
-				_className = ((weaponsItemsCargo (_allItem select _i)) select _j) select 0;
-				if (_className isKindOf [_type, configFile >> "CfgWeapons"] && _className != "") then {
-					_displayName = Format ["%1, %2 m",(getText (configFile >>  "CfgWeapons" >>_className >> "displayName")), _dist];
-					_dispNm set [_emptySlot + _j, [_displayName, _allItem select _i, _className]];
-				};
+		_dist = floor (player distance (_allItem select _i));
+		_cntW = count (weaponsItemsCargo (_allItem select _i)) - 1;
+		for "_j" from 0 to _cntW do {
+			_className = ((weaponsItemsCargo (_allItem select _i)) select _j) select 0;
+			if (_className isKindOf [_type, configFile >> "CfgWeapons"] && _className != "") then {
+				_displayName = Format ["%1, %2 m",(getText (configFile >>  "CfgWeapons" >>_className >> "displayName")), _dist];
+				_dispNm pushBack [_displayName, _allItem select _i, _className];
 			};
 		};
-		_emptySlot = nil;
 	};
-_dispNm
+	for "_i" from 0 to 11 do
+	{
+		_dispNm pushBack [""]
+	};
+	_dispNm
 };
 
 //Returns a list of nearby vehicles according to their class (for mount menu, disassemble menus and slingloading)
 AIO_getName_vehicles = 
 {
 	private ["_allItem","_ItemCnt","_dist","_className", "_dispNm", "_displayName"];
-	_dispNm = ["", "", "", "", "", "", "", "", ""];
+	_dispNm = [];
 	_allItem = _this select 0;
 	_ItemCnt = _this select 1;
-	for "_i" from 0 to 11 do
+	for "_i" from 0 to _ItemCnt-1 do
 	{
-		if (_ItemCnt > _i) then {
 		_dist = floor (player distance (_allItem select _i));
 		_className = typeOf (vehicle (_allItem select _i));
 		_displayName = Format ["%1, %2 m",(getText (configFile >>  "CfgVehicles" >>_className >> "displayName")), _dist];
-		_dispNm set [_i, _displayName];
-		};
+		_dispNm pushBack _displayName;
 	};
-_dispNm
+	for "_i" from 0 to 11 do
+	{
+		_dispNm pushBack ""
+	};
+	_dispNm
 };
 
 //Used for updating AIO_DriverSettings_subMenu when one of its settings are changed

@@ -1,6 +1,6 @@
 class CfgPatches
 {
-	class AIO_AIMenu
+	class AIO_AIMENU
 	{
 		author="Leopard20";
 		name="All-In-One Command Menu";
@@ -32,14 +32,14 @@ class CfgPatches
 
 class Extended_PreInit_EventHandlers
 {
-	class AIO_AIMenu_Init
+	class AIO_AIMENU_Init
 	{
 		clientInit="call compile preProcessFileLineNumbers '\AIO_AIMENU\XEH_preInit.sqf'";
 	};
 };
 class Extended_PostInit_EventHandlers
 {
-	class AIO_AIMenu
+	class AIO_AIMENU
 	{
 		clientInit="call compile preprocessFileLineNumbers '\AIO_AIMENU\init.sqf'";
 	};
