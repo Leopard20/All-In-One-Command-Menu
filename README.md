@@ -5,7 +5,7 @@ The deluxe version of the older mod, All-In-One Command Menu, with updated visua
 
 [BI Forum Thread](https://forums.bohemia.net/forums/topic/224834-all-in-one-single-player-project/)
 # Note:
-The source code is out of date.
+The source code is outdated.
 
 # Installation:
 1. [Download the latest build](https://github.com/leopard20/All-In-One-Command-Menu/releases/latest) from the Releases tab. 
