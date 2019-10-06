@@ -161,7 +161,7 @@ if (_id == -1) then {
 		if (_engineOn) then {
 			_time = time;
 			_vehicle setVariable ["AIO_engineOn", _time];
-			_vehicle setVariable ["AIO_engineReady", _time + ((18 - (_time - (_vehicle getVariable ["AIO_engineOff", _time]))) max 0)];
+			_vehicle setVariable ["AIO_engineReady", _time + ((_time - (_vehicle getVariable ["AIO_engineOff", _time])) min 18)];
 		} else {
 			_vehicle setVariable ["AIO_engineOff", time];
 		};

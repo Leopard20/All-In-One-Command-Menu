@@ -8,6 +8,7 @@ class AIO_commsMenu {
 		class Ammo {
 			title = "<img color='#ffffff' image='AIO_AIMenu\pictures\ammo.paa'/><t font='PuristaBold'> Low Ammo</t>"; 
 			shortcuts[] = {2};  
+			shortcutsAction = "CommandingMenu1";
 			command = "CMD_REPLY_AMMO_LOW";
 			show="1";
 			enable="1";
@@ -16,6 +17,7 @@ class AIO_commsMenu {
 		class Fuel {
 			title = "<img color='#ffffff' image='AIO_AIMenu\pictures\fuel.paa'/><t font='PuristaBold'> Low Fuel</t>"; 
 			shortcuts[] = {3};  
+			shortcutsAction = "CommandingMenu2";
 			command = "CMD_REPLY_FUEL_LOW";
 			show="1";
 			enable="1";
@@ -24,6 +26,7 @@ class AIO_commsMenu {
 		class ManDown {
 			title = "<img color='#ffffff' image='AIO_AIMenu\pictures\mandown.paa'/><t font='PuristaBold'> Man down</t>"; 
 			shortcuts[] = {4};  
+			shortcutsAction = "CommandingMenu3";
 			command = "CMD_REPLY_KILLED";
 			show="1";
 			enable="1";
@@ -32,6 +35,7 @@ class AIO_commsMenu {
 		class Injured {
 			title = "<img color='#f94a4a' image='\A3\ui_f\data\IGUI\Cfg\Cursors\unitBleeding_ca.paa'/><t font='PuristaBold'> Injured</t>"; 
 			shortcuts[] = {5};  
+			shortcutsAction = "CommandingMenu4";
 			command = "CMD_REPLY_INJURED";
 			show="1";
 			enable="1";
@@ -39,7 +43,8 @@ class AIO_commsMenu {
 		};
 		class Status1 {
 			title = "<img color='#ffffff' image='AIO_AIMenu\pictures\status.paa'/><t font='PuristaBold'> Report Status</t>"; 
-			shortcuts[] = {6};  
+			shortcuts[] = {6}; 
+			shortcutsAction = "CommandingMenu5";			
 			command = "CMD_REPORT";
 			show = "IsLeader";
 			enable="1";
@@ -48,6 +53,7 @@ class AIO_commsMenu {
 		class Status2 {
 			title = "<img color='#ffffff' image='AIO_AIMenu\pictures\status.paa'/><t font='PuristaBold'> Where are you?</t>"; 
 			shortcuts[] = {6};  
+			shortcutsAction = "CommandingMenu5";
 			command = "CMD_REPLY_WHERE_ARE_YOU";
 			show = "1 - IsLeader";
 			enable= "1";
@@ -56,6 +62,7 @@ class AIO_commsMenu {
 		class GotEm {
 			title = "<img color='#ffffff' image='AIO_AIMenu\pictures\kill.paa'/><t font='PuristaBold'> Got one</t>"; 
 			shortcuts[] = {7};  
+			shortcutsAction = "CommandingMenu6";
 			command = "CMD_REPLY_ONE_LESS";
 			show="1";
 			enable="1";
@@ -70,6 +77,7 @@ class AIO_commsMenu {
 		class Support {
 			title = "<img color='#ffffff' image='\A3\ui_f\data\GUI\Cfg\CommunicationMenu\supplydrop_ca.paa'/><t font='PuristaBold'> Call Support</t>"; 
 			shortcuts[] = {8};  
+			shortcutsAction = "CommandingMenu7";
 			show = "1";  
 			enable = "1";  
 			menu = "RscCallSupport";

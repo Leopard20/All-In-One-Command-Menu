@@ -3,7 +3,7 @@
 if (AIO_lastWaypointMode == 7) exitWith {
 	_veh = if (_param1 isEqualType []) then {vehicle (_param1 select 0)} else {_param1};
 	_exit = false;
-	_side = side player;
+	_side = side group player;
 	{
 		_isEnemy = [side _x, _side] call BIS_fnc_sideIsEnemy;  
 		if (_isEnemy) exitWith {_exit = true};

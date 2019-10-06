@@ -21,7 +21,7 @@ if (AIO_copyExactStance) then {
 		_team = assignedTeam _x;
 		_playerGrp = group player; 
 		_leader = leader _playerGrp; 
-		_tempGrp = createGroup (side player); 
+		_tempGrp = createGroup (side group player); 
 		_x disableAI "AUTOCOMBAT";
 		[_x] joinSilent _tempGrp;
 		_tempGrp setBehaviour "AWARE";

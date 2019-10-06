@@ -57,11 +57,11 @@
 ["AIO_enableMod", "CHECKBOX", "Enable All-in-One Command Menu", ["All-In-One Command Menu", "Initialization"] ,true, 1, {}, true] call CBA_Settings_fnc_init;
 ["AIO_Init_Message", "CHECKBOX", "Show Initialization Message", ["All-In-One Command Menu", "Initialization"] ,false, 1] call CBA_Settings_fnc_init;
 ["AIO_HC_Module_Enabled", "CHECKBOX", "Create High Command Module", ["All-In-One Command Menu", "Initialization"], false, 1, {}, true] call CBA_Settings_fnc_init;
-["AIO_becomeLeaderOnSwitch", "CHECKBOX", "Become Leader on Team Switch", ["All-In-One Command Menu", "Initialization"] ,false, 1] call CBA_Settings_fnc_init;
-["AIO_useVoiceChat", "CHECKBOX", "Use radio chat for reporting", ["All-In-One Command Menu", "Initialization"] ,true, 1] call CBA_Settings_fnc_init;
-["AIO_autoMedicEnabled", "CHECKBOX", "Enable Auto-Medic", ["All-In-One Command Menu", "Initialization"] ,false, 1] call CBA_Settings_fnc_init;
-["AIO_copyExactStance", "CHECKBOX", ["Use Exact Copy Stance", "Units follow the exact stance of player, including intermediate ones"], ["All-In-One Command Menu", "Initialization"] ,true, 1] call CBA_Settings_fnc_init;
-
+["AIO_becomeLeaderOnSwitch", "CHECKBOX", "Become Leader on Team Switch", ["All-In-One Command Menu", "Initialization"] ,false, 0] call CBA_Settings_fnc_init;
+["AIO_useVoiceChat", "CHECKBOX", "Use radio chat for reporting", ["All-In-One Command Menu", "Initialization"] ,true, 0] call CBA_Settings_fnc_init;
+["AIO_autoMedicEnabled", "CHECKBOX", "Enable Auto-Medic", ["All-In-One Command Menu", "Initialization"] ,false, 0] call CBA_Settings_fnc_init;
+["AIO_copyExactStance", "CHECKBOX", ["Use Exact Copy Stance", "Units follow the exact stance of player, including intermediate ones"], ["All-In-One Command Menu", "Initialization"] ,true, 0] call CBA_Settings_fnc_init;
+["AIO_useNumpadKeys", "LIST", ["Menu selection mode", "Choose the prefered method for selecting menu items"], ["All-In-One Command Menu", "Initialization"] ,[[false, true], ["Numeric Keys", "Numeric and Numpad Keys"], 0], 0] call CBA_Settings_fnc_init;
 //zeus
 ["AIO_Zeus_Enabled", "CHECKBOX", "Create Zeus Module", ["All-In-One Command Menu", "Zeus"] ,true, 1] call CBA_Settings_fnc_init;
 ["AIO_forceActivateAddons", "CHECKBOX", ["Force-enable all mods", "Mission makers can deactivate some addons. You can force activate them."], ["All-In-One Command Menu", "Zeus"] ,false, 1] call CBA_Settings_fnc_init;
@@ -71,9 +71,9 @@
 ["AIO_Zeus_destroy_Enabled", "CHECKBOX", "Enable Destroying Objects in Zeus", ["All-In-One Command Menu", "Zeus"] ,true, 1] call CBA_Settings_fnc_init;
 ["AIO_Zeus_limit_area", "SLIDER", "Limit Zeus Editing Area (in meters, 0 = Disabled)", ["All-In-One Command Menu", "Zeus"] ,[0, 5000, 0, 0], 1] call CBA_Settings_fnc_init;
 //driver
-["AIO_autoEnableSuperPilot", "CHECKBOX", ["Use Super Pilot automatically", "Enables Super Pilot for helicopters when landing/slingloading/resupplying"], ["All-In-One Command Menu", "Pilot Mode"] ,true, 1] call CBA_Settings_fnc_init;
-["AIO_pilot_holdCtrl", "LIST", ["Direct Flight Control Mode", "Gives direct vehicle control to player"], ["All-In-One Command Menu", "Pilot Mode"] ,[[false, true], ["Toggle", "Hold"], 0], 1] call CBA_Settings_fnc_init;
-["AIO_FixedWatchDir", "LIST", ["Player Watch Direction During Direct Flight Ctrl", "Should the player look directly ahead (toward direction of movement) during Direct Ctrl. mode?"], ["All-In-One Command Menu", "Pilot Mode"] ,[[false, true], ["Watch Ahead", "Fixed"], 0], 1] call CBA_Settings_fnc_init;
+["AIO_autoEnableSuperPilot", "CHECKBOX", ["Use Super Pilot automatically", "Enables Super Pilot for helicopters when landing/slingloading/resupplying"], ["All-In-One Command Menu", "Pilot Mode"] ,true, 0] call CBA_Settings_fnc_init;
+["AIO_pilot_holdCtrl", "LIST", ["Direct Flight Control Mode", "Gives direct vehicle control to player"], ["All-In-One Command Menu", "Pilot Mode"] ,[[false, true], ["Toggle", "Hold"], 0], 0] call CBA_Settings_fnc_init;
+["AIO_FixedWatchDir", "LIST", ["Player Watch Direction During Direct Flight Ctrl", "Should the player look directly ahead (toward direction of movement) during Direct Ctrl. mode?"], ["All-In-One Command Menu", "Pilot Mode"] ,[[false, true], ["Watch Ahead", "Fixed"], 0], 0] call CBA_Settings_fnc_init;
 
 
 

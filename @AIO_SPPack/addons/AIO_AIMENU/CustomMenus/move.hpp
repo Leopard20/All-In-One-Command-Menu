@@ -23,6 +23,7 @@ class AIO_moveMenu {
 		{
 			title="<img color='#95ff44' image='\A3\ui_f\data\IGUI\Cfg\simpleTasks\types\meet_ca.paa'/><t font='PuristaBold'> Return to Formation</t>";
 			shortcuts[]={2};
+			shortcutsAction = "CommandingMenu1";
 			command = "CMD_JOIN";
 			show = "IsLeader + VehicleCommander";
 			enable = "NotEmpty + CommandsToPilot";
@@ -31,6 +32,7 @@ class AIO_moveMenu {
 		class Stop {
 			title = "<img image='AIO_AIMenu\pictures\stop.paa'/><t font='PuristaBold'> Stop</t>"; 
 			shortcuts[] = {3};  
+			shortcutsAction = "CommandingMenu2";
 			show = "1";  
 			enable = "NotEmpty";
 			command = "CMD_STOP";
@@ -45,6 +47,7 @@ class AIO_moveMenu {
 		class Stance {
 			title = "<img color='#ffa43d' image='\A3\ui_f\data\IGUI\RscIngameUI\RscUnitInfo\SI_Stand_ca.paa'/><t font='PuristaBold'> Stance</t>"; 
 			shortcuts[] = {4};  
+			shortcutsAction = "CommandingMenu3";
 			show = "1";  
 			enable = "1";  
 			menu = "AIO_stanceSubMenu";
@@ -52,7 +55,8 @@ class AIO_moveMenu {
 		};
 		class Cover {
 			title = "<img color='#a532c9' image='\A3\ui_f\data\GUI\Cfg\GameTypes\defend_ca.paa'/><t font='PuristaBold'> Cover</t>"; 
-			shortcuts[] = {5};  
+			shortcuts[] = {5}; 
+			shortcutsAction = "CommandingMenu4";			
 			show = "1";  
 			enable = "1";
 			menu = "AIO_coverSubMenu";
@@ -61,6 +65,7 @@ class AIO_moveMenu {
 		class Formation {
 			title = "<img color='#626262' image='AIO_AIMenu\pictures\formation.paa'/><t font='PuristaBold'> Formation</t>"; 
 			shortcuts[] = {6};  
+			shortcutsAction = "CommandingMenu5";
 			show = "1";  
 			enable = "1";  
 			menu = "AIO_formationSubMenu";
@@ -69,6 +74,7 @@ class AIO_moveMenu {
 		class Building {
 			title = "<img color='#fffb44' image='\A3\ui_f\data\IGUI\Cfg\simpleTasks\types\getin_ca.paa'/><t font='PuristaBold'> Move into building ...</t>"; 
 			shortcuts[] = {7};  
+			shortcutsAction = "CommandingMenu6";
 			show = "1";  
 			enable = "1";  
 			menu = "#USER:AIO_moveIntoHouse_subMenu";

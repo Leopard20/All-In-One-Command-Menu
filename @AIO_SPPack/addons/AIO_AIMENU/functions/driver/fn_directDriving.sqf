@@ -4,12 +4,20 @@ if (!AIO_Advanced_Ctrl) then {
 	AIO_selectedDriver disableAI "TARGET";
 	AIO_selectedDriver disableAI "AUTOTARGET";
 	selectPlayer AIO_selectedDriver;
+	
 	_group = group AIO_switchedPlayer;
-	[AIO_selectedDriver, AIO_switchedPlayer] joinSilent AIO_driverGroup;
+	_driverGroup = createGroup (side _group);
+	_assignedTeam = assignedTeam AIO_selectedDriver;
+	
+	[AIO_selectedDriver, AIO_switchedPlayer] joinSilent _driverGroup;
+	
 	if (AIO_FixedWatchDir) then {AIO_switchedPlayer disableAI "WEAPONAIM"} else {AIO_switchedPlayer disableAI "AUTOTARGET"};
 	AIO_selectedDriver doTarget AIO_switchedPlayer;
 	AIO_selectedDriver doWatch AIO_switchedPlayer;
 	[AIO_switchedPlayer, AIO_selectedDriver] joinSilent _group;
+	
+	AIO_selectedDriver assignTeam _assignedTeam;
+	
 	_group selectLeader AIO_switchedPlayer;
 	AIO_switchedPlayer switchCamera _camera;
 	AIO_Advanced_Ctrl = true;

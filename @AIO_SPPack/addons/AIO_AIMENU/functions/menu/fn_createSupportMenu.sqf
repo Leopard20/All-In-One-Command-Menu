@@ -53,6 +53,7 @@ for "_i" from 1 to (_cntMenu) do
 };
 _menuNum = 1;
 
+_numericKeys = [79,80,81,75,76,77,71,72,73,82];
 for "_i" from 0 to (_cntU - 1) do
 {
 	_unit = _units select _i;
@@ -86,12 +87,12 @@ for "_i" from 0 to (_cntU - 1) do
 	_text = parseText format ["<img image='%4'/><t font='PuristaBold'> %1 - %2 %3</t>", _number, name _unit, _veh, _img];
 	
 	AIO_HCSelectedUnits pushBack _unit;
-	
+	_shortcut = 2+_mod-1;
 	_text1 = if (_unit != player && _unit in _temp) then {
-		format ['AIO_chooseSupUnits%1 pushBack [_text, [2+_mod-1], "", -5, [["expression", "AIO_HCSelectedUnitsNum pushBack %3; [%1, %2, 2] spawn 
+		format ['AIO_chooseSupUnits%1 pushBack [_text, ([[_shortcut], [_shortcut, (_numericKeys select _shortcut-2)]] select AIO_useNumpadKeys), "", -5, [["expression", "AIO_HCSelectedUnitsNum pushBack %3; [%1, %2, 2] spawn 
 		AIO_fnc_disableMenu"]], "1", "1"]', _menuNum , _mod, _i]
 	} else {
-		format ['AIO_chooseSupUnits%1 pushBack [_text, [2+_mod-1], "", -5, [["expression", ""]], "1", "0"]', _menuNum]
+		format ['AIO_chooseSupUnits%1 pushBack [_text, ([[_shortcut], [_shortcut, (_numericKeys select _shortcut-2)]] select AIO_useNumpadKeys), "", -5, [["expression", ""]], "1", "0"]', _menuNum]
 	};
 	call compile _text1;
 	

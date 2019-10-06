@@ -8,6 +8,7 @@ class AIO_coverSubMenu {
 		class TakeCover {
 			title = "<img color='#f94a4a' image='\A3\ui_f\data\IGUI\Cfg\simpleTasks\types\target_ca.paa'/><t font='PuristaBold'> Take Cover</t>"; 
 			shortcuts[] = {2};  
+			shortcutsAction = "CommandingMenu1";
 			command = -5;
 			class Params
 			{
@@ -20,6 +21,7 @@ class AIO_coverSubMenu {
 		class form360 {
 			title = "<img color='#ffff00' image='\A3\ui_f\data\IGUI\Cfg\simpleTasks\types\target_ca.paa'/><t font='PuristaBold'> 360 Formation *</t>"; 
 			shortcuts[] = {3};  
+			shortcutsAction = "CommandingMenu2";
 			command = -5;
 			class Params
 			{
@@ -32,6 +34,7 @@ class AIO_coverSubMenu {
 		class fortify {
 			title = "<img color='#f94a4a' image='\A3\ui_f\data\IGUI\Cfg\simpleTasks\types\target_ca.paa'/><t font='PuristaBold'> Fortify Position *</t>"; 
 			shortcuts[] = {4};  
+			shortcutsAction = "CommandingMenu3";
 			show="1";
 			enable = "NotEmpty * CursorOnGround";
 			command = -5;
@@ -50,6 +53,7 @@ class AIO_coverSubMenu {
 		class Hide {
 			title = "<img color='#2da7ff' image='\A3\ui_f\data\IGUI\Cfg\simpleTasks\types\target_ca.paa'/><t font='PuristaBold'> Hide</t>"; 
 			shortcuts[] = {5};  
+			shortcutsAction = "CommandingMenu4";
 			command = "CMD_HIDE";
 			show="1";
 			enable = "NotEmpty";

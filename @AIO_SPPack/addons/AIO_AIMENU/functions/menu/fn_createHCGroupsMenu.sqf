@@ -1,5 +1,5 @@
 private ["_groups", "_cntGrps", "_menuNum", "_cntMenu", "_text"];
-_groups = allGroups select {(side _x) == (side player)};
+_groups = allGroups select {(side _x) == (side group player)};
 _groups = [_groups,[],{player distance (leader _x)},"ASCEND"] call BIS_fnc_sortBy;
 _cntGrps = count _groups;
 _cntMenu = floor (_cntGrps/10) + 1;
@@ -135,6 +135,7 @@ _getHex =
 	(_d1+_d2)
 };
 */
+_numericKeys = [79,80,81,75,76,77,71,72,73,82];
 
 for "_i" from 0 to (_cntGrps - 1) do
 {
@@ -159,8 +160,9 @@ for "_i" from 0 to (_cntGrps - 1) do
 	
 	_text = format ["%1 - %2 m", _group, _dist];
 	AIO_HCgroup_array pushBack _group;
-	_text1 = format ['AIO_allHCgroups_subMenu%1 pushBack [parseText"<img color=""#%7"" image=""%6""/><t font=""PuristaBold""> %3", [2+_mod-1], "", -5, [["expression", "[%5] call AIO_fnc_addHCGroup_Alt; [%1, %2, 3] spawn AIO_fnc_disableMenu"]], "1", "1"]', _menuNum , _mod, _text, _group, _i, _grpIcon, _colorID];
-	_text2 = format ['AIO_allHCgroups_subMenu%1 pushBack [parseText"<img color=""#%5"" image=""%4""/><t font=""PuristaBold""> %3", [2+_mod-1], "", -5, [["expression", ""]], "1", "0"]', _menuNum , _mod, _text, _grpIcon, _colorID];
+	_shortcut = 2+_mod-1;
+	_text1 = format ['AIO_allHCgroups_subMenu%1 pushBack [parseText"<img color=""#%7"" image=""%6""/><t font=""PuristaBold""> %3", ([[_shortcut], [_shortcut, (_numericKeys select _shortcut-2)]] select AIO_useNumpadKeys), "", -5, [["expression", "[%5] call AIO_fnc_addHCGroup_Alt; [%1, %2, 3] spawn AIO_fnc_disableMenu"]], "1", "1"]', _menuNum , _mod, _text, _group, _i, _grpIcon, _colorID];
+	_text2 = format ['AIO_allHCgroups_subMenu%1 pushBack [parseText"<img color=""#%5"" image=""%4""/><t font=""PuristaBold""> %3", ([[_shortcut], [_shortcut, (_numericKeys select _shortcut-2)]] select AIO_useNumpadKeys), "", -5, [["expression", ""]], "1", "0"]', _menuNum , _mod, _text, _grpIcon, _colorID];
 	if (_group != (group player) && player != hcLeader _group) then {call compile _text1} else {call compile _text2};
 	if (_mod == 10 && (_cntGrps - 1) != _i) then {
 		_text1 = format ['AIO_allHCgroups_subMenu%1 pushBack ["", [], "", -1, [["expression", ""]], "1", "0"]', _menuNum , 12];

@@ -9,6 +9,7 @@ class AIO_mountMenu {
 		{
 			title="<img color='#2da7ff' image='\A3\ui_f\data\IGUI\Cfg\Actions\getout_ca.paa'/><t font='PuristaBold'> Disembark</t>";
 			shortcuts[]={11};
+			shortcutsAction = "CommandingMenu0";
 			command="CMD_GETOUT";
 			show="1";
 			enable="1";
@@ -23,6 +24,7 @@ class AIO_mountMenu {
 		class Wheeled {
 			title = "<img color='#2da7ff' image='\A3\ui_f\data\GUI\Rsc\RscDisplayGarage\car_ca.paa'/><t font='PuristaBold'> Wheeled</t>"; 
 			shortcuts[] = {2};  
+			shortcutsAction = "CommandingMenu1";
 			show = "1";  
 			enable = "1";  
 			command = -5;
@@ -35,6 +37,7 @@ class AIO_mountMenu {
 		class Tracked {
 			title = "<img color='#2da7ff' image='\A3\ui_f\data\GUI\Rsc\RscDisplayGarage\tank_ca.paa'/><t font='PuristaBold'> Tracked</t>"; 
 			shortcuts[] = {3};  
+			shortcutsAction = "CommandingMenu2";
 			show = "1";  
 			enable = "1";  
 			command = -5;
@@ -47,6 +50,7 @@ class AIO_mountMenu {
 		class Helicopter {
 			title = "<img color='#2da7ff' image='\A3\ui_f\data\GUI\Rsc\RscDisplayGarage\helicopter_ca.paa'/><t font='PuristaBold'> Helicopter</t>"; 
 			shortcuts[] = {4};  
+			shortcutsAction = "CommandingMenu3";
 			show = "1";  
 			enable = "1";  
 			command = -5;
@@ -59,6 +63,7 @@ class AIO_mountMenu {
 		class Boat {
 			title = "<img color='#2da7ff' image='\A3\ui_f\data\GUI\Rsc\RscDisplayGarage\naval_ca.paa'/><t font='PuristaBold'> Boat</t>"; 
 			shortcuts[] = {5};  
+			shortcutsAction = "CommandingMenu4";
 			show = "1";  
 			enable = "1";  
 			command = -5;
@@ -71,6 +76,7 @@ class AIO_mountMenu {
 		class Plane {
 			title = "<img color='#2da7ff' image='\A3\ui_f\data\GUI\Rsc\RscDisplayGarage\plane_ca.paa'/><t font='PuristaBold'> Plane</t>"; 
 			shortcuts[] = {6};  
+			shortcutsAction = "CommandingMenu5";
 			show = "1";  
 			enable = "1";  
 			command = -5;
@@ -83,6 +89,7 @@ class AIO_mountMenu {
 		class StaticWpn {
 			title = "<img color='#2da7ff' image='\A3\ui_f\data\GUI\Rsc\RscDisplayGarage\static_ca.paa'/><t font='PuristaBold'> Static Weapon</t>"; 
 			shortcuts[] = {7};  
+			shortcutsAction = "CommandingMenu6";
 			show = "1";  
 			enable = "1";  
 			command = -5;
@@ -101,6 +108,7 @@ class AIO_mountMenu {
 		class CursorTrgt {
 			title = "<img color='#2da7ff' image='\A3\ui_f\data\IGUI\Cfg\simpleTasks\types\target_ca.paa'/><t font='PuristaBold'> %POINTED_TARGET_NAME</t>"; 
 			shortcuts[] = {8};  
+			shortcutsAction = "CommandingMenu7";
 			show = "IsLeader * NotEmpty * CursorOnVehicleCanGetIn";
 			enable = "NotEmpty";
 			command = -5;

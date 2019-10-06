@@ -11,6 +11,7 @@ if (AIO_enableSuperPilot) then {
 	
 	if (_id != -1) then {
 		_display displayRemoveEventHandler ["keyDown", _id];
+		_display setVariable ["AIO_keyDownID", -1]; 
 	};
 	
 	_id = _display displayAddEventHandler ["KeyDown", {
@@ -187,6 +188,7 @@ if (AIO_enableSuperPilot) then {
 	
 	if (_id != -1) then {
 		_display displayRemoveEventHandler ["keyUp", _id];
+		_display getVariable ["AIO_keyUpID", -1]; 
 	};
 	
 	_id = _display displayAddEventHandler ["keyUp", {
@@ -233,7 +235,7 @@ if (AIO_enableSuperPilot) then {
 	[AIO_vehiclePlayer] call AIO_fnc_analyzeHeli;
 	
 } else {
-	[AIO_vehiclePlayer] call AIO_fnc_disableSuperPilot;
+	if !((driver AIO_vehiclePlayer) in AIO_taskedUnits) then {[AIO_vehiclePlayer] call AIO_fnc_disableSuperPilot};
 	AIO_vehiclePlayer = objNull;
 	_display displayRemoveEventHandler ["keyDown", _display getVariable ["AIO_keyDownID", -1]];
 	_display setVariable ["AIO_keyDownID", -1];

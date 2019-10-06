@@ -33,11 +33,11 @@ _txt5 = parseText format ["<img image='%1'/><t font='PuristaBold'> Misc Items", 
 AIO_addMagazine_subMenu =
 [
 	["Take Weapon",true],
-	[_txt1, [2], "", -5, [["expression", "[groupSelectedUnits player, 0] spawn AIO_fnc_addAmmo; [(groupSelectedUnits player)] spawn AIO_fnc_createMagsMenu"]], "1", "1"],
-	[_txt2, [3], "", -5, [["expression", "[groupSelectedUnits player, 1] spawn AIO_fnc_addAmmo; [(groupSelectedUnits player)] spawn AIO_fnc_createMagsMenu"]], "1", "1"],
-	[_txt3, [4], "", -5, [["expression", "[groupSelectedUnits player, 2] spawn AIO_fnc_addAmmo; [(groupSelectedUnits player)] spawn AIO_fnc_createMagsMenu"]], "1", "1"],
-	[_txt4, [5], "", -5, [["expression", "[groupSelectedUnits player, 3] spawn AIO_fnc_addAmmo; [(groupSelectedUnits player)] spawn AIO_fnc_createMagsMenu"]], "1", "1"],
-	[_txt5, [6], "", -5, [["expression", "[groupSelectedUnits player, 4] spawn AIO_fnc_addAmmo; [(groupSelectedUnits player)] spawn AIO_fnc_createMagsMenu"]], "1", "1"]
+	[_txt1, ([[2], [2, 79]] select AIO_useNumpadKeys), "", -5, [["expression", "[groupSelectedUnits player, 0] spawn AIO_fnc_addAmmo; [(groupSelectedUnits player)] spawn AIO_fnc_createMagsMenu"]], "1", "1"],
+	[_txt2, ([[3], [3, 80]] select AIO_useNumpadKeys), "", -5, [["expression", "[groupSelectedUnits player, 1] spawn AIO_fnc_addAmmo; [(groupSelectedUnits player)] spawn AIO_fnc_createMagsMenu"]], "1", "1"],
+	[_txt3, ([[4], [4, 81]] select AIO_useNumpadKeys), "", -5, [["expression", "[groupSelectedUnits player, 2] spawn AIO_fnc_addAmmo; [(groupSelectedUnits player)] spawn AIO_fnc_createMagsMenu"]], "1", "1"],
+	[_txt4, ([[5], [5, 75]] select AIO_useNumpadKeys), "", -5, [["expression", "[groupSelectedUnits player, 3] spawn AIO_fnc_addAmmo; [(groupSelectedUnits player)] spawn AIO_fnc_createMagsMenu"]], "1", "1"],
+	[_txt5, ([[6], [6, 76]] select AIO_useNumpadKeys), "", -5, [["expression", "[groupSelectedUnits player, 4] spawn AIO_fnc_addAmmo; [(groupSelectedUnits player)] spawn AIO_fnc_createMagsMenu"]], "1", "1"]
 ];
 
 showCommandingMenu "#USER:AIO_addMagazine_subMenu";

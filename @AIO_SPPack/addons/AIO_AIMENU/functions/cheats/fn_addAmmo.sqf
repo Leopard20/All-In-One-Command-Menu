@@ -18,7 +18,7 @@ if (_type == 4) exitWith {
 		if (_ItemWatch == "") then {_x addItem "ItemWatch"; _x assignItem "ItemWatch"};
 		if (_ItemRadio == "") then {_x addItem "ItemRadio"; _x assignItem "ItemRadio"};
 		if (_ItemGPS == "") then {
-			_side = ["O", "B", "I", "C"] select ((side player) call BIS_fnc_sideID);
+			_side = ["O", "B", "I", "C"] select ((side group player) call BIS_fnc_sideID);
 			_ItemGPS = format ["%1_UAVTerminal", _side];
 			_x addItem _ItemGPS; 
 			_x assignItem _ItemGPS

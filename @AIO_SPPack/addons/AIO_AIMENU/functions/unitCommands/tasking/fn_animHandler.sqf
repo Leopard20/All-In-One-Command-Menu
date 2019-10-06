@@ -22,7 +22,7 @@ waitUntil {
 			_x disableAI "PATH";
 			_x disableAI "ANIM";
 			if !(_positions isEqualTo []) then {
-				_currentPos = getPosASLVisual _x;
+				_currentPos = getPosWorld _x;
 				_nextPos = _positions select 0;
 				_x moveTo _nextPos;
 				if (_currentPos distance2D _nextPos < 2) then { //_unit has reached the position
@@ -46,19 +46,8 @@ waitUntil {
 					_angle = acos(_vecDir vectorCos _watchDir);
 					_turn = 1;
 					if (_angle > 1) then {
-						_vecDirX = _vecDir select 0;
-						_vecDirY = _vecDir select 1;
-						_watchDirX = _watchDir select 0;
-						_watchDirY = _watchDir select 1;
-						if (_watchDirY*_vecDirY >= 0) then {
-							if (_watchDirX >= _vecDirX) then {_turn = -1} else {_turn = 1};
-						} else {
-							if (_watchDirX*_vecDirX >= 0) then {if(_vecDirX >= 0) then {_turn = -1} else {_turn = 1}} else {
-								if (abs(_watchDirX)<=abs(_vecDirX)) then {_turn = -1} else {_turn = 1};
-								if(_vecDirX < 0) then {_turn =-1*_turn};
-							};
-						};
-						if (_vecDirY < 0) then {_turn =-1*_turn};
+						_turn = [-1,1] select (_x getRelDir _nextPos > 180);
+						
 						if (_angle > 5) then {
 							_newDir = [_vecDir, 5*_turn] call BIS_fnc_rotateVector2D;
 							_x setVectorDir _newDir;

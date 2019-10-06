@@ -9,7 +9,7 @@ _text2 = parseText format ["<t font='PuristaBold'>%1 (%2)", name _unit2, [_unit2
 AIO_Select_Rearmer =
 [
 	["Unit to open inventory", true],
-	[_text1, [2], "", -5, [["expression", "[(AIO_selectedUnits), 0, AIO_selectedTarget] spawn AIO_fnc_rearmAtUnit "]], "1", "1"],
-	[_text2, [3], "", -5, [["expression", "[(AIO_selectedUnits), 1, AIO_selectedTarget] spawn AIO_fnc_rearmAtUnit "]], "1", "1"]
+	[_text1, ([[2], [2, 79]] select AIO_useNumpadKeys), "", -5, [["expression", "[(AIO_selectedUnits), 0, AIO_selectedTarget] spawn AIO_fnc_rearmAtUnit "]], "1", "1"],
+	[_text2, ([[3], [3, 80]] select AIO_useNumpadKeys), "", -5, [["expression", "[(AIO_selectedUnits), 1, AIO_selectedTarget] spawn AIO_fnc_rearmAtUnit "]], "1", "1"]
 ];
 showCommandingMenu "#USER:AIO_Select_Rearmer";

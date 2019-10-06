@@ -2,18 +2,21 @@ _display = findDisplay 46;
 
 _id = _display getVariable ["AIO_keyDownID", -1]; 	
 if (_id != -1) then {
-_display displayRemoveEventHandler ["keyDown", _id];
+	_display displayRemoveEventHandler ["keyDown", _id];
+	_display setVariable ["AIO_keyDownID", -1];
 };
 
 _id = _display getVariable ["AIO_keyUpID", -1];
 if (_id != -1) then {
 	_display displayRemoveEventHandler ["keyUp", _id];
+	_display setVariable ["AIO_keyUpID", -1];
 };
 
 if !(AIO_driver_mode_enabled) exitWith {
 	_id = player getVariable ["AIO_getOut_EH", -1];
 	if (_id != -1) then {
 		player removeEventHandler ["GetOutMan", _id];
+		player setVariable ["AIO_getOut_EH", -1];
 	};
 };
 

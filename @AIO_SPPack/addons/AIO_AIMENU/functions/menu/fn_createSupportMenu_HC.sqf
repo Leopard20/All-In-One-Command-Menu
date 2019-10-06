@@ -4,7 +4,7 @@ AIO_HCSelectedUnits = [];
 AIO_selectedSupport = _supType;
 AIO_HCSelectedUnitsNum = [];
 
-_groups = allGroups select {(side _x) == (side player)};
+_groups = allGroups select {(side _x) == (side group player)};
 _groups = [_groups,[],{player distance (leader _x)},"ASCEND"] call BIS_fnc_sortBy;
 
 _temp = [];
@@ -171,7 +171,7 @@ _sides = ["o", "b", "i", "n"];
 _cfgGroupIcons = ConfigFile >> "CfgGroupIcons";
 _groupIcons = ("true" configClasses _cfgGroupIcons) apply {configName _x};
 
-
+_numericKeys = [79,80,81,75,76,77,71,72,73,82];
 for "_i" from 0 to (_cntU - 1) do
 {
 	_group = _groups select _i;
@@ -196,12 +196,12 @@ for "_i" from 0 to (_cntU - 1) do
 	if (_mod == 0) then {_mod = 10};
 	
 	AIO_HCSelectedUnits pushBack _group;
-	
+	_shortcut = 2+_mod-1;
 	_text1 = if (_group != group player && _group in _temp) then {
-		format ['AIO_chooseSupUnits%1 pushBack [parseText"<img color=""#%4"" image=""%5""/><t font=""PuristaBold""> %6", [2+_mod-1], "", -5, [["expression", "AIO_HCSelectedUnitsNum pushBack %3; [%1, %2, 2] spawn 
+		format ['AIO_chooseSupUnits%1 pushBack [parseText"<img color=""#%4"" image=""%5""/><t font=""PuristaBold""> %6", ([[_shortcut], [_shortcut, (_numericKeys select _shortcut-2)]] select AIO_useNumpadKeys), "", -5, [["expression", "AIO_HCSelectedUnitsNum pushBack %3; [%1, %2, 2] spawn 
 		AIO_fnc_disableMenu"]], "1", "1"]', _menuNum , _mod, _i, _colorID, _grpIcon, _text]
 	} else {
-		format ['AIO_chooseSupUnits%1 pushBack [parseText"<img color=""#%2"" image=""%3""/><t font=""PuristaBold""> %4", [2+_mod-1], "", -5, [["expression", ""]], "1", "0"]', _menuNum, _colorID, _grpIcon, _text]
+		format ['AIO_chooseSupUnits%1 pushBack [parseText"<img color=""#%2"" image=""%3""/><t font=""PuristaBold""> %4", ([[_shortcut], [_shortcut, (_numericKeys select _shortcut-2)]] select AIO_useNumpadKeys), "", -5, [["expression", ""]], "1", "0"]', _menuNum, _colorID, _grpIcon, _text]
 	};
 	call compile _text1;
 	

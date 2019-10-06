@@ -5,7 +5,7 @@ _selectedUnits = _this select 0;
 _selectedVehicles = [];
 
 _cursor = cursorObject;
-if (player distance2D _cursor < 20 && {vehicle player == player && {(vectorUp _cursor) select 2 < 0.7 && {count (crew _cursor) == 0 || {side ((crew _cursor) select 0) == side player}}}}) then {
+if (player distance2D _cursor < 20 && {vehicle player == player && {(vectorUp _cursor) select 2 < 0.7 && {count (crew _cursor) == 0 || {side ((crew _cursor) select 0) == side group player}}}}) then {
 	_selectedVehicles pushBack _cursor;
 };
 
@@ -32,7 +32,7 @@ _unstickPlayer =
 	player setVelocity [0,0,0];
 	_playerGrp = group player; 
 	_leader = leader _playerGrp; 
-	_tempGrp = createGroup (side player); 
+	_tempGrp = createGroup (side group player); 
 	[player] joinSilent _tempGrp; player switchMove ""; 
 	[player] joinSilent _playerGrp; 
 	_playerGrp selectLeader _leader; 

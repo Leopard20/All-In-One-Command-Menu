@@ -23,7 +23,7 @@ AIO_retreatMapCMD =
 		_team = assignedTeam _x;
 		_playerGrp = group player; 
 		_leader = leader _playerGrp; 
-		_tempGrp = createGroup (side player); 
+		_tempGrp = createGroup (side group player); 
 		_x disableAI "AUTOCOMBAT";
 		_x disableAI "AUTOTARGET";
 		[_x] joinSilent _tempGrp;

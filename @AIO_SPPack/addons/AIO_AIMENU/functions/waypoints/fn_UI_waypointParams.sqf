@@ -29,7 +29,7 @@ if (AIO_waypointMode == 7) exitWith { //mount
 	{
 		_nearVehs1 = _x nearObjects ["allVehicles", 1000];
 		{
-			if (!(_x isKindOf "Man") && !(_x isKindOf "Animal") && {(getNumber (_cfgVehicles >> typeOf _x >> "side") == _playerSide || {(crew _x) findIf {side _x == side player} != -1}) && {(count (fullCrew [_x, "", true]))!=(count (fullCrew [_x, "", false]))}}) then {_nearVehs pushBackUnique _x};
+			if (!(_x isKindOf "Man") && !(_x isKindOf "Animal") && {(getNumber (_cfgVehicles >> typeOf _x >> "side") == _playerSide || {(crew _x) findIf {side _x == side group player} != -1}) && {(count (fullCrew [_x, "", true]))!=(count (fullCrew [_x, "", false]))}}) then {_nearVehs pushBackUnique _x};
 		} forEach _nearVehs1;
 	} forEach _farUnits;
 

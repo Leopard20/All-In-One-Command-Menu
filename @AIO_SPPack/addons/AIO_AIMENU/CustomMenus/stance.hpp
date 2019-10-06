@@ -7,7 +7,8 @@ class AIO_stanceSubMenu {
 	class Items {
 		class Reset {
 			title = "<img image='\A3\ui_f\data\IGUI\RscTitles\MPProgress\respawn_ca.paa'/><t font='PuristaBold'><t font='PuristaBold'> Reset</t>"; 
-			shortcuts[] = {11};  
+			shortcuts[] = {11}; 
+			shortcutsAction = "CommandingMenu0";			
 			show = "1";  
 			enable = "1";  
 			command = -5;
@@ -20,6 +21,7 @@ class AIO_stanceSubMenu {
 		class Auto {
 			title = "<img image='\A3\ui_f\data\IGUI\Cfg\Actions\landingAutopilot_ON_ca.paa'/><t font='PuristaBold'><t font='PuristaBold'> Auto</t>"; 
 			shortcuts[] = {2};  
+			shortcutsAction = "CommandingMenu1";
 			show = "1";  
 			enable = "1";  
 			command = "CMD_POS_AUTO";
@@ -28,6 +30,7 @@ class AIO_stanceSubMenu {
 		class CopyMyStance {
 			title = "<t font='PuristaBold'><t font='PuristaBold'> Copy My Stance</t>";
 			shortcuts[] = {3};
+			shortcutsAction = "CommandingMenu2";
 			show = "1";  
 			enable = "1";  
 			command = -5;  
@@ -52,6 +55,7 @@ class AIO_stanceSubMenu {
 		class Stand {
 			title = "<img color='#61ff00' image='\A3\ui_f\data\IGUI\RscIngameUI\RscUnitInfo\SI_stand_ca.paa'/><t font='PuristaBold'><t font='PuristaBold'> Stand --</t>"; 
 			shortcuts[] = {4};  
+			shortcutsAction = "CommandingMenu3";
 			show = "1";  
 			enable = "1";  
 			command = "CMD_POS_UP";
@@ -93,6 +97,7 @@ class AIO_stanceSubMenu {
 		class Crouch {
 			title = "<img color='#ffc700' image='\A3\ui_f\data\IGUI\RscIngameUI\RscUnitInfo\SI_crouch_ca.paa'/><t font='PuristaBold'><t font='PuristaBold'> Crouch --</t>"; 
 			shortcuts[] = {5};  
+			shortcutsAction = "CommandingMenu4";
 			show = "1";  
 			enable = "1";  
 			command = "CMD_POS_MIDDLE";  
@@ -134,6 +139,7 @@ class AIO_stanceSubMenu {
 		class Prone {
 			title = "<img color='#ff5400' image='\A3\ui_f\data\IGUI\RscIngameUI\RscUnitInfo\SI_prone_ca.paa'/><t font='PuristaBold'><t font='PuristaBold'> Prone --</t>"; 
 			shortcuts[] = {6};  
+			shortcutsAction = "CommandingMenu5";
 			show = "1";  
 			enable = "1";  
 			command = "CMD_POS_DOWN";  

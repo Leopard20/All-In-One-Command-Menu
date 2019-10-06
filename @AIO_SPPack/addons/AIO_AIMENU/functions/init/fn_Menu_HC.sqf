@@ -14,6 +14,7 @@ for "_i" from 1 to (_cntMenu) do
 	call compile _text;
 };
 
+_numericKeys = [79,80,81,75,76,77,71,72,73,82];
 
 _menuNum = 1;
 for "_i" from 0 to (_cntU - 1) do
@@ -24,10 +25,11 @@ for "_i" from 0 to (_cntU - 1) do
 	if (_mod == 0) then {_mod = 10};
 	_text = parseText format ["<t font='PuristaBold'> %1 - %2", _number, name _unit];
 	AIO_dismiss_array pushBack _unit;
+	_shortcut = 2+_mod-1;
 	if (_unit != player) then {
-		call compile format ['AIO_squadDismiss_subMenu%1 pushBack [_text, [2+_mod-1], "", -5, [["expression", "[%3] call AIO_fnc_dismiss; [%1, %2, 0] spawn AIO_fnc_disableMenu"]], "1", "1"]', _menuNum , _mod, _i];
+		call compile format ['AIO_squadDismiss_subMenu%1 pushBack [_text, ([[_shortcut], [_shortcut, (_numericKeys select _shortcut-2)]] select AIO_useNumpadKeys), "", -5, [["expression", "[%3] call AIO_fnc_dismiss; [%1, %2, 0] spawn AIO_fnc_disableMenu"]], "1", "1"]', _menuNum , _mod, _i];
 	} else {
-		call compile format ['AIO_squadDismiss_subMenu%1 pushBack [_text, [2+_mod-1], "", -5, [["expression", ""]], "1", "0"]', _menuNum];
+		call compile format ['AIO_squadDismiss_subMenu%1 pushBack [_text, ([[_shortcut], [_shortcut, (_numericKeys select _shortcut-2)]] select AIO_useNumpadKeys), "", -5, [["expression", ""]], "1", "0"]', _menuNum];
 	};
 	if (_mod == 10 && (_cntU - 1) != _i) then {
 		call compile format ['AIO_squadDismiss_subMenu%1 pushBack ["", [], "", -1, [["expression", ""]], "1", "0"]', _menuNum , 12];
@@ -54,10 +56,11 @@ for "_i" from 0 to (_cntU - 1) do
 	if (_unit == player) then {_name = format ["%1 (Player)", (name _unit)]} else {_name = name _unit};
 	_text = parseText format ["<t font='PuristaBold'> %1 - %2", _number, _name];
 	AIO_leader_array pushBack _unit;
+	_shortcut = 2+_mod-1;
 	if (_unit != leader (group player)) then {
-		call compile format ['AIO_giveLead_subMenu%1 pushBack [_text, [2+_mod-1], "", -5, [["expression", "[%2] call AIO_fnc_makeLeader"]], "1", "1"]', _menuNum , _i]}
+		call compile format ['AIO_giveLead_subMenu%1 pushBack [_text, ([[_shortcut], [_shortcut, (_numericKeys select _shortcut-2)]] select AIO_useNumpadKeys), "", -5, [["expression", "[%2] call AIO_fnc_makeLeader"]], "1", "1"]', _menuNum , _i]}
 	else {
-		call compile format ['AIO_giveLead_subMenu%1 pushBack [_text, [2+_mod-1], "", -5, [["expression", ""]], "1", "0"]', _menuNum];
+		call compile format ['AIO_giveLead_subMenu%1 pushBack [_text, ([[_shortcut], [_shortcut, (_numericKeys select _shortcut-2)]] select AIO_useNumpadKeys), "", -5, [["expression", ""]], "1", "0"]', _menuNum];
 	};
 	if (_mod == 10 && (_cntU - 1) != _i) then {
 		call compile format ['AIO_giveLead_subMenu%1 pushBack ["", [], "", -1, [["expression", ""]], "1", "0"]', _menuNum , 12];
@@ -81,10 +84,11 @@ for "_i" from 0 to (_cntU - 1) do
 	if (_mod == 0) then {_mod = 10};
 	_text = parseText format ["<t font='PuristaBold'> %1 - %2", _number, name _unit];
 	AIO_monitor_array pushBack _unit;
+	_shortcut = 2+_mod-1;
 	if (_unit != leader (group player)) then {
-		call compile format ['AIO_monitor_subMenu%1 pushBack [_text, [2+_mod-1], "", -5, [["expression", "[%3] spawn AIO_fnc_monitorUnit"]], "1", "1"]', _menuNum , _mod, _i];
+		call compile format ['AIO_monitor_subMenu%1 pushBack [_text, ([[_shortcut], [_shortcut, (_numericKeys select _shortcut-2)]] select AIO_useNumpadKeys), "", -5, [["expression", "[%3] spawn AIO_fnc_monitorUnit"]], "1", "1"]', _menuNum , _mod, _i];
 	} else {
-		call compile format ['AIO_monitor_subMenu%1 pushBack [_text, [2+_mod-1], "", -5, [["expression", ""]], "1", "0"]', _menuNum];
+		call compile format ['AIO_monitor_subMenu%1 pushBack [_text, ([[_shortcut], [_shortcut, (_numericKeys select _shortcut-2)]] select AIO_useNumpadKeys), "", -5, [["expression", ""]], "1", "0"]', _menuNum];
 	};
 	if (_mod == 10 && (_cntU - 1) != _i) then {
 		call compile format ['AIO_monitor_subMenu%1 pushBack ["", [], "", -1, [["expression", ""]], "1", "0"]', _menuNum , 12];
@@ -100,8 +104,8 @@ for "_i" from 1 to (_cntMenu) do
 {
 	_text = format ['AIO_recruit_subMenu%1 = [
 	["Recruit",true], 
-	[parseText"<img image=""\A3\ui_f\data\IGUI\Cfg\simpleTasks\types\target_ca.paa""/><t font=""PuristaBold""> Cursor Target", [2], "", -5, [["expression", "[cursorTarget] call AIO_fnc_recruit"]], "1", "CursorOnGround", "\a3\Ui_f\data\IGUI\Cfg\Cursors\iconCursorSupport_ca.paa"],
-	[parseText"<t font=""PuristaBold"">Nearby Small Groups", [3], "", -5, [["expression", "call AIO_fnc_recruitGroup"]], "1", "1"],
+	[parseText"<img image=""\A3\ui_f\data\IGUI\Cfg\simpleTasks\types\target_ca.paa""/><t font=""PuristaBold""> Cursor Target", ([[2], [2, 79]] select AIO_useNumpadKeys), "", -5, [["expression", "[cursorTarget] call AIO_fnc_recruit"]], "1", "CursorOnGround", "\a3\Ui_f\data\IGUI\Cfg\Cursors\iconCursorSupport_ca.paa"],
+	[parseText"<t font=""PuristaBold"">Nearby Small Groups", ([[3], [3, 80]] select AIO_useNumpadKeys), "", -5, [["expression", "call AIO_fnc_recruitGroup"]], "1", "1"],
 	["", [], "", -1, [["expression", ""]], "1", "0"]
 	]', _i];
 	call compile _text;
@@ -116,7 +120,8 @@ for "_i" from 0 to (_cntU - 1) do
 	if (_mod == 3) then {_mod = 10};
 	_text = parseText format ["<t font='PuristaBold'>%3 m - %1 - %2</t>", name _unit, _group, floor(_unit distance player)];
 	AIO_recruit_array pushBack _unit;
-	call compile format ['AIO_recruit_subMenu%1 pushBack [_text, [2+_mod-1], "", -5, [["expression", "[%3] call AIO_fnc_recruitAlt; [%1, %2, 1] spawn AIO_fnc_disableMenu"]], "1", "1"]', _menuNum , _mod, _i];
+	_shortcut = 2+_mod-1;
+	call compile format ['AIO_recruit_subMenu%1 pushBack [_text, ([[_shortcut], [_shortcut, (_numericKeys select _shortcut-2)]] select AIO_useNumpadKeys), "", -5, [["expression", "[%3] call AIO_fnc_recruitAlt; [%1, %2, 1] spawn AIO_fnc_disableMenu"]], "1", "1"]', _menuNum , _mod, _i];
 	if (_mod == 10 && (_cntU - 1) != _i) then {
 		call compile format ['AIO_recruit_subMenu%1 pushBack ["", [], "", -1, [["expression", ""]], "1", "0"]', _menuNum , 12];
 		call compile format ['AIO_recruit_subMenu%1 pushBack [parseText"<t font=""PuristaBold""> Next >>", [], "#USER:AIO_recruit_subMenu%3", -5, [["expression", ""]], "1", "1"]', _menuNum , 13, (_menuNum + 1)];

@@ -17,7 +17,7 @@ _crew = [];
 	};
 } forEach _units;
 
-_group = createGroup (side player);
+_group = createGroup (side group player);
 _units joinSilent _group;
 for "_i" from 0 to (count _crew - 1) do
 {

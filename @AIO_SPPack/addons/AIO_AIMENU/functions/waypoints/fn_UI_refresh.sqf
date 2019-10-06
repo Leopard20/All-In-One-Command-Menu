@@ -1,6 +1,6 @@
-_tempGrp = createGroup (side player);
+_tempGrp = createGroup (side group player);
 _tempGrp setBehaviour "AWARE";
-_playerGrp = createGroup (side player);
+_playerGrp = createGroup (side group player);
 _grp = [player];
 _units = (units group player)-_grp;
 _units = _units select {alive _x};

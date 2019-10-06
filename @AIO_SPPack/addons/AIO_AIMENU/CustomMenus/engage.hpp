@@ -22,6 +22,7 @@ class AIO_engageMenu {
 		class OpenFire {
 			title = "<img color='#95ff44' image='AIO_AIMenu\pictures\openfire.paa'/><t font='PuristaBold'> Open Fire</t>"; 
 			shortcuts[] = {2};  
+			shortcutsAction = "CommandingMenu1";
 			command = "CMD_OPEN_FIRE";
 			show="1";
 			enable = "NotEmpty + CommandsToGunner";
@@ -30,6 +31,7 @@ class AIO_engageMenu {
 		class HoldFire {
 			title = "<img color='#ffffff' image='AIO_AIMenu\pictures\holdfire.paa'/><t font='PuristaBold'> Hold Fire</t>"; 
 			shortcuts[] = {3};  
+			shortcutsAction = "CommandingMenu2";
 			command = "CMD_HOLD_FIRE";
 			show="1";
 			enable = "NotEmpty + CommandsToGunner";
@@ -44,6 +46,7 @@ class AIO_engageMenu {
 		class Suppress {
 			title = "<img color='#ffffff' image='AIO_AIMenu\pictures\suppress.paa'/><t font='PuristaBold'> Suppressive Fire</t>"; 
 			shortcuts[] = {4};  
+			shortcutsAction = "CommandingMenu3";
 			command = "CMD_SUPPRESS";
 			show="1";
 			enable="NotEmpty";
@@ -52,6 +55,7 @@ class AIO_engageMenu {
 		class EngageCMD {
 			title = "<img color='#2da7ff' image='\A3\ui_f\data\IGUI\Cfg\simpleTasks\types\target_ca.paa'/><t font='PuristaBold'> R.O.E</t>"; 
 			shortcuts[] = {5};  
+			shortcutsAction = "CommandingMenu4";
 			show = "1";  
 			enable = "1";  
 			menu = "AIO_engageSubMenu";
@@ -60,6 +64,7 @@ class AIO_engageMenu {
 		class CombatMode {
 			title = "<img color='#ff8844' image='AIO_AIMenu\pictures\combat.paa'/><t font='PuristaBold'> Combat Mode</t>"; 
 			shortcuts[] = {6};  
+			shortcutsAction = "CommandingMenu5";
 			menu = "AIO_combatSubMenu";
 			show = "1";
 			enable="IsLeader";

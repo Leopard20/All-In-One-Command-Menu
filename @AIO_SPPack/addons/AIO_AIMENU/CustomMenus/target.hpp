@@ -22,6 +22,7 @@ class AIO_targetMenu {
 		class NoTarget {
 			title = "<img color='#95ff44' image='\A3\ui_f\data\IGUI\Cfg\simpleTasks\types\target_ca.paa'/><t font='PuristaBold'> No Target</t>"; 
 			shortcuts[] = {2};  
+			shortcutsAction = "CommandingMenu1";
 			command = -5;
 			show="1";
 			enable = "NotEmpty";
@@ -34,6 +35,7 @@ class AIO_targetMenu {
 		class SelTarget1 {
 			title = "<img color='#f94a4a' image='\A3\ui_f\data\IGUI\Cfg\simpleTasks\types\target_ca.paa'/><t font='PuristaBold'> Choose Target</t>"; 
 			shortcuts[] = {3};  
+			shortcutsAction = "CommandingMenu2";
 			command = -5;
 			show="1";
 			enable = "NotEmpty";
@@ -46,6 +48,7 @@ class AIO_targetMenu {
 		class WatchDir {
 			title = "<img color='#307fff' image='\A3\ui_f\data\GUI\Rsc\RscDisplayArsenal\binoculars_ca.paa'/><t font='PuristaBold'> Watch Direction</t>"; 
 			shortcuts[] = {4};  
+			shortcutsAction = "CommandingMenu3";
 			command = "CMD_WATCH_CTX";
 			show = "1";
 			enable= "NotEmpty * CursorOnGround";
@@ -60,6 +63,7 @@ class AIO_targetMenu {
 		class SelTarget2 {
 			title = "<img color='#2da7ff' image='\A3\ui_f\data\IGUI\Cfg\simpleTasks\types\target_ca.paa'/><t font='PuristaBold'> Choose Target (Friendly)</t>"; 
 			shortcuts[] = {5};  
+			shortcutsAction = "CommandingMenu4";
 			command = -5;
 			show="1";
 			enable = "NotEmpty";

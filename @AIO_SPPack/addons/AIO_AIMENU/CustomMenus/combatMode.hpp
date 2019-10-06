@@ -8,6 +8,7 @@ class AIO_combatSubMenu {
 		class Stealth {
 			title = "<t color='#00aeff' font='PuristaBold'> Stealth</t>"; 
 			shortcuts[] = {2};  
+			shortcutsAction = "CommandingMenu1";
 			command = "CMD_STEALTH";
 			show="1";
 			enable="NotEmpty";
@@ -16,6 +17,7 @@ class AIO_combatSubMenu {
 		class Combat {
 			title = "<t color='#ff4444' font='PuristaBold'> Combat</t>"; 
 			shortcuts[] = {3};  
+			shortcutsAction = "CommandingMenu2";
 			command = "CMD_COMBAT";
 			show="1";
 			enable="NotEmpty";
@@ -24,6 +26,7 @@ class AIO_combatSubMenu {
 		class Aware {
 			title = "<t color='#ff8844' font='PuristaBold'> Aware</t>"; 
 			shortcuts[] = {4};  
+			shortcutsAction = "CommandingMenu3";
 			command = "CMD_AWARE";
 			show="1";
 			enable="NotEmpty";
@@ -32,6 +35,7 @@ class AIO_combatSubMenu {
 		class Safe {
 			title = "<t color='#fffb44' font='PuristaBold'> Safe</t>"; 
 			shortcuts[] = {5};  
+			shortcutsAction = "CommandingMenu4";
 			command = "CMD_SAFE";
 			show="1";
 			enable="NotEmpty";
@@ -40,6 +44,7 @@ class AIO_combatSubMenu {
 		class Careless {
 			title = "<t color='#95ff44' font='PuristaBold'> Careless</t>"; 
 			shortcuts[] = {6};  
+			shortcutsAction = "CommandingMenu5";
 			command = -5;
 			class Params
 			{

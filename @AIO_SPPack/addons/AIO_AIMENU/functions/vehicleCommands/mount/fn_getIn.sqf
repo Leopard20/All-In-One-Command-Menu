@@ -3,7 +3,7 @@ params ["_selectedUnits", "_veh", "_vehrole", ["_playerCalled", true]];
 if !(canMove _veh) exitWith {};
 
 _exit = false;
-_side = side player;
+_side = side group player;
 {
 	_isEnemy = [side _x, _side] call BIS_fnc_sideIsEnemy;  
 	if (_isEnemy) exitWith {_exit = true};

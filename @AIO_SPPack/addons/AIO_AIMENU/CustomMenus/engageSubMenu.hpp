@@ -8,6 +8,7 @@ class AIO_engageSubMenu {
 		class Disengage {
 			title = "<t color='#00aeff' font='PuristaBold'> Disengage</t>"; 
 			shortcuts[] = {2};  
+			shortcutsAction = "CommandingMenu1";
 			command = "CMD_KEEP_FORM";
 			show="1";
 			enable="NotEmpty";
@@ -16,6 +17,7 @@ class AIO_engageSubMenu {
 		class Engage {
 			title = "<t color='#ff8844' font='PuristaBold'> Engage</t>"; 
 			shortcuts[] = {3};  
+			shortcutsAction = "CommandingMenu2";
 			command = "CMD_ENGAGE";
 			show="1";
 			enable="NotEmpty";
@@ -24,6 +26,7 @@ class AIO_engageSubMenu {
 		class EngageAtWill {
 			title = "<t color='#ff4444' font='PuristaBold'> Engage at Will</t>"; 
 			shortcuts[] = {4};  
+			shortcutsAction = "CommandingMenu3";
 			command = "CMD_LOOSE_FORM";
 			show="1";
 			enable="NotEmpty";

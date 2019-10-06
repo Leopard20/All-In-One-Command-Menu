@@ -2,7 +2,7 @@ params ["_mode"];
 
 _fnc = [BIS_fnc_sideIsEnemy, BIS_fnc_sideIsFriendly] select _mode;
 
-_side = side player;
+_side = side group player;
 _sides = [];
 {
 	if ([_x, _side] call _fnc) then {_sides pushBack _x};

@@ -42,7 +42,7 @@ if (_type == 3) then {
 
 AIO_switchseat_SubIndex_subMenu = [
 	["Select Seat Index",true],
-	[parseText"<t font='PuristaBold'> First Available", [2], "", -5, [["expression", format["[groupSelectedUnits player, %1, -1] call AIO_fnc_switchSeat", _type + 2]]], "1", "1"]
+	[parseText"<t font='PuristaBold'> First Available", ([[2], [2, 79]] select AIO_useNumpadKeys), "", -5, [["expression", format["[groupSelectedUnits player, %1, -1] call AIO_fnc_switchSeat", _type + 2]]], "1", "1"]
 ];
 
 

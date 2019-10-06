@@ -23,7 +23,7 @@ AIO_MAP_Vehicles = [];
 		{
 			_nearVehs1 = _x nearObjects ["allVehicles", 500];
 			{
-				if (!(_x in _mapVehs) && {!(_x isKindOf "Man") && !(_x isKindOf "Animal") && {(getNumber (_cfgVehicles >> typeOf _x >> "side") == _playerSide || {(crew _x) findIf {side _x == side player} != -1}) && {(count (fullCrew [_x, "", true]))!=(count (fullCrew [_x, "", false]))}}}) then {_nearVehs pushBackUnique _x};
+				if (!(_x in _mapVehs) && {!(_x isKindOf "Man") && !(_x isKindOf "Animal") && {(getNumber (_cfgVehicles >> typeOf _x >> "side") == _playerSide || {(crew _x) findIf {side _x == side group player} != -1}) && {(count (fullCrew [_x, "", true]))!=(count (fullCrew [_x, "", false]))}}}) then {_nearVehs pushBackUnique _x};
 			} forEach _nearVehs1;
 		} forEach _farUnits;
 
