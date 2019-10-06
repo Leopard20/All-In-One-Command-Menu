@@ -50,8 +50,8 @@ Finally, to bind your function to a key, call CBA_fnc_addKeybind:
 ["My Awesome Mod","show_breathing_key", "Show Breathing", {_this call mymod_fnc_showGameHint}, "", [DIK_B, [true, true, false]]] call CBA_fnc_addKeybind;
 */
 
-
-["AIO_useVoiceChat", "CHECKBOX", "Use Voice Chat", "All-In-One Command Menu" ,true, 1] call CBA_Settings_fnc_init;
+["AIO_enableMod", "CHECKBOX", "Enable All-in-One Command Menu", "All-In-One Command Menu" ,true, 1] call CBA_Settings_fnc_init;
+["AIO_useVoiceChat", "CHECKBOX", "Use radio chat for reporting", "All-In-One Command Menu" ,true, 1] call CBA_Settings_fnc_init;
 ["AIO_Init_Message", "CHECKBOX", "Show Initialization Message", "All-In-One Command Menu" ,true, 1] call CBA_Settings_fnc_init;
 ["AIO_Zeus_Enabled", "CHECKBOX", "Create Zeus Module", "All-In-One Command Menu" ,true, 1] call CBA_Settings_fnc_init;
 ["AIO_HC_Module_Enabled", "CHECKBOX", "Create High Command Module", "All-In-One Command Menu", false, 1] call CBA_Settings_fnc_init;
@@ -63,9 +63,9 @@ Finally, to bind your function to a key, call CBA_fnc_addKeybind:
 ["AIO_use_HC_driver", "CHECKBOX", "Use High Command Driver", "All-In-One Command Menu" ,true, 1] call CBA_Settings_fnc_init;
 ["AIO_use_doMove_command", "CHECKBOX", "Use doMove instead of CommandMove for Driver", "All-In-One Command Menu" ,true, 1] call CBA_Settings_fnc_init;
 ["AIO_becomeLeaderOnSwitch", "CHECKBOX", "Become Leader on Team Switch", "All-In-One Command Menu" ,false, 1] call CBA_Settings_fnc_init;
-["AIO_AdvancedCtrlMode", "LIST", "Advanced Control Mode", "All-In-One Command Menu" ,[[false, true], ["Toggle", "Hold"], 0], 1] call CBA_Settings_fnc_init;
-["AIO_DriverFixWatchDir", "LIST", "Player Watch Direction During Adv Ctrl", "All-In-One Command Menu" ,[[false, true], ["Watch Ahead", "Fixed"], 0], 1] call CBA_Settings_fnc_init;
-["AIO_useExactStanceCopy", "LIST", "Copy My Stance Mode", "All-In-One Command Menu" ,[[true, false], ["Exact Stance", "Standard Stance"], 0], 1] call CBA_Settings_fnc_init;
+["AIO_AdvancedCtrlMode", "LIST", "Advanced Driving Control Mode", "All-In-One Command Menu" ,[[false, true], ["Toggle", "Hold"], 0], 1] call CBA_Settings_fnc_init;
+["AIO_DriverFixWatchDir", "LIST", "Player Watch Direction During Adv. Driving Ctrl", "All-In-One Command Menu" ,[[false, true], ["Watch Ahead", "Fixed"], 0], 1] call CBA_Settings_fnc_init;
+["AIO_useExactCopyStance", "LIST", "Copy My Stance Mode", "All-In-One Command Menu" ,[[true, false], ["Exact Stance", "Standard Stance"], 0], 1] call CBA_Settings_fnc_init;
 
 ["All-In-One Command Menu","AIO_AIMenu_initKey", "Show Menu", {_this call AIO_keyspressed}, "", [21, [false, false, false]], false] call CBA_fnc_addKeybind;
 ["All-In-One Command Menu","AIO_follow_stance_key", "Toggle Copy My Stance", {if !(AIO_copy_my_stance) then {[(groupSelectedUnits player)] spawn AIO_copy_my_stance_fnc} else {AIO_copy_my_stance = false; {_x setUnitPos "AUTO"} forEach ((units group player) - [player]);}}, "", [DIK_C, [true, true, false]], false] call CBA_fnc_addKeybind;
