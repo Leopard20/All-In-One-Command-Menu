@@ -64,6 +64,7 @@
 
 //zeus
 ["AIO_Zeus_Enabled", "CHECKBOX", "Create Zeus Module", ["All-In-One Command Menu", "Zeus"] ,true, 1] call CBA_Settings_fnc_init;
+["AIO_forceActivateAddons", "CHECKBOX", ["Force-enable all mods", "Mission makers can deactivate some addons. You can force activate them."], ["All-In-One Command Menu", "Zeus"] ,false, 1] call CBA_Settings_fnc_init;
 ["AIO_Zeus_place_Enabled", "CHECKBOX", "Enable Creating Objects in Zeus", ["All-In-One Command Menu", "Zeus"] ,true, 1] call CBA_Settings_fnc_init;
 ["AIO_Zeus_edit_Enabled", "CHECKBOX", "Enable Editing Objects in Zeus", ["All-In-One Command Menu", "Zeus"] ,true, 1] call CBA_Settings_fnc_init;
 ["AIO_Zeus_delete_Enabled", "CHECKBOX", "Enable Deleting Objects in Zeus", ["All-In-One Command Menu", "Zeus"] ,true, 1] call CBA_Settings_fnc_init;

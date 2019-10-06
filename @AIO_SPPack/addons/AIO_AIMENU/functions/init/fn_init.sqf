@@ -9,6 +9,7 @@ if (isNil "AIO_enableMod") then {
 	AIO_Zeus_edit_Enabled = true;
 	AIO_Zeus_delete_Enabled = true;
 	AIO_Zeus_destroy_Enabled = true;
+	AIO_forceActivateAddons = false;
 	AIO_Zeus_limit_area = 0;
 	AIO_becomeLeaderOnSwitch = false;
 	AIO_pilot_holdCtrl = true;

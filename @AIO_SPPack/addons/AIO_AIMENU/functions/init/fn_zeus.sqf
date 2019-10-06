@@ -11,11 +11,11 @@ _createZeusFnc =
 	//AIO_curator_module = _group createUnit ["ModuleCurator_F", [0, 0, 0], [], 0, "NONE"];
 	AIO_curator_module = "ModuleCurator_F" createVehicleLocal [0, 0, 0];
 	AIO_curator_module setVariable ["owner", (name player)];
-	_classes = '!(["A3", configName _x, true] call BIS_fnc_inString)' configClasses (configFile >> "CfgPatches");
+	_classes = '!(["A3", str _x, true] call BIS_fnc_inString)' configClasses (configFile >> "CfgPatches");
 	
 	_classes = _classes apply {configName _x};
 
-	_classes call BIS_fnc_activateAddons;
+	if (AIO_forceActivateAddons) then {_classes call BIS_fnc_activateAddons};
 	
 	AIO_curator_module addCuratorAddons _classes;
 	 

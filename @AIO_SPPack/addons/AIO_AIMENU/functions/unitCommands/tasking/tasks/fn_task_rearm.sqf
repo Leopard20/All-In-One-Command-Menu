@@ -341,6 +341,15 @@ call {
 
 _fnc_TakeMag =
 {
+	_add = (_x select 2);
+	
+	for "_add" from _add to 0 step -1 do
+	{
+		if (_unit canAdd [_itemType, _add]) exitWith {};
+	};
+	
+	if (_add == 0) exitWith {};
+	
 	_magazineCargo = getMagazineCargo _obj;
 	
 	_mags = (_magazineCargo select 0);
@@ -350,8 +359,6 @@ _fnc_TakeMag =
 	if (_index == -1) exitWith {};
 	
 	_cnt = (_magazineCargo select 1) select _index;
-	
-	_add = (_x select 2);
 	
 	(_magazineCargo select 1) set [_index, (_cnt - _add) max 0];
 	
@@ -366,6 +373,15 @@ _fnc_TakeMag =
 
 _fnc_TakeItem =
 {
+	_add = (_x select 2);
+	
+	for "_add" from _add to 0 step -1 do
+	{
+		if (_unit canAdd [_itemType, _add]) exitWith {};
+	};
+	
+	if (_add == 0) exitWith {};
+	
 	_magazineCargo = getItemCargo _obj;
 	
 	_mags = (_magazineCargo select 0);
@@ -375,8 +391,6 @@ _fnc_TakeItem =
 	if (_index == -1) exitWith {};
 	
 	_cnt = (_magazineCargo select 1) select _index;
-	
-	_add = (_x select 2);
 	
 	(_magazineCargo select 1) set [_index, (_cnt - _add) max 0];
 	
