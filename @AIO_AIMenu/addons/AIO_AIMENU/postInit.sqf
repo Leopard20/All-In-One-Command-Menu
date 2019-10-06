@@ -13,6 +13,7 @@ AIO_sprintingUnits = [];
 AIO_EnableSprintMode = 0;
 AIO_driver_mode_enabled = false;
 AIO_MAP_EMPTY_VEHICLES_MODE = false;
+AIO_usingMap = false;
 AIO_selectedunits = [];
 AIO_nearCars = [];
 AIO_nearArmor = [];
