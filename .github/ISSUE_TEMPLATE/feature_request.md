@@ -1,7 +1,6 @@
 ---
 name: Feature request
 about: Feature request template
-
 ---
 
-***Feature Description:***
+**_Feature Description:_**
