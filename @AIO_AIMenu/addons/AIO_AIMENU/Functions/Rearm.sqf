@@ -13,7 +13,7 @@ AIO_rearmList_fnc =
 	_rearmTargets = [];
 	{
 		private _unit = _x;
-		_allWeapons = nearestObjects [_unit, ["ReammoBox_F", "Car", "Tank", "Helicopter", "Plane"], 100];
+		_allWeapons = nearestObjects [_unit, ["ReammoBox_F", "Car", "Tank", "Helicopter", "Plane", "WeaponHolderSimulated","LandVehicle","CAManbase"], 100];
 		for "_i" from 0 to ((count _allWeapons) -1) do {
 			_cond = (count (weaponsItemsCargo (_allWeapons select _i)) > 0 OR count ((getMagazineCargo (_allWeapons select _i)) select 0) > 0);
 			if (!((_allWeapons select _i) in _rearmTargets) && _cond) then {
@@ -52,7 +52,7 @@ AIO_getName_weapons_fnc =
 	AIO_Rifle_subMenu = nil;
 	AIO_Hgun_subMenu = nil;
 	AIO_launcher_subMenu = nil;
-	private _allWeapons = nearestObjects [_unit, ["ReammoBox", "ReammoBox_F"], 200];
+	private _allWeapons = nearestObjects [_unit, ["ReammoBox", "ReammoBox_F", "WeaponHolderSimulated","LandVehicle","CAManbase"], 200];
 	_allWeapons = [_allWeapons,[],{player distance _x},"ASCEND"] call BIS_fnc_sortBy;
 	//_allWeapons = _allWeapons apply {((weaponsItemsCargo _x) select 0) select 0};
 	AIO_weaponType_subMenu =
