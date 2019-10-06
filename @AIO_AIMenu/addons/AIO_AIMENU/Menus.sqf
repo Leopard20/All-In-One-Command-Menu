@@ -13,6 +13,8 @@ AIO_nearcargo = [];
 AIO_rearmTargets = [];
 //AIO_key = nil;
 if !(visibleMap) then {AIO_MAP_EMPTY_VEHICLES_MODE = false;};
+AIO_groupSelectedUnits = groupSelectedUnits player;
+AIO_groupSelectedUnitsCnt = count AIO_groupSelectedUnits;
 
 AIO_heal_subMenu = 
 [
@@ -175,15 +177,14 @@ AIO_infantry_subMenu =
 	["Deploy explosives", [], "#USER:AIO_explosives_subMenu", -5, [["expression", ""]], "0", "CursorOnGround"],
 	["Heal up!", [2], "#USER:AIO_heal_subMenu", -5, [["expression", ""]], "1", "1"],
 	["Set R.O.E", [3], "#USER:AIO_behaviour_subMenu", -5, [["expression", ""]], "1", "1"],
-	["Inventory", [4], "", -5, [["expression", "[(groupSelectedUnits player)] execVM ""AIO_AIMENU\inventory.sqf"" "]], "1", "0"],
+	["Inventory", [4], "", -5, [["expression", "[(groupSelectedUnits player)] execVM ""AIO_AIMENU\inventory.sqf"" "]], "1", "CursorOnGround", "\a3\Ui_f\data\IGUI\Cfg\Cursors\iconCursorSupport_ca.paa"],
 	["Defense", [5], "#USER:AIO_defense_subMenu", -5, [["expression", ""]], "1", "1"],
 	["", [], "", -5, [["expression", ""]], "1", "0"],
 	["Garrison Building", [6], "", -5, [["expression", "[(groupSelectedUnits player), cursorTarget] execVM ""AIO_AIMENU\garrison_Building.sqf"" "]], "1", "CursorOnGround", "\a3\Ui_f\data\IGUI\Cfg\Cursors\iconCursorSupport_ca.paa"],
 	["Clear Building", [7], "", -5, [["expression", "[(groupSelectedUnits player), cursorTarget] execVM ""AIO_AIMENU\clear_Building.sqf"" "]], "1", "CursorOnGround", "\a3\Ui_f\data\IGUI\Cfg\Cursors\iconCursorSupport_ca.paa"],
 	["", [], "", -5, [["expression", ""]], "1", "0"],
 	["Follow Target", [8], "", -5, [["expression", "[(groupSelectedUnits player), cursorTarget] execVM ""AIO_AIMENU\follow.sqf"" "]], "1", "CursorOnGround", "\a3\Ui_f\data\IGUI\Cfg\Cursors\iconCursorSupport_ca.paa"],
-	["Limit Unit Speed", [9], "#USER:AIO_limitSpeed1_subMenu", -5, [["expression", ""]], "1", "1"],
-	["Refresh Player", [10], "", -5, [["expression", "_playerGrp = group player; _leader = leader _playerGrp; _tempGrp = createGroup (side player); [player] joinSilent _tempGrp; [player] joinSilent _playerGrp; _playerGrp selectLeader _leader; deleteGroup _tempGrp"]], "1", "1"]
+	["Limit Unit Speed", [9], "#USER:AIO_limitSpeed1_subMenu", -5, [["expression", ""]], "1", "1"]
 ];
 
 AIO_switchseat_subMenu =
@@ -193,6 +194,15 @@ AIO_switchseat_subMenu =
 	["To Commander", [3], "", -5, [["expression", "[(groupSelectedUnits player), 2] execVM ""AIO_AIMENU\switchseat.sqf"" "]], "1", "1"],
 	["To Gunner", [4], "", -5, [["expression", "[(groupSelectedUnits player), 3] execVM ""AIO_AIMENU\switchseat.sqf"" "]], "1", "1"],
 	["To Passenger", [5], "", -5, [["expression", "[(groupSelectedUnits player), 4] execVM ""AIO_AIMENU\switchseat.sqf"" "]], "1", "1"]
+];
+
+AIO_switchseat_subMenu_player =
+[
+	["Switch Seat",true],
+	["To Driver", [2], "", -5, [["expression", "[[player], 1] execVM ""AIO_AIMENU\switchseat.sqf"" "]], "1", "1"],
+	["To Commander", [3], "", -5, [["expression", "[[player], 2] execVM ""AIO_AIMENU\switchseat.sqf"" "]], "1", "1"],
+	["To Gunner", [4], "", -5, [["expression", "[[player], 3] execVM ""AIO_AIMENU\switchseat.sqf"" "]], "1", "1"],
+	["To Passenger", [5], "", -5, [["expression", "[[player], 4] execVM ""AIO_AIMENU\switchseat.sqf"" "]], "1", "1"]
 ];
 
 AIO_resupply_subMenu =
@@ -271,10 +281,12 @@ AIO_Taxi_subMenu =
 AIO_DriverSettings_subMenu = 
 [
 	["Driver Settings",true],
-	["Force Follow Road", [2], "", -5, [["expression", "[] spawn {if (AIO_forceFollowRoad) then {(vehicle AIO_selectedDriver) forceFollowRoad false; AIO_forceFollowRoad = false} else {(vehicle AIO_selectedDriver) forceFollowRoad true; AIO_forceFollowRoad = true};[] call AIO_update_settings;showCommandingMenu ""#USER:AIO_DriverSettings_subMenu""}"]], "1", "1"],
+	["Fix Watch Dir", [2], "", -5, [["expression", "[] spawn {if (AIO_FixedWatchDir) then {AIO_FixedWatchDir = false} else {AIO_FixedWatchDir = true};[] call AIO_update_settings;showCommandingMenu ""#USER:AIO_DriverSettings_subMenu""}"]], "1", "1"],
 	["Driver Combat Mode", [3], "", -5, [["expression", "[] spawn {private _rejoin = false; if !(AIO_use_HC_driver) then {AIO_driverGroup = createGroup (side player);_rejoin = true; [AIO_selectedDriver] joinSilent AIO_driverGroup}; if (AIO_driverBehaviour == ""Careless"") then {AIO_driverGroup setBehaviour ""COMBAT""; AIO_driverBehaviour = ""Combat""} else {AIO_driverGroup setBehaviour ""CARELESS"";AIO_driverBehaviour = ""Careless""}; if (_rejoin) then {[AIO_selectedDriver] joinSilent (group player); deleteGroup AIO_driverGroup};[] call AIO_update_settings;showCommandingMenu ""#USER:AIO_DriverSettings_subMenu""}"]], "1", "1"],
 	["Driving Mode:", [4], "", -5, [["expression", "[] spawn {if (AIO_driver_urban_mode) then {AIO_driver_urban_mode = false} else {AIO_driver_urban_mode = true};[] call AIO_update_settings;showCommandingMenu ""#USER:AIO_DriverSettings_subMenu""}"]], "1", "1"],
-	["Disable Driver Mode", [5], "", -5, [["expression", "[] call AIO_cancel_driver_mode"]], "1", "1"]
+	["Force Follow Road", [5], "", -5, [["expression", "[] spawn {if (AIO_forceFollowRoad) then {(vehicle AIO_selectedDriver) forceFollowRoad false; AIO_forceFollowRoad = false} else {(vehicle AIO_selectedDriver) forceFollowRoad true; AIO_forceFollowRoad = true};[] call AIO_update_settings;showCommandingMenu ""#USER:AIO_DriverSettings_subMenu""}"]], "1", "1"],
+	["", [], "", -5, [["expression", ""]], "1", "0"],
+	["Disable Driver Mode", [6], "", -5, [["expression", "[] call AIO_cancel_driver_mode"]], "1", "1"]
 ];
 
 AIO_vehicle_subMenu =
@@ -282,12 +294,15 @@ AIO_vehicle_subMenu =
 	["Vehicle Commands",true],
 	["Switch Seats", [], "#USER:AIO_switchseat_subMenu", -5, [["expression", ""]], "0", "1"],
 	["Mount", [2], "#USER:AIO_mount_subMenu", -5, [["expression", ""]], "1", "1"],
+	["", [], "", -5, [["expression", ""]], "1", "0"],
 	["Flight Height", [3], "#USER:AIO_flightHeight_subMenu", -5, [["expression", ""]], "1", "1"],
 	["Land", [4], "", -5, [["expression", "[(groupSelectedUnits player)] execVM ""AIO_AIMENU\landHelicopter.sqf"" "]], "1", "1"],
 	["Fly Around Area", [5], "#USER:AIO_flyAround_subMenu", -5, [["expression", ""]], "1", "1"],
+	["", [], "", -5, [["expression", ""]], "1", "0"],
 	["Resupply", [6], "#USER:AIO_resupply_subMenu", -5, [["expression", ""]], "1", "1"],
 	["Vehicle Controls", [7], "#USER:AIO_vehicleCtrl_subMenu", -5, [["expression", ""]], "1", "1"],
 	["Taxi Aircraft", [8], "#USER:AIO_Taxi_subMenu", -5, [["expression", ""]], "1", "0"],
+	["", [], "", -5, [["expression", ""]], "1", "0"],
 	["Create High Command Driver", [9], "", -5, [["expression", "[(groupSelectedUnits player)] call AIO_create_HC_Driver"]], "1", "0"],
 	["EJECT (parachute if Air)", [10], "", -5, [["expression", "[(groupSelectedUnits player)] execVM ""AIO_AIMENU\eject.sqf"" "]], "1", "1"]
 ];
@@ -354,10 +369,12 @@ AIO_action_subMenu =
 [
     ["Actions",true],
 	["Sling Load", [2], "#USER:AIO_sling_subMenu", -5, [["expression", ""]], "1", "0"],
+	["", [], "", -5, [["expression", ""]], "1", "0"],
 	["Disassemble", [3], "", -5, [["expression", "
 	AIO_selectedunits = (groupSelectedUnits player);
 	[7] call AIO_spawn_mountMenu"]], "1", "1"],
 	["Assemble *", [4], "", -5, [["expression", "[(groupSelectedUnits player), screenToWorld [0.5,0.5]] execVM ""AIO_AIMENU\assemble.sqf"" "]], "1", "CursorOnGround", "\a3\Ui_f\data\IGUI\Cfg\Cursors\iconCursorSupport_ca.paa"],
+	["", [], "", -5, [["expression", ""]], "1", "0"],
 	["Take Weapon", [5], "", -5, [["expression", "
 	AIO_selectedunits = (groupSelectedUnits player);
 	[AIO_selectedunits] call AIO_getName_weapons_fnc "]], "1", "0"],
@@ -375,24 +392,42 @@ AIO_MENU_GroupCommunication =
 	["", [], "", -5, [["expression", ""]], "1", "0"],
 	["Actions", [6], "#USER:AIO_action_subMenu", -5, [["expression", ""]], "1", "1"],
 	["", [], "", -5, [["expression", ""]], "1", "0"],
-	["Unstuck unit", [7], "", -5, [["expression", "[(groupSelectedUnits player)] execVM ""AIO_AIMENU\unstuckUnit.sqf"" "]], "1", "1"],
+	["Unstuck Unit", [7], "", -5, [["expression", "[(groupSelectedUnits player)] execVM ""AIO_AIMENU\unstuckUnit.sqf"" "]], "1", "1"],
 	["", [], "", -5, [["expression", ""]], "1", "0"],
 	["Make Units Playable", [8], "", -5, [["expression", "{addSwitchableUnit _x} foreach (units group player)-[player]"]], "1", "1"],
 	["", [], "", -5, [["expression", ""]], "1", "0"],
 	["Add/Refresh Zeus", [9], "", -5, [["expression", "[0] execVM ""AIO_AIMENU\zeus.sqf"" "]], "0", "1"]
 ];
 
+AIO_MENU_GroupCommunication1 = 
+[
+	["All-In-One Command Menu",false],
+	["Disembark Non-Essential", [], "", -5, [["expression", "[(groupSelectedUnits player)] execVM ""AIO_AIMENU\disembarkUnessential.sqf"" "]], "0", "1"],
+	["Infantry Commands", [2], "#USER:AIO_infantry_subMenu", -5, [["expression", ""]], "1", "1"],
+	["WayPoints", [3], "#USER:AIO_wpControls_subMenu", -5, [["expression", ""]], "1", "1"],
+	["Vehicle Commands", [4], "#USER:AIO_vehicle_subMenu", -5, [["expression", ""]], "1", "1"],
+	["Weapon Management", [5], "#USER:AIO_weaponAcessories_subMenu", -5, [["expression", ""]], "1", "1"],
+	["", [], "", -5, [["expression", ""]], "1", "0"],
+	["Actions", [6], "#USER:AIO_action_subMenu", -5, [["expression", ""]], "1", "1"],
+	["", [], "", -5, [["expression", ""]], "1", "0"],
+	["Unstuck unit", [7], "", -5, [["expression", "[(groupSelectedUnits player)] execVM ""AIO_AIMENU\unstuckUnit.sqf"" "]], "1", "1"],
+	["", [], "", -5, [["expression", ""]], "1", "0"],
+	["HC Menu", [8], "", -5, [["expression", "[] execVM ""AIO_AIMENU\Menus_HC.sqf"" "]], "1", "1"],
+	["", [], "", -5, [["expression", ""]], "1", "0"],
+	["Add/Refresh Zeus", [9], "", -5, [["expression", "[0] execVM ""AIO_AIMENU\zeus.sqf"" "]], "0", "1"]
+];
+
 if (AIO_Zeus_Enabled) then {(AIO_MENU_GroupCommunication select 13) set [5, "1"]};
 if !(AIO_use_HC_driver) then {
-	(AIO_vehicle_subMenu select 9) set [0, "Create Driver"];
+	(AIO_vehicle_subMenu select 12) set [0, "Create Driver"];
 };
 
-if (!AIO_driver_mode_enabled) then {
-	if (count(groupSelectedUnits player) == 0) exitWith {};
+if !(AIO_driver_mode_enabled) then {
+	if (AIO_groupSelectedUnitsCnt == 0) exitWith {};
 	private _inVeh = false;
 	{
 	if (vehicle _x != _x) then {_inVeh = true};
-	} forEach (groupSelectedUnits player);
+	} forEach AIO_groupSelectedUnits;
 	if (_inVeh) then {(AIO_MENU_GroupCommunication select 1) set [5, "1"]};
 } else {
 	if ((vehicle AIO_selectedDriver) isKindOf "Air") then {AIO_DriverSettings_subMenu set [3,["Set Flight Height", [4], "#USER:AIO_flightHeight_subMenu", -5, [["expression", ""]], "1", "1"]]};
@@ -400,19 +435,27 @@ if (!AIO_driver_mode_enabled) then {
 	[] call AIO_update_settings;
 };
  
-if (count (groupSelectedUnits player) == 1) then
+if (AIO_groupSelectedUnitsCnt == 1) then
 {
-	_unit = (groupSelectedUnits player) select 0;
+	_unit = AIO_groupSelectedUnits select 0;
 	private _veh = vehicle _unit;
 	if (_veh isKindOf "Helicopter") then {(AIO_action_subMenu select 1) set [6, "1"]};
-	(AIO_action_subMenu select 4) set [6, "1"];
+	(AIO_action_subMenu select 6) set [6, "1"];
 	if (vehicle _unit != _unit) then {(AIO_vehicle_subMenu select 1) set [5, "1"]};
-	(AIO_infantry_subMenu select 4) set [6, "CursorOnGround"];
 	(AIO_rearm_subMenu select 5) set [6, "1"];
-	if ((vehicle _unit) isKindOf "Air") then {(AIO_vehicle_subMenu select 8) set [6, "1"]};
-	if (_unit == driver (vehicle player)) then {(AIO_vehicle_subMenu select 9) set [6, "1"]};
+	if ((vehicle _unit) isKindOf "Air") then {(AIO_vehicle_subMenu select 10) set [6, "1"]};
+	if (_unit == driver (vehicle player)) then {(AIO_vehicle_subMenu select 12) set [6, "1"]};
 };
 
+if (AIO_groupSelectedUnitsCnt == 0) then {
+	if (vehicle player != player) then {
+		(AIO_vehicle_subMenu select 1) set [5, "1"];
+		(AIO_vehicle_subMenu select 1) set [2, "#USER:AIO_switchseat_subMenu_player"];
+	};
+};
+
+if (AIO_groupSelectedUnitsCnt > 2 or AIO_groupSelectedUnitsCnt == 0) then {(AIO_infantry_subMenu select 4) set [6, "0"]};
+if (player != hcLeader group player) then {player hcSetGroup [group player]};
  
  /*
 AIO_explosives_set = [ "ATMine_Range_Mag", "APERSMine_Range_Mag","SLAMDirectionalMine_Wire_Mag", "APERSTripMine_Wire_Mag", "APERSBoundingMine_Range_Mag"];
@@ -466,5 +509,5 @@ AIO_availableExplosives = [];
 
 */
 
-showCommandingMenu "#USER:AIO_MENU_GroupCommunication";
+if (player != hcLeader group player) then {showCommandingMenu "#USER:AIO_MENU_GroupCommunication1"} else {showCommandingMenu "#USER:AIO_MENU_GroupCommunication"};
 

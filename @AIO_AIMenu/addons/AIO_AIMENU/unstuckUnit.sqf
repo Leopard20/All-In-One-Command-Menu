@@ -6,10 +6,18 @@ _selectedVehicles = [];
 
 AIO_unstuckPlayer =
 {
-	_position = (getPos player) findEmptyPosition[ 5 , 100 , typeOf _unit ];
-	_ATLPosition = ASLToATL _position;
-	_position = [_ATLPosition select 0,_ATLPosition select 1, 1];
+	private ["_position", "_playerGrp", "_leader", "_tempGrp"];
+	_position = (getPos player) findEmptyPosition[ 0.5 , 10 , typeOf player ];
+	player switchMove "";
+	[player, [_position select 0, _position select 1], 0.1] call AIO_fnc_setPosAGLS;
 	player setPos _position;
+	_playerGrp = group player; 
+	_leader = leader _playerGrp; 
+	_tempGrp = createGroup (side player); 
+	[player] joinSilent _tempGrp; player switchMove ""; 
+	[player] joinSilent _playerGrp; 
+	_playerGrp selectLeader _leader; 
+	deleteGroup _tempGrp;
 };
 
 AIO_unstuckUnit = 
@@ -18,16 +26,14 @@ AIO_unstuckUnit =
 	
 	_unit = _this select 0;
 	
-	if(player distance _unit <50) then
+	if(player distance _unit < 50) then
 	{
-		_position = (getPos player) findEmptyPosition[ 5 , 100 , typeOf _unit ];
-		_ATLPosition = ASLToATL _position;
-		_position = [_ATLPosition select 0,_ATLPosition select 1, 1];
+		_position = (getPos player) findEmptyPosition[ 5 , 50 , typeOf _unit ];
 		
 		_unit doWatch objNull;
 		_unit selectWeapon primaryWeapon _unit;
-		
-		_unit setPos _position;
+		_unit switchMove "";
+		[_unit, [_position select 0, _position select 1], 0.1] call AIO_fnc_setPosAGLS;
 	}
 	else
 	{
@@ -41,13 +47,10 @@ AIO_unstuckVehicle =
 	private ["_vehicle","_position"];
 	
 	_vehicle = _this select 0;
-	//_vehicle = vehicle player;
-
-	_position = (getPos player) findEmptyPosition[ 10 , 200 , typeOf _vehicle ];
-	_ATLPosition = ASLToATL _position;
-	_position = [_ATLPosition select 0,_ATLPosition select 1, 0.5];
-	_vehicle setPos _position;
-
+	_height = if (_vehicle isKindOf "Air") then {((getPos _vehicle) select 2)+ 0.1} else {0.1};
+	if (_height > 20) exitWith {hint "Can't unstuck vehicles in flight."};
+	_position = (getPos player) findEmptyPosition[ 5 , 50 , typeOf _vehicle ];
+	[_vehicle, [_position select 0, _position select 1], _height] call AIO_fnc_setPosAGLS;
 };
 
 {
@@ -55,7 +58,7 @@ AIO_unstuckVehicle =
 	{
 		if(!((vehicle _x) in _selectedVehicles)) then
 		{
-			_selectedVehicles set [count _selectedVehicles, vehicle _x];
+			_selectedVehicles pushBack (vehicle _x);
 		};
 	}
 	else
@@ -66,21 +69,20 @@ AIO_unstuckVehicle =
 
 if(count _selectedUnits == 0) then
 {
-	if(player != vehicle player) then
+	if (player != vehicle player) then
 	{
 		if(!((vehicle player) in _selectedVehicles)) then
 		{
-			_selectedVehicles set [count _selectedVehicles, vehicle player];
+			_selectedVehicles pushBack (vehicle player);
 		};
 	}
 	else
 	{
-		[player] spawn AIO_unstuckUnit;
+		[player] spawn AIO_unstuckPlayer;
 	};
 };
 
 {
-	//_vehicle = (vehicle _x);
 	[_x] spawn AIO_unstuckVehicle;
 	sleep 2;
 } foreach _selectedVehicles;

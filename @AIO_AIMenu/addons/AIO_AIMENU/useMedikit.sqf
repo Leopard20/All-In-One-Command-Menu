@@ -18,10 +18,11 @@ if (currentCommand _target == "MOVE") then {
 	_currentComm = 2;
 	_dest = expectedDestination _target;
 	_pos = _dest select 0;
+	_grp = group player;
 	_tempGrp = createGroup (side _unit);
 	_assignedTeam2 = assignedTeam _target;
 	[_target] joinSilent _tempGrp;
-	[_target] joinSilent (group player);
+	[_target] joinSilent _grp;
 	deleteGroup _tempGrp;
 	_target assignTeam _assignedTeam2;
 };
@@ -101,9 +102,57 @@ if (alive _unit && alive _target && _unit distance _tarPos < 2.5) then {
 		sleep 1;
 	};
 	if (_unit != _target) then {
-	_unit action ["HealSoldier", _target];
-	} else {_unit action ["HealSoldierSelf", _target];};
+	_unit action ["HealSoldier", _target];					
+	} else {_unit action ["HealSoldierSelf", _target]};
 	sleep 3;
+	
+	if (AIO_UseAceMedical) then {
+		_target setVariable ["ACE_MEDICAL_pain", 0, true];
+		_target setVariable ["ACE_MEDICAL_morphine", 0, true];
+		_target setVariable ["ACE_MEDICAL_bloodVolume", 100, true];
+		// tourniquets
+		_target setVariable ["ACE_MEDICAL_tourniquets", [0,0,0,0,0,0], true];
+
+		// wounds and injuries
+		_target setVariable ["ACE_MEDICAL_openWounds", [], true];
+		_target setVariable ["ACE_MEDICAL_bandagedWounds", [], true];
+		_target setVariable ["ACE_MEDICAL_internalWounds", [], true];
+
+		// vitals
+		_target setVariable ["ACE_MEDICAL_heartRate", 80];
+		_target setVariable ["ACE_MEDICAL_heartRateAdjustments", []];_target setVariable ["ACE_MEDICAL_bloodPressure", [80, 120]];
+		_target setVariable ["ACE_MEDICAL_peripheralResistance", 100];
+
+		 // fractures
+			_target setVariable ["ACE_MEDICAL_fractures", []];
+
+		 // IVs
+		 _target setVariable ["ACE_MEDICAL_ivBags", nil, true];
+
+		 // damage storage
+		_target setVariable ["ACE_MEDICAL_bodyPartStatus", [0,0,0,0,0,0], true];
+
+			// airway
+		 _target setVariable ["ACE_MEDICAL_airwayStatus", 100, true];
+			_target setVariable ["ACE_MEDICAL_airwayOccluded", false, true];
+		 _target setVariable ["ACE_MEDICAL_airwayCollapsed", false, true];
+
+		// generic medical admin
+		_target setVariable ["ACE_MEDICAL_addedToUnitLoop", false, true];
+		_target setVariable ["ACE_MEDICAL_inCardiacArrest", false, true];
+		_target setVariable ["ACE_MEDICAL_inReviveState", false, true];
+		_target setVariable ["ACE_isUnconscious", false, true];
+		_target setVariable ["ACE_MEDICAL_hasLostBlood", 0, true];
+		_target setVariable ["ACE_MEDICAL_isBleeding", false, true];
+		_target setVariable ["ACE_MEDICAL_hasPain", false, true];
+		_target setVariable ["ACE_MEDICAL_painSuppress", 0, true];
+
+		// medication
+		private _allUsedMedication = _target getVariable ["ACE_MEDICAL_allUsedMedication", []];
+		{
+		_target setVariable [_x select 0, nil];
+		} forEach _allUsedMedication;	
+	};
 	_target setDamage 0;
 };
 sleep 2;
@@ -119,10 +168,11 @@ if (_target != player) then {
 };
 _target setVariable ["AIO_beingHealed",0];
 _unit setUnitPos "AUTO";
+_grp = group player;
 _tempGrp = createGroup (side _unit);
 _assignedTeam1 = assignedTeam _unit;
 [_unit] joinSilent _tempGrp;
 _tempGrp setBehaviour _behav;
-[_unit] joinSilent (group player);
+[_unit] joinSilent _grp;
 _unit assignTeam _assignedTeam1;
 deleteGroup _tempGrp;

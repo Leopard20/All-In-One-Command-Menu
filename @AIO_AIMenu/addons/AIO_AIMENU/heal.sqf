@@ -8,7 +8,7 @@ if (leader (group player) != player) then {_selectedUnits = units group player};
 AIO_useFirstAidKit_safe =
 {
 	params ["_unit" ,"_selectedUnits", "_cover"];
-	private ["_currentComm", "_dest", "_pos", "_veh"];
+	private ["_currentComm", "_dest", "_pos", "_veh", "_cond"];
 	_veh = vehicle _unit;
 	_currentComm = 0;
 	if (currentCommand _unit == "STOP") then {_currentComm = 1};
@@ -74,34 +74,72 @@ AIO_MedicHealUp_safe =
 		_dest = expectedDestination _medic;
 		_pos = _dest select 0;
 	};
-	if((getDammage _medic)>0 && _medic getVariable["AIO_beingHealed",0]!=1) then
-	{
-		if (behaviour _medic == "COMBAT" && _cover == 1) then {[[_medic], 20] execVM "AIO_AIMENU\moveToCover.sqf";};
-		_script_handler = [_medic, _medic, _cover] execVM "AIO_AIMENU\useMedikit.sqf";
-		waitUntil {scriptDone _script_handler};
-	};
-	
-	if((getDammage player)>0 && player getVariable["AIO_beingHealed",0]!=1) then
-	{
-		_script_handler = [_medic, player, _cover] execVM "AIO_AIMENU\useMedikit.sqf";
-		waitUntil {scriptDone _script_handler};
-	};
-	
-	{
-		if ((getDammage _x)>0 && _x getVariable["AIO_beingHealed",0]!=1) then
+	if !(AIO_UseAceMedical) then {
+		if((getDammage _medic)>0 && _medic getVariable["AIO_beingHealed",0]!=1) then
 		{
-			if (behaviour _x == "COMBAT" && _cover == 1) then {[[_x], 20] execVM "AIO_AIMENU\moveToCover.sqf";};
-		};
-	} foreach (_selectedUnits);
-	private _remUnits = _selectedUnits;
-	while {count _remUnits != 0} do {
-		if ((getDammage (_remUnits select 0))>0 && (_remUnits select 0) getVariable["AIO_beingHealed",0]!=1) then 
-		{
-			_script_handler = [_medic, (_remUnits select 0), _cover] execVM "AIO_AIMENU\useMedikit.sqf";
+			if (behaviour _medic == "COMBAT" && _cover == 1) then {[[_medic], 20] execVM "AIO_AIMENU\moveToCover.sqf";};
+			_script_handler = [_medic, _medic, _cover] execVM "AIO_AIMENU\useMedikit.sqf";
 			waitUntil {scriptDone _script_handler};
 		};
-		_remUnits = _remUnits - [(_remUnits select 0)];
-		_remUnits = [_remUnits,[],{_x distance _medic},"ASCEND"] call BIS_fnc_sortBy;
+		
+		if((getDammage player)>0 && player getVariable["AIO_beingHealed",0]!=1) then
+		{
+			_script_handler = [_medic, player, _cover] execVM "AIO_AIMENU\useMedikit.sqf";
+			waitUntil {scriptDone _script_handler};
+		};
+		
+		{
+			if ((getDammage _x)>0 && _x getVariable["AIO_beingHealed",0]!=1) then
+			{
+				if (behaviour _x == "COMBAT" && _cover == 1) then {[[_x], 20] execVM "AIO_AIMENU\moveToCover.sqf";};
+			};
+		} foreach (_selectedUnits);
+		private _remUnits = _selectedUnits;
+		while {count _remUnits != 0} do {
+			if ((getDammage (_remUnits select 0))>0 && (_remUnits select 0) getVariable["AIO_beingHealed",0]!=1) then 
+			{
+				_script_handler = [_medic, (_remUnits select 0), _cover] execVM "AIO_AIMENU\useMedikit.sqf";
+				waitUntil {scriptDone _script_handler};
+			};
+			_remUnits = _remUnits - [(_remUnits select 0)];
+			_remUnits = [_remUnits,[],{_x distance _medic},"ASCEND"] call BIS_fnc_sortBy;
+		};
+	} else {
+		if (((_medic getvariable "ACE_MEDICAL_isBleeding") OR ({(_medic getvariable _x) > 0} count ["ACE_MEDICAL_pain","ACE_MEDICAL_hasLostBlood"]) > 0) && _medic getVariable["AIO_beingHealed",0]!=1) then
+		{
+			if (behaviour _medic == "COMBAT" && _cover == 1) then {[[_medic], 20] execVM "AIO_AIMENU\moveToCover.sqf";};
+			_script_handler = [_medic, _medic, _cover] execVM "AIO_AIMENU\useMedikit.sqf";
+			waitUntil {scriptDone _script_handler};
+		};
+		
+		if (((player getvariable "ACE_MEDICAL_isBleeding") OR ({(player getvariable _x) > 0} count ["ACE_MEDICAL_pain","ACE_MEDICAL_hasLostBlood"]) > 0) && player getVariable["AIO_beingHealed",0]!=1) then
+		{
+			if !(("ACE_fieldDressing" in items _unit) && ("ACE_morphine" in items _unit)) exitWith {};
+			_script_handler = [_medic, player, _cover] execVM "AIO_AIMENU\useMedikit.sqf";
+			waitUntil {scriptDone _script_handler};
+		};
+		
+		{
+			_unit = _x;
+			if (((_unit getvariable "ACE_MEDICAL_isBleeding") OR ({(_unit getvariable _x) > 0} count ["ACE_MEDICAL_pain","ACE_MEDICAL_hasLostBlood"]) > 0) && _unit getVariable["AIO_beingHealed",0]!=1) then
+			{
+				if (behaviour _unit == "COMBAT" && _cover == 1) then {[[_unit], 20] execVM "AIO_AIMENU\moveToCover.sqf";};
+			};
+		} foreach _selectedUnits;
+		
+		private _remUnits = _selectedUnits;
+		while {count _remUnits != 0} do {
+			if !(("ACE_fieldDressing" in items _unit) && ("ACE_morphine" in items _unit)) exitWith {};
+			_unit = _remUnits select 0;
+			if (((_unit getvariable "ACE_MEDICAL_isBleeding") OR ({(_unit getvariable _x) > 0} count ["ACE_MEDICAL_pain","ACE_MEDICAL_hasLostBlood"]) > 0) && _unit getVariable["AIO_beingHealed",0]!=1) then 
+			{
+				_script_handler = [_medic, _unit, _cover] execVM "AIO_AIMENU\useMedikit.sqf";
+				waitUntil {scriptDone _script_handler};
+			};
+			_remUnits = _remUnits - [_unit];
+			_remUnits = [_remUnits,[],{_x distance _medic},"ASCEND"] call BIS_fnc_sortBy;
+		};
+	
 	};
 	_medic doWatch objNull;
 	_medic doFollow player;
@@ -111,11 +149,12 @@ AIO_MedicHealUp_safe =
 };
 
 
-private _medics = ["B_Medic_F", "B_recon_medic_F", "O_recon_medic_F", "O_Medic_F", "asdg_I_recon_medic", "I_Medic_F"];
+//private _medics = ["B_Medic_F", "B_recon_medic_F", "O_recon_medic_F", "O_Medic_F", "asdg_I_recon_medic", "I_Medic_F"];
 for "_i" from 0 to (count _selectedUnits  - 1) do
 {
 	_unit = _selectedUnits select _i;
-	if ((typeOf _unit) in _medics OR ("Medikit" in (items _unit))) then
+	_cond = if (AIO_UseAceMedical) then {("ACE_fieldDressing" in items _unit) && ("ACE_morphine" in items _unit)} else {("Medikit" in (items _unit))};
+	if (_cond) then
 	{
 		_medic = _unit;
 		_selectedUnits = [_selectedUnits,[],{_x distance _medic},"ASCEND"] call BIS_fnc_sortBy;

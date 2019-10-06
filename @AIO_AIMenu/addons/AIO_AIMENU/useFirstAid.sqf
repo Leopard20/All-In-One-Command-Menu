@@ -16,10 +16,11 @@ if (currentCommand _target == "MOVE") then {
 	_currentComm = 2;
 	_dest = expectedDestination _target;
 	_pos = _dest select 0;
+	_grp = group player;
 	_tempGrp = createGroup (side _unit);
 	_assignedTeam2 = assignedTeam _target;
 	[_target] joinSilent _tempGrp;
-	[_target] joinSilent (group player);
+	[_target] joinSilent _grp;
 	deleteGroup _tempGrp;
 	_target assignTeam _assignedTeam2;
 };
@@ -112,5 +113,13 @@ if (_target != player) then {
 	if (_currentComm == 2) then {_target doMove _pos};
 	if (_currentComm == 1) then {doStop _target};
 };
+_grp = group player;
+_tempGrp = createGroup (side _unit);
+_assignedTeam1 = assignedTeam _unit;
+[_unit] joinSilent _tempGrp;
+_tempGrp setBehaviour _behav;
+[_unit] joinSilent _grp;
+_unit assignTeam _assignedTeam1;
+deleteGroup _tempGrp;
 _target setVariable["AIO_beingHealed",0];
 _unit setUnitPos "AUTO";

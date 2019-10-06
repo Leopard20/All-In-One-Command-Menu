@@ -24,7 +24,7 @@ _getInFnc =
 	if (_target isKindOf "Staticweapon") then {_getInAs = 3};
 	_type = typeOf _target;
 	_size = sizeOf _type;
-	_distance = _size/3 + 5;
+	_distance = _size/2.5 + 5;
 	_unit setVariable ["AIO_Mount_Canceled", 0];
 	private _cond = ((vehicle _unit) isKindOf "Air" && (getPos (vehicle _unit)) select 2 > 0);
 	if (vehicle _unit == _target OR _cond) exitWith {_unit setVariable ["AIO_Mount_Canceled", 1]};
@@ -73,15 +73,38 @@ _getInFnc =
 	};
 	
 	if (_unit distance _target > _distance OR !(alive _unit) OR !(alive _target)) exitWith {_unit doMove (position _unit); _unit setVariable ["AIO_Mount_Canceled", 1]};
-	if (_getInAs == 1) then {_unit action ["getinDriver", _target]};
+	if (_getInAs == 1) then {
+		_unit assignAsDriver _target;
+		_unit action ["getinDriver", _target];
+		[_unit] orderGetIn true;
+	};
 	if (_getInAs == 2) then {
-		if (_posType == "Turret") then {_unit action ["getInTurret", _target, _position]} else {_unit action ["getInCommander", _target]};
+		if (_posType == "Turret") then {
+			_unit assignAsTurret [_target, _position];
+			_unit action ["getInTurret", _target, _position];
+			[_unit] orderGetIn true;
+		} else {
+			_unit assignAsCommander _target;
+			_unit action ["getInCommander", _target];
+			[_unit] orderGetIn true;
+		};
 	};
 	if (_getInAs == 3) then {
 		if (_posType == "Turret") then {
-			_unit action ["getInTurret", _target, _position]} else {_unit action ["getInGunner", _target]};
+			_unit assignAsTurret [_target, _position];
+			_unit action ["getInTurret", _target, _position];
+			[_unit] orderGetIn true;
+		} else {
+			_unit assignAsGunner _target;
+			_unit action ["getInGunner", _target];
+			[_unit] orderGetIn true;
+		};
 	};
-	if (_getInAs == 4) then {_unit action ["getInCargo", _target, _position]};
+	if (_getInAs == 4) then {
+		_unit assignAsCargo _target;
+		_unit action ["getInCargo", _target, _position];
+		[_unit] orderGetIn true;
+	};
 };
 private _roleArray = ["" ,"as Driver","as Commander","as Gunner","as Passenger"];
 player groupChat (format ["Get in that %1 %2", _vehname, (_roleArray select _vehrole)]);
