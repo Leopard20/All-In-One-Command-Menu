@@ -9,7 +9,7 @@ AIO_WayPoint_markers = [ [[["",[]]],[],"empty"],
 						[[["",[]]],[],"empty"],[[["",[]]],[],"empty"],[[["",[]]],[],"empty"],[[["",[]]],[],"empty"],[[["",[]]],[],"empty"]];
 
 AIO_keyspressed = {
-	if (AIO_monitoring_enabled) exitWith {AIO_monitoring_disabled = true};
+	if (AIO_monitoring_enabled) exitWith {AIO_monitoring_disabled = true; hintSilent ""};
 	if (hcShownBar) then {[] execVM "AIO_AIMENU\Menus_HC.sqf"} else {[] execVM "AIO_AIMENU\Menus.sqf"};
 	if (AIO_AdvancedCtrlMode && AIO_Advanced_Ctrl) then {[] call AIO_cancel_driver_mode};
 };
