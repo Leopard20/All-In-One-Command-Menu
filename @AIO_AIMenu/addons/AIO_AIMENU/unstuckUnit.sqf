@@ -9,7 +9,9 @@ AIO_unstuckPlayer =
 	private ["_position", "_playerGrp", "_leader", "_tempGrp"];
 	_position = (getPosATL player) findEmptyPosition[ 0.1 , 10 , typeOf player ];
 	player switchMove "";
-	[player, [_position select 0, _position select 1], 0.1] call AIO_fnc_setPosAGLS;
+	if (surfaceIsWater _position) then {
+		[player, [_position select 0, _position select 1], 0.1] call AIO_fnc_setPosAGLS;
+	} else {player setPos _position};
 	player setVelocity [0,0,0];
 	_playerGrp = group player; 
 	_leader = leader _playerGrp; 
@@ -29,7 +31,9 @@ AIO_unstuckUnit =
 	_unit doWatch objNull;
 	_unit selectWeapon (primaryWeapon _unit);
 	_unit switchMove "";
-	[_unit, [_position select 0, _position select 1], 0.1] call AIO_fnc_setPosAGLS;
+	if (surfaceIsWater _position) then {
+		[_unit, [_position select 0, _position select 1], 0.1] call AIO_fnc_setPosAGLS;
+	} else {_unit setPos _position};
 	_unit setVelocity [0,0,0];
 };
 

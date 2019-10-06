@@ -1,4 +1,4 @@
-private ["_selectedUnits","_medicsHealing" ,"_medic", "_cover"];
+private ["_selectedUnits","_medicsHealing" ,"_medic", "_cover", "_tempUnits"];
 
 _selectedUnits = _this select 0;
 _cover = _this select 1;
@@ -150,6 +150,8 @@ AIO_MedicHealUp_safe =
 
 
 //private _medics = ["B_Medic_F", "B_recon_medic_F", "O_recon_medic_F", "O_Medic_F", "asdg_I_recon_medic", "I_Medic_F"];
+_tempUnits = _selectedUnits;
+if (count _selectedUnits == 0) then {_selectedUnits = units group player - [player]};
 for "_i" from 0 to (count _selectedUnits  - 1) do
 {
 	_unit = _selectedUnits select _i;
@@ -166,9 +168,9 @@ for "_i" from 0 to (count _selectedUnits  - 1) do
 
 if(!_medicsHealing) then
 {
-	for "_i" from 0 to (count _selectedUnits  - 1) do
+	for "_i" from 0 to (count _tempUnits  - 1) do
 	{
-		[(_selectedUnits select _i), _selectedUnits, _cover] spawn AIO_useFirstAidKit_safe;
+		[(_tempUnits select _i), _tempUnits, _cover] spawn AIO_useFirstAidKit_safe;
 		sleep 0.2;
 	};
 };
