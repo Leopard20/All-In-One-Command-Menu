@@ -13,9 +13,10 @@ if (_distance > 10 || !_lowSpeed) then {
 	//_veh setVariable ["AIO_disableControls", false];
 	_veh setVariable ["AIO_flightHeight", _height];
 	_veh flyInHeight _height;
-	_unit enableAI "PATH";
-	_veh land "NONE";
 	_veh moveTo _landPos;
+	_unit enableAI "PATH";
+	_unit enableAI "MOVE";
+	_veh land "NONE";
 } else {
 	_veh moveTo _landPos;
 	_landMode = [_unit, 0, 2] call AIO_fnc_getTask;

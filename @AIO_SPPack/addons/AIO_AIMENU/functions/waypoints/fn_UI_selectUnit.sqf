@@ -10,7 +10,7 @@ if (alive _unit) then {
 		AIO_selectedUnits = AIO_selectedUnits - [_unit];
 		_backgroundColor = [0.15,0.35,0.45,1];
 	} else {
-		AIO_selectedUnits = AIO_selectedUnits select [0, count AIO_selectedUnits]; //create new var; unlink
+		AIO_selectedUnits = +AIO_selectedUnits; //create new var; unlink
 		AIO_selectedUnits pushBack _unit
 	};
 	(_display displayCtrl (1619 + _this)) ctrlSetBackgroundColor _backgroundColor;

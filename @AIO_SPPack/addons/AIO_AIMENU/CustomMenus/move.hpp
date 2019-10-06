@@ -71,13 +71,13 @@ class AIO_moveMenu {
 			menu = "AIO_formationSubMenu";
 			speechId = 0;
 		};
-		class Building {
-			title = "<img color='#fffb44' image='\A3\ui_f\data\IGUI\Cfg\simpleTasks\types\getin_ca.paa'/><t font='PuristaBold'> Move into building ...</t>"; 
+		class Flank {
+			title = "<img image='AIO_AIMenu\pictures\advance.paa'/><t font='PuristaBold'> Flank</t>"; 
 			shortcuts[] = {7};  
 			shortcutsAction = "CommandingMenu6";
 			show = "1";  
 			enable = "1";  
-			menu = "#USER:AIO_moveIntoHouse_subMenu";
+			menu = "AIO_flankMenu";
 			speechId = 0;
 		};
 	};

@@ -98,7 +98,7 @@ class AIO_formationSubMenu {
 			speechId = 0;
 		};
 		class EchL {
-			title = "<img color='#626262' image='AIO_AIMENU\pictures\formM.paa'/><t font='PuristaBold'> Echelon L.</t>"; 
+			title = "<img color='#626262' image='AIO_AIMENU\pictures\formEchL.paa'/><t font='PuristaBold'> Echelon L.</t>"; 
 			shortcuts[] = {10};  
 			shortcutsAction = "CommandingMenu9";
 			command = "CMD_FORM_ECHLEFT";
@@ -107,7 +107,7 @@ class AIO_formationSubMenu {
 			speechId = 0;
 		};
 		class EchR {
-			title = "<img color='#626262' image='AIO_AIMENU\pictures\formM.paa'/><t font='PuristaBold'> Echelon R.</t>"; 
+			title = "<img color='#626262' image='AIO_AIMENU\pictures\formEchR.paa'/><t font='PuristaBold'> Echelon R.</t>"; 
 			shortcuts[] = {11};  
 			shortcutsAction = "CommandingMenu0";
 			command = "CMD_FORM_ECHRIGHT";

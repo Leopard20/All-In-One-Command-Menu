@@ -92,7 +92,7 @@ if (_damage == 0) then {
 	_target setDamage 0;
 };
 
-_cnt + 1;
+_cnt = _cnt + 1;
 
 if (_target getVariable ["AIO_damageHandler", -1] != -1) then {
 	_target setVariable ["AIO_damage", _damage/_cnt];

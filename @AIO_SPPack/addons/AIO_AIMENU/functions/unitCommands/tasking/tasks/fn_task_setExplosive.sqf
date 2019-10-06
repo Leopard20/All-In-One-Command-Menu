@@ -22,19 +22,20 @@ _barrier = [_target] call AIO_fnc_inBoundingBox;
 _bounds = if (isNull _barrier) then {4} else {(sizeOf (typeOf _barrier))/2.75 + 5};
 _distance = _unit distance _target;
 if (_distance > _bounds) then {
-	_unit enableAI "PATH";
-	_unit enableAI "ANIM";
 	_unit moveTo _target;
+	_unit enableAI "ANIM";
+	_unit enableAI "PATH";
+	_unit enableAI "MOVE";
 } else {
 	if (!(isNull _barrier) && {(_unit distance2D _target > 3.5)}) exitWith {
 		if !(_unit in AIO_animatedUnits) then {
 			_posArray = [_unit, AGLToASL _target] call AIO_fnc_findRoute;
 			if !(_posArray isEqualTo []) then {
 				_unit setVariable ["AIO_animation", [_posArray,[],[],[],30+time]];
-				AIO_animatedUnits pushBackUnique _unit;
+				AIO_animatedUnits pushBack _unit;
 			} else {
 				_unit setVariable ["AIO_animation", [[_target],[],[],[],10+time]];
-				AIO_animatedUnits pushBackUnique _unit;
+				AIO_animatedUnits pushBack _unit;
 			};
 		};
 	};
@@ -79,6 +80,5 @@ if (_distance > _bounds) then {
 	//hint str _muzzle;
 	_unit fire [_muzzle, _muzzle, _explosive];
 	[_unit, 0, 0] call AIO_fnc_setTask;
-	_unit enableAI "ANIM";
 	_unit playAction "primaryWeapon";
 };

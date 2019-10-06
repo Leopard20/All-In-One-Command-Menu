@@ -2,9 +2,7 @@ params ["_selectedUnits"];
 
 _openChute =
 {
-	private ["_unit", "_vehicle"];
-	_unit = _this select 0;
-	_vehicle = _this select 1;
+	params ["_unit", "_vehicle"];
 	
 	_pack = unitBackpack _unit;
 	
@@ -12,48 +10,45 @@ _openChute =
 	
 	_unit action ["eject", _vehicle];
 	
-	while{_unit distance _vehicle < 10} do
-	{
-		sleep 0.5;
+	_unit addBackpack "B_Parachute";
+	
+	waitUntil {_unit distance _vehicle > 10 || !alive _unit};
+	
+	private ["_packObj"];
+	
+	if !(isNull _pack) then {
+		_packObj = objectParent _pack;
+		_packObj attachTo [_unit,[-0.1,-0.3,-0.7], "spine3"]; 
+		_packObj setVectorDirAndUp [[0,-1,0],[0,0,-1]]; //flip pack upside down
 	};
 	
 	waitUntil {
-		(getPosATL _unit) select 2 < 500
+		_pos = getPosASL _unit;
+		((_pos#2 - ((getTerrainHeightASL _pos) max 0)) < 500) || !alive _unit
 	};
-
 	
-	_pack attachTo [_unit,[0,-0.13,0],"Pelvis"]; 
-	_pack setVectorDirAndUp [[0,0,1],[0,1,0]]; //flip pack upside down
-	
-	_unit addBackpack "B_Parachute";
 	_unit action ["OpenParachute", _unit];
 	
-	_pack setPos [(getPos _unit) select 0,(getPos _unit) select 1,-50];
+	//_pack setPos [(getPos _unit) select 0,(getPos _unit) select 1,-50];
 	
-	waitUntil {
-		(getPosATL _unit) select 2 <1
-	};
+	waitUntil {isTouchingGround _unit};
 	
 	deletevehicle (vehicle _unit);
-
-	detach _pack;
 	
-	_pack setVectorDirAndUp [[0,0,-1],[0,-1,0]];
-	_pack setPosATL [getposATL _unit select 0,getposATL _unit select 1,-0.13];
-	(_unit) action ["TakeBag",_pack];
-
+	if !(isNull _pack) then {
+		detach _packObj;
+		_packObj setVectorDirAndUp [[0,0,-1],[0,-1,0]];
+		_packObj setPosASL (getposASL _unit);
+		if (alive _unit) then {
+			_unit action ["TakeBag",_pack];
+		}
+	};
 };
 
 _eject =
 {
-	private ["_unit","_vehicle"];
-	_unit = _this select 0;
-	_vehicle = _this select 1;
 	
-	
-	//sleep 0.5+random 2;
-	
-	if(_vehicle isKindOf "Air" && ((getPosATL _vehicle) select 2)>3) then
+	if	(_vehicle isKindOf "Air" && ((getPosATL _vehicle) select 2) > 5) then
 	{
 		[_unit, _vehicle] spawn _openChute;
 	}
@@ -64,10 +59,11 @@ _eject =
 };
 
 {
-	if (_x != vehicle _X) then
+	_unit = _x;
+	_vehicle = vehicle _x;
+	if (_unit != _vehicle) then
 	{
-		_vehicle = vehicle _x;
-		[_x, _vehicle] spawn _eject;
+		call _eject;
 	};
 } foreach _selectedUnits;
 

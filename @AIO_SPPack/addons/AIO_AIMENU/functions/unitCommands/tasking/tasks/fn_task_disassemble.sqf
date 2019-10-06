@@ -28,9 +28,10 @@ _pos = if (_isPos) then {_static} else {ASLToAGL(getPosASL _static)};
 _dist = if (_isPos) then {5} else {(sizeOf(typeOf _static))/2.5 + 5};
 //_dist = (sizeOf(typeOf _static))/2.75 + 5;
 if (_unit distance _static > _dist) then {
-	_unit enableAI "PATH";
-	_unit enableAI "ANIM";
 	_unit moveTo _pos;
+	_unit enableAI "ANIM";
+	_unit enableAI "PATH";
+	_unit enableAI "MOVE";
 } else {
 	if (backpack _unit != "") exitWith {_unit action ["PutBag"]};
 	/*

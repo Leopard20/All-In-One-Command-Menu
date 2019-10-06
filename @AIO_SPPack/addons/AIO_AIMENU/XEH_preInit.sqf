@@ -96,28 +96,45 @@ if !(AIO_enableMod) exitWith {};
 
 ["All-In-One Custom Menus","AIO_AIMENU_menu1", ["Move Menu", "Customized vanilla Move Menu. Unbind this key to disable this feature."], {
 	private _menu = commandingMenu;
-	if (_menu == "RscGroupRootMenu" || {_menu == "" && {count (groupSelectedUnits player) != 0}}) then {[] spawn {_time = diag_tickTime; waitUntil {commandingMenu == "RscMenuMove" || diag_tickTime - _time > 1}; showCommandingMenu "AIO_moveMenu"}};
-	}, "", [2, [false, false, false]], false] call CBA_fnc_addKeybind;
+	if (_menu == "RscGroupRootMenu" || {_menu == "" && {count (groupSelectedUnits player) != 0}}) then {[] spawn {sleep 0.001; showCommandingMenu "AIO_moveMenu"}};
+	}, {true}, [2, [false, false, false]], false] call CBA_fnc_addKeybind;
 ["All-In-One Custom Menus","AIO_AIMENU_menu2", ["Target Menu", "Customized vanilla Target Menu. Unbind this key to disable this feature."], {
 	private _menu = commandingMenu;
-	if (_menu == "RscGroupRootMenu" || {_menu == "" && {count (groupSelectedUnits player) != 0}}) then {[] spawn {_time = diag_tickTime; waitUntil {commandingMenu == "#WATCH" || diag_tickTime - _time > 1}; showCommandingMenu "AIO_targetMenu"}};
-	}, "", [3, [false, false, false]], false] call CBA_fnc_addKeybind;
+	if (_menu == "RscGroupRootMenu" || {_menu == "" && {count (groupSelectedUnits player) != 0}}) then {
+		if ((_this select 1) in ((actionKeys "CommandingMenuSelect2") + (actionKeys "CommandingMenu2"))) then {
+			[] spawn {_time = time; waitUntil {commandingMenu == "#WATCH" || (time - _time > 0.5)}; showCommandingMenu "AIO_targetMenu"};
+		} else {
+			[] spawn {sleep 0.001; showCommandingMenu "AIO_targetMenu"};
+		};
+	};
+	}, {true}, [3, [false, false, false]], false] call CBA_fnc_addKeybind;
 ["All-In-One Custom Menus","AIO_AIMENU_menu3", ["Attack Menu", "Customized vanilla Attack Menu. Unbind this key to disable this feature."], {
 	private _menu = commandingMenu;
-	if (_menu == "RscGroupRootMenu" || {_menu == "" && {count (groupSelectedUnits player) != 0}}) then {[] spawn {_time = diag_tickTime; waitUntil {commandingMenu == "RscMenuEngage" || diag_tickTime - _time > 1}; showCommandingMenu "AIO_engageMenu"}};
-	}, "", [4, [false, false, false]], false] call CBA_fnc_addKeybind;
+	if (_menu == "RscGroupRootMenu" || {_menu == "" && {count (groupSelectedUnits player) != 0}}) then {[] spawn {sleep 0.001; showCommandingMenu "AIO_engageMenu"}};
+	}, {true}, [4, [false, false, false]], false] call CBA_fnc_addKeybind;
 ["All-In-One Custom Menus","AIO_AIMENU_menu4", ["Mount Menu", "Customized vanilla Mount Menu. Unbind this key to disable this feature."], {
 	private _menu = commandingMenu;
-	if (_menu == "RscGroupRootMenu" || {_menu == "" && {count (groupSelectedUnits player) != 0}}) then {[] spawn {_time = diag_tickTime; waitUntil {commandingMenu == "#GET_IN" || diag_tickTime - _time > 1}; showCommandingMenu "AIO_mountMenu"}};
-	}, "", [5, [false, false, false]], false] call CBA_fnc_addKeybind;
+	if (_menu == "RscGroupRootMenu" || {_menu == "" && {count (groupSelectedUnits player) != 0}}) then {
+		if ((_this select 1) in ((actionKeys "CommandingMenuSelect4") + (actionKeys "CommandingMenu4"))) then {
+			[] spawn {_time = time; waitUntil {commandingMenu == "#GET_IN" || (time - _time > 0.5)}; showCommandingMenu "AIO_mountMenu"};
+		} else {
+			[] spawn {sleep 0.001; showCommandingMenu "AIO_mountMenu"};
+		};
+	};
+	}, {true}, [5, [false, false, false]], false] call CBA_fnc_addKeybind;
 ["All-In-One Custom Menus","AIO_AIMENU_menu6", ["Communication Menu", "Customized vanilla Communication Menu. Unbind this key to disable this feature."], {
 	private _menu = commandingMenu;
-	if (_menu == "RscGroupRootMenu" || {_menu == ""}) then {[] spawn {_time = diag_tickTime; waitUntil {commandingMenu == "RscMenuStatus" || diag_tickTime - _time > 1}; showCommandingMenu "AIO_commsMenu"}};
-	}, "", [6, [false, false, false]], false] call CBA_fnc_addKeybind;
+	if (_menu == "RscGroupRootMenu" || {_menu == ""}) then {[] spawn {sleep 0.001; showCommandingMenu "AIO_commsMenu"}};
+	}, {true}, [6, [false, false, false]], false] call CBA_fnc_addKeybind;
 ["All-In-One Custom Menus","AIO_AIMENU_menu5", ["Action Menu", "Customized vanilla Action Menu. Unbind this key to disable this feature."], {
 	private _menu = commandingMenu;
-	if (_menu == "RscGroupRootMenu" || {_menu == ""}) then {[] spawn {_time = diag_tickTime; waitUntil {commandingMenu == "#ACTION" || diag_tickTime - _time > 1}; showCommandingMenu "#USER:AIO_action_subMenu"}};
-	}, "", [7, [false, false, false]], false] call CBA_fnc_addKeybind;
+	if (_menu == "RscGroupRootMenu" || {_menu == "" && {count (groupSelectedUnits player) != 0}}) then {[] spawn {sleep 0.001; showCommandingMenu "#USER:AIO_action_subMenu"}};
+	}, {true}, [7, [false, false, false]], false] call CBA_fnc_addKeybind;
+
+["All-In-One Custom Menus","AIO_AIMENU_menu8", ["Formation Menu", "Customized vanilla Formation Menu. Unbind this key to disable this feature."], {
+	private _menu = commandingMenu;
+	if (_menu == "RscGroupRootMenu" || {_menu == "" && {count (groupSelectedUnits player) != 0}}) then {[] spawn {sleep 0.001; showCommandingMenu "AIO_formationSubMenu"}};
+	}, {true}, [9, [false, false, false]], false] call CBA_fnc_addKeybind;
 	
 ["All-In-One Command Menu","AIO_AIMENU_FireOnMyLead", "Fire On My Lead", {
 	if (player != leader player) exitWith {};

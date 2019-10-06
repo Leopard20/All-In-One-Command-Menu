@@ -37,7 +37,7 @@ if (_cntMedic != 0) then {
 	_availableMedics = _medics;
 	{
 		_patient = _x;
-		_suitableMedics = _availableMedics select {_x != _patient && {_x distance2D _patient < 80}};
+		_suitableMedics = _availableMedics select {_x != _patient && _x distance2D _patient < 100};
 		
 		/*
 		if (AIO_UseAceMedical) then {
@@ -87,8 +87,13 @@ if (_cntMedic != 0) then {
 	} forEach _wounded;
 	{
 		_patient = _x;
-		_suitableMedics = _medics select {_x != _patient && {_x distance2D _patient < 80 && {"ACE_epinephrine" in (items _x) || {"Medikit" in (items _x)}}}};
-		if (count _suitableMedics != 0) then {
+		_suitableMedics = _medics select {_x != _patient && _x distance2D _patient < 100 && {_items = (items _x); "ACE_epinephrine" in _items || "Medikit" in _items}};
+		_cnt = count _suitableMedics;
+		if (_cnt == 0) then {
+			_suitableMedics = _medics select {_x != _patient && _x distance2D _patient < 100};
+			_cnt = count _suitableMedics;
+		};
+		if (_cnt != 0) then {
 			_suitableMedics = [_suitableMedics, [], {_x distance _patient}, "ASCEND"] call BIS_fnc_sortBy;
 			_medic = _suitableMedics select 0;
 			_task = [_medic,0,0] call AIO_fnc_getTask;

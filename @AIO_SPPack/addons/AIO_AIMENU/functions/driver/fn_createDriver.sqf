@@ -36,7 +36,8 @@ if (_veh isKindOf "Air") exitWith {
 };
 
 [[player],1,-1] call AIO_fnc_switchSeat;
-sleep 0.001;
+
+if (canSuspend) then {sleep 0.001};
 
 _fullCrew = fullCrew [_veh, "", false];
 _unitSeat = _fullCrew findIf {_x select 0 == _unit};

@@ -10,8 +10,9 @@ _height = 50;
 if (_distance < 30 && {speed _veh < 10}) then {_height = 25};
 if (_distance > 10 || {_veh getVariable ["AIO_landContact", false] || {speed _veh > 10}}) then {
 	_veh setVariable ["AIO_flightHeight", _height];
-	_unit enableAI "PATH";
 	_veh moveTo ASLToAGL(getPosASL _target);
+	_unit enableAI "MOVE";
+	_unit enableAI "PATH";
 } else {
 	_veh moveTo ASLToAGL(getPosASL _target);
 	_height = _veh getVariable ["AIO_height", 0];

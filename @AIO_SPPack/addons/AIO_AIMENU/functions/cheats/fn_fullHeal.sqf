@@ -2,10 +2,14 @@ params ["_units"];
 _units pushBack player;
 {
 	_unit = _x;
-	{
-		_x setDamage 0;
-		_x setUnconscious false;
-	} forEach [_unit, vehicle _unit];
+	if (_unit == player && {lifeState player == "INCAPACITATED" || player getVariable ["ACE_isUnconscious", false]}) then {
+		("BlackScreen" call BIS_fnc_rscLayer) cutFadeOut 01;
+		if !(isNil "AIO_ppColor") then {{ppEffectDestroy _x} forEach [AIO_ppColor, AIO_ppVig, AIO_ppDynBlur, AIO_ppRadBlur]};
+	};
+	_unit setUnconscious false;
+	_unit setCaptive false;
+	_unit setDamage 0;
+	(vehicle _unit) setDamage 0;
 	if (AIO_UseAceMedical) then {
 		_unit setVariable ["ACE_MEDICAL_pain", 0, true];
 		_unit setVariable ["ACE_MEDICAL_morphine", 0, true];
@@ -52,6 +56,7 @@ _units pushBack player;
 		{
 			_unit setVariable [_x select 0, nil];
 		} forEach _allUsedMedication;	
-	}
+	};
+	
 } forEach _units;
 

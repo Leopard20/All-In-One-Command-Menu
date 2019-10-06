@@ -27,6 +27,7 @@ class Extended_PreInit_EventHandlers
 #include "CustomMenus\formation.hpp"
 #include "CustomMenus\combatMode.hpp"
 #include "CustomMenus\engageSubMenu.hpp"
+#include "CustomMenus\flank.hpp"
 #include "ui\defines.hpp"
 #include "ui\RscTitles.hpp"
 #include "ui\waypointUI.hpp"

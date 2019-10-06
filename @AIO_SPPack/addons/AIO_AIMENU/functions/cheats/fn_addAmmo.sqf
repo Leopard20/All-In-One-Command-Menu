@@ -29,36 +29,56 @@ if (_type == 4) exitWith {
 };
 
 _wpnType = "";
+_magType = "";
 _cnt = 1;
 call {
 	if (_type == 0) exitWith {
 		_wpnType = "primaryWeapon";
+		_magType = "primaryWeaponMagazine";
 		_cnt = 2;
 	};
 
 	if (_type == 1) exitWith {
 		_wpnType = "handgunWeapon";
+		_magType = "handgunMagazine";
 	};
 
 	if (_type == 2) exitWith {
 		_wpnType = "secondaryWeapon";
+		_magType = "secondaryWeaponMagazine";
 	};
 };
 
 _cfgWeapons = configFile >> "cfgWeapons";
+_cfgMags = configFile >> "cfgMagazines";
 {
 	_unit = _x;
 	_weapon = call compile format ["%1 _unit", _wpnType];
 	if (_weapon != "") then {
 		_muzzles = (getArray(_cfgWeapons >> _weapon >> "muzzles")) select {_x != "this"};
-		_mags = getArray(_cfgWeapons >> _weapon >> "magazines");
-		_mag = selectRandom _mags;
+		_preferedMag = call compile format ["%1 _unit", _magType];
+		_compatibleMags = getArray(_cfgWeapons >> _weapon >> "magazines");
+		_mag = if !(_preferedMag isEqualTo []) then {
+			_preferedMag = _preferedMag select {_x in _compatibleMags};
+			if (count _preferedMag != 0) then {
+				_preferedMag = _preferedMag select 0;
+				_ammoCnt = getNumber(_cfgMags >> _preferedMag >> "Count");
+				_unit setAmmo [_weapon, _ammoCnt];
+				_preferedMag
+			} else {
+				selectRandom _compatibleMags
+			}
+		} else {
+			selectRandom _compatibleMags
+		};
 		_unit addMagazines [_mag, _cnt];
 		{
 			_mags = getArray(_cfgWeapons >> _weapon >> _x >> "magazines");
-			_ideal = _mags select {(["HE", _x, true] call BIS_fnc_inString) || {(["AP", _x, true] call BIS_fnc_inString)}};
-			_mag = if !(_ideal isEqualTo []) then {selectRandom _ideal} else {selectRandom _mags};
-			_unit addMagazines [_mag, _cnt];
+			if (count _mags != 0) then {
+				_ideal = _mags select {(["HE", _x, true] call BIS_fnc_inString) || {(["AP", _x, true] call BIS_fnc_inString)}};
+				_mag = if !(_ideal isEqualTo []) then {selectRandom _ideal} else {selectRandom _mags};
+				_unit addMagazines [_mag, _cnt];
+			};
 		} forEach _muzzles;
 	};
 } forEach _units;

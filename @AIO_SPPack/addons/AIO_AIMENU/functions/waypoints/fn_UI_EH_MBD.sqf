@@ -37,7 +37,7 @@ _map ctrlAddEventHandler ["MouseButtonDown", {
 						_WP = _waypoints select _cursorWPID;
 						_WP set [3, 5];
 						_WP set [2, [_cursorWPUnit]];
-						_WP set [5, (AIO_selectedUnits apply {_x})];
+						_WP set [5, +AIO_selectedUnits];
 					} else {
 						(_waypoints select (_waypoints findIf {(_x select [0,4]) isEqualTo _cursorWP})) set [2, _newLink];
 					};
@@ -89,7 +89,7 @@ _map ctrlAddEventHandler ["MouseButtonDown", {
 				} forEach AIO_selectedUnits;
 				
 				//unlinking variables
-				AIO_selectedUnits = AIO_selectedUnits select [0, count AIO_selectedUnits];
+				AIO_selectedUnits = +AIO_selectedUnits;
 				
 				call AIO_fnc_UI_waypointParams;
 			};

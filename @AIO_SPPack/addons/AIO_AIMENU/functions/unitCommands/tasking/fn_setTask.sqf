@@ -3,9 +3,12 @@ params ["_unit", "_number", "_var"];
 if (_number == 0) exitWith
 {
 	_unit setVariable ["AIO_secondaryTask", _var];
-	if ((_var - 11) * (_var - 12) == 0) then {
+	if ((_var - 11) * (_var - 12) == 0) exitWith {
 		_unit setVariable ["AIO_landPad", objNull];
 		_unit setVariable ["AIO_landTimer", -1];
+	};
+	if (_var == 4) then {
+		_unit setVariable ["AIO_checkedCover", false];
 	};
 };
 if (_number == 1) exitWith

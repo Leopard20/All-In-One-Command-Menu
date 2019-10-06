@@ -30,8 +30,9 @@ if (_aceDamage != -1 && {_animState != _move}) exitWith {
 
 if (_damage <= 0) then {
 	[_unit, 0, 0] call AIO_fnc_setTask;
-	_unit enableAI "PATH";
 	_unit enableAI "ANIM";
+	_unit enableAI "PATH";
+	_unit enableAI "MOVE";
 } else {
 	_unit playMoveNow _move;
 };

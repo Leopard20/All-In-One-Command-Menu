@@ -28,13 +28,15 @@ if (_currentCommand != "STOP") exitWith {doStop _unit};
 
 _pos = [_unit, 0, 1] call AIO_fnc_getTask;
 if (_unit distance _pos > 7) then {
-	_unit enableAI "PATH";
-	_unit enableAI "ANIM";
 	_unit setUnitPos "MIDDLE";
 	_unit moveTo _pos;
 	_unit setVariable ["AIO_takeCoverDone", false];
+	_unit enableAI "ANIM";
+	_unit enableAI "PATH";
+	_unit enableAI "MOVE";
 } else {
 	_unit moveTo _pos;
+	
 	_finalStance = [_unit, 0, 3] call AIO_fnc_getTask;
 	
 	_stance = ["PRONE", "CROUCH", "CROUCH"] select _finalStance;

@@ -59,5 +59,20 @@ class AIO_coverSubMenu {
 			enable = "NotEmpty";
 			speechId = 0;
 		};
+		class Seperator3 {
+			title = ""; 
+			shortcuts[] = {};    
+			command = -1;
+			speechId = 0;
+		};
+		class Building {
+			title = "<img color='#fffb44' image='\A3\ui_f\data\IGUI\Cfg\simpleTasks\types\getin_ca.paa'/><t font='PuristaBold'> Move into building %POINTED_TARGET_NAME</t>"; 
+			shortcuts[] = {6};  
+			shortcutsAction = "CommandingMenu5";
+			show = "1";  
+			enable = "NotEmpty * CursorOnGround";
+			menu = "#USER:AIO_moveIntoHouse_subMenu";
+			speechId = 0;
+		};
 	};
 };

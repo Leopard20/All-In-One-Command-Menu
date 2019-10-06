@@ -88,7 +88,7 @@ call {
 	
 	_covers append (_nonenter apply {[_x, 3]});
 	
-	_hardCovers = (nearestTerrainObjects [_unit, ["WALL", "BUILDING", "THINGX", "ROCKS"], _range]) select {_obj = _x; _index = _takenCovers findIf {_x select 0 == _obj}; (!(_obj isKindOf "HeliH") && {([_x, 1.5, 1] call AIO_fnc_isBigEnough) && (_index == -1 || {{alive _x} count ((_takenCovers select _index) select 1) < 2})})};
+	_hardCovers = (nearestTerrainObjects [_unit, ["WALL", "BUILDING", "THINGX", "ROCKS"], 30]) select {_obj = _x; _index = _takenCovers findIf {_x select 0 == _obj}; (!(_obj isKindOf "HeliH") && {([_x, 1.5, 1] call AIO_fnc_isBigEnough) && (_index == -1 || {{alive _x} count ((_takenCovers select _index) select 1) < 2})})};
 	
 	_hardCovers = _hardCovers + ((nearestObjects [_pos, ["CAR","TANK"], 30]) select {_obj = _x; _index = _takenCovers findIf {_x select 0 == _obj}; ((isNull (driver _x)) && {_index == -1 || {{alive _x} count ((_takenCovers select _index) select 1) < 2}})}); 
 	_covers append (_hardCovers apply {[_x, 2]});

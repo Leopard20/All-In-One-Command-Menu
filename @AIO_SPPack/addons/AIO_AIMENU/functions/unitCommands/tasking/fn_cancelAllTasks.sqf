@@ -17,7 +17,7 @@ if (_veh isKindOf "Helicopter" && {_unit == effectiveCommander _veh && _veh != A
 
 [_unit] call AIO_fnc_followLastOrder;
 
-_synced = (_unit getVariable ["AIO_sync", []]) apply {_x};
+_synced = +(_unit getVariable ["AIO_sync", []]);
 {
 	_x enableAI "PATH";
 	[_x, _unit, true] call AIO_fnc_desync;

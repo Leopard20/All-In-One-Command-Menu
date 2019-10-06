@@ -1,15 +1,22 @@
 _currentCommand = currentCommand _unit;
 if (_currentCommand == "MOVE" || _currentCommand == "") exitWith {[_unit] call AIO_fnc_cancelAllTasks};
-if (_currentCommand != "STOP") exitWith {doStop _unit};
-_wait = [_unit, 0, 2] call AIO_fnc_getTask;
 _target = [_unit, 0, 1] call AIO_fnc_getTask;
-if (!alive _target || {time > _wait || {(_target getVariable ["AIO_medic", objNull]) != _unit || {_unit distance _target > 80}}}) exitWith {
+
+if (_currentCommand != "STOP") exitWith {
+	_unit doWatch objNull;
+	[_unit] call AIO_fnc_refreshMove;
+};
+
+_wait = [_unit, 0, 2] call AIO_fnc_getTask;
+if (!alive _target || {time > _wait || {(_target getVariable ["AIO_medic", objNull]) != _unit || {_unit distance _target > 100}}}) exitWith {
 	_unit setVariable ["AIO_animation", [[], [], [], [],0]];
-	_unit enableAI "PATH";
 	_unit enableAI "ANIM";
-	if !(isNull _target) then {
+	_unit enableAI "PATH";
+	_unit enableAI "MOVE";
+	if (alive _target) then {
 		_target enableAI "PATH";
 		_target enableAI "ANIM";
+		_target enableAI "MOVE";
 		[_unit, _target, false] call AIO_fnc_desync;
 		_target forceSpeed -1;
 		_target setVariable ["AIO_medic", objNull];
@@ -18,23 +25,30 @@ if (!alive _target || {time > _wait || {(_target getVariable ["AIO_medic", objNu
 };
 //disembark the unit
 _veh = vehicle _unit;
+
 if (_veh != _unit) exitWith {
 	_getInHandler = _unit getVariable ["AIO_getInHandler", scriptNull];
 	if (scriptDone _getInHandler) then {
 		_getInHandler = [_unit, _veh, 2] spawn AIO_fnc_getBackIn;
 		_unit setVariable ["AIO_getInHandler", _getInHandler];
 	};
-	doGetOut _unit;
+	doGetOut _unit
 };
 
-//check if medic is in boundingBox
-_barrier = [_target] call AIO_fnc_inBoundingBox;
-_bounds = if (isNull _barrier) then {3.5} else {(sizeOf (typeOf _barrier))/2.75 + 5};
 _distance = _unit distance _target;
+_barrier = if (_distance > 4) then {[_target] call AIO_fnc_inBoundingBox} else {objNull};
+_bounds = if (isNull _barrier) then {3.5} else {(sizeOf (typeOf _barrier))/2.75 + 5};
+
 if (_distance < 15) then {
 	_unitSide = side group player;
 	if ((_unit targets [true, 500]) findIf {[side _x, _unitSide] call BIS_fnc_sideIsEnemy} != -1) then {
-		_unit setUnitPos "DOWN";
+		_unitPos = _unit modelToWorldWorld [0,0,0.35];
+		_intersect = lineIntersectsSurfaces [_unitPos, _unitPos vectorDiff [0,0,1], _unit, objNull, true, 1, "GEOM", "NONE"];
+		if (count _intersect > 0 && {!(((_intersect#0#3) buildingPos -1) isEqualTo [])}) then {
+			_unit setUnitPos "MIDDLE";
+		} else {
+			_unit setUnitPos "DOWN";
+		}
 	} else {
 		_unit setUnitPos "AUTO";
 	};
@@ -45,12 +59,16 @@ if (_distance > _bounds) then {
 		_unit setUnitPos "MIDDLE";
 		[_unit] call AIO_fnc_refreshMove;
 	};
-	_unit enableAI "PATH";
-	_unit enableAI "ANIM";
-	_target enableAI "PATH";
-	_target enableAI "ANIM";
 	if (_unit distance _target < 10) then {_target forceSpeed 1};
 	_unit moveTo ASLToAGL(getPosASL _target);
+	
+	_unit enableAI "ANIM";
+	_unit enableAI "PATH";
+	_unit enableAI "MOVE";
+	
+	_target enableAI "PATH";
+	_target enableAI "ANIM";
+	_target enableAI "MOVE";
 } else {
 
 	//disembark the target
@@ -61,21 +79,26 @@ if (_distance > _bounds) then {
 			_getInHandler = [_target, _veh, 1, _unit] spawn AIO_fnc_getBackIn;
 			_target setVariable ["AIO_getInHandler", _getInHandler];
 		};
-		if !(isPlayer _target) then {doGetOut _target};
+		if (isPlayer _target) then {
+			if ((lifeState _target == "INCAPACITATED") || (_target getVariable ["ACE_isUnconscious", false])) then {
+				moveOut _target
+			};
+		} else {
+			if ((lifeState _target == "INCAPACITATED") || (_target getVariable ["ACE_isUnconscious", false])) then {
+				moveOut _target
+			} else {
+				doGetOut _target
+			}
+		};
 	};
 	
 	_target forceSpeed -1;
 	if (!(isNull _barrier) && {(_unit distance2D _target > 3.5)}) exitWith {
 		if !(_unit in AIO_animatedUnits) then {
 			_bpos = getPosASL _target;
-			_posArray = [_unit, _bpos] call AIO_fnc_findRoute;
-			if !(_posArray isEqualTo []) then {
-				_unit setVariable ["AIO_animation", [_posArray,[],[],[],30+time]];
-				AIO_animatedUnits pushBackUnique _unit;
-			} else {
-				_unit setVariable ["AIO_animation", [[_bpos],[],[],[],10+time]];
-				AIO_animatedUnits pushBackUnique _unit;
-			};
+			_posArray = [_unit, _bpos, objNull, false] call AIO_fnc_findRoute;
+			_unit setVariable ["AIO_animation", [_posArray,[],[],[],30+time]];
+			AIO_animatedUnits pushBack _unit;
 		};
 	};
 	
@@ -89,24 +112,27 @@ if (_distance > _bounds) then {
 		_unit setVariable ["AIO_checkedCover", true];
 		_killer = [_target] call AIO_fnc_getHideFrom;
 		if (isNull _killer) exitWith {_unit setVariable ["AIO_inCover", true]};
-		_covers = [[_unit], _killer, true] call AIO_fnc_findCover;
-		if (_covers isEqualTo []) exitWith {_unit setVariable ["AIO_inCover", true]};
+		_coverPos = [_unit, _killer, _target] call AIO_fnc_findCover;
 		_unit setVariable ["AIO_inCover", false];
-		[_unit, _target, _covers, 1] call AIO_fnc_dragWounded;
+		[_unit, _target, [_coverPos]] call AIO_fnc_dragWounded;
 	};
+	
 	if !(_unit getVariable ["AIO_inCover", true]) exitWith {};
 	
-	_animState = animationState _unit;
+	_animState = (animationState _unit) select [0,4];
+	
+	if (_animState == "acin") exitWith {}; //still dragging
 	
 	_stance = if (stance _unit == "PRONE") then {"pne"} else {"knl"};
 	_wpn = if (currentWeapon _unit == handgunWeapon _unit) then {"pst"} else {"rfl"};
 	_move = format ["ainvp%1mstpslayw%2dnon_medicother", _stance, _wpn];
 	
 	_medication = 1;
-	if (_animState != _move) then {_medication = [_unit, _isDown] call AIO_fnc_useMedication};
+	if (_animState != "ainv") then {_medication = [_unit, _isDown] call AIO_fnc_useMedication};
 	if (_medication == -1) exitWith {
 		_target enableAI "PATH";
 		_target enableAI "ANIM";
+		_target enableAI "MOVE";
 		[_unit, _target, false] call AIO_fnc_desync;
 		[_unit, 0, 0] call AIO_fnc_setTask;
 	};
@@ -120,7 +146,7 @@ if (_distance > _bounds) then {
 	
 	if !(_isDown) then {
 		_damage = 1;
-		if (_animState == _move) then {
+		if (_animState == "ainv") then {
 			_damage = [_unit, _target] call AIO_fnc_heal;
 			if (time - (_unit getVariable ["AIO_lastPlayMove", -10]) > 7) then {_unit switchMove _move; _unit setVariable ["AIO_lastPlayMove", time]};
 		};
@@ -128,7 +154,7 @@ if (_distance > _bounds) then {
 		_aceDamage = (_target getVariable ["ACE_MEDICAL_openWounds", []]) findIf {_x select 2 > 0};
 		_target disableAI "PATH";
 		
-		if (_aceDamage != -1 && {_animState != _move}) exitWith {
+		if (_aceDamage != -1 && {_animState != "ainv"}) exitWith {
 			((_target getVariable ["ACE_MEDICAL_openWounds", []]) select _aceDamage) set [2, 0];
 			((_target getVariable ["ACE_MEDICAL_openWounds", []]) select _aceDamage) set [3, 0];
 			_unit playMoveNow _move;
@@ -137,20 +163,21 @@ if (_distance > _bounds) then {
 		if (_damage <= 0 && !(_target getVariable ["ACE_MEDICAL_isBleeding", false]) && !(_target getVariable ["ACE_MEDICAL_hasPain", false])) then {
 			[_unit, 0, 0] call AIO_fnc_setTask;
 			_target setVariable ["AIO_medic", objNull];
-			_unit setVariable ["AIO_checkedCover", false];
 			AIO_animatedUnits = AIO_animatedUnits - [_unit];
 			_unit synchronizeObjectsRemove [_target];
 			_unit setVariable ["AIO_animation", [[], [], [], [],0]];
 			_target enableAI "PATH";
 			_target enableAI "ANIM";
-			_unit enableAI "PATH";
+			_target enableAI "MOVE";
 			_unit enableAI "ANIM";
+			_unit enableAI "PATH";
+			_unit enableAI "MOVE";
 			[_unit, _target, false] call AIO_fnc_desync;
 		} else {
 			_unit playMoveNow _move;
 		};
 	} else {
-		if (_animState != _move) exitWith {_unit playMoveNow _move; _unit setVariable ["AIO_lastPlayMove", time]};
+		if (_animState != "ainv") exitWith {_unit playMoveNow _move; _unit setVariable ["AIO_lastPlayMove", time]};
 		
 		if (time - (_unit getVariable ["AIO_lastPlayMove", 0]) < 2) exitWith {};
 		
@@ -160,8 +187,11 @@ if (_distance > _bounds) then {
 		_target setDamage 0.8;
 		_target switchMove "unconsciousoutprone";
 		_target enableAI "PATH";
-		_unit enableAI "PATH";
+		_target enableAI "ANIM";
+		_target enableAI "MOVE";
 		_unit enableAI "ANIM";
+		_unit enableAI "PATH";
+		_unit enableAI "MOVE";
 		[_unit, 2, _wait+20] call AIO_fnc_setTask;
 		if (_target == player) then {
 			("BlackScreen" call BIS_fnc_rscLayer) cutFadeOut 01;

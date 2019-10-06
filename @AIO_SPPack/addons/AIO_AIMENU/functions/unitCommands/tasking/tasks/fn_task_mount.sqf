@@ -7,8 +7,9 @@ _target = [_unit, 0, 1] call AIO_fnc_getTask;
 _veh = vehicle _unit;
 if (_veh == _target) exitWith {
 	_driver = driver _target;
-	_unit enableAI "PATH";
 	_unit enableAI "ANIM";
+	_unit enableAI "PATH";
+	_unit enableAI "MOVE";
 	if !(isNull _driver) then {[_unit, _driver, false] call AIO_fnc_desync};
 	[_unit, 0, 0] call AIO_fnc_setTask;
 	_unit setVariable ["AIO_getInPos", [0,0,0]];
@@ -30,9 +31,10 @@ if (_memPoint isEqualTo [0,0,0]) then {
 _pos = _target modelToWorld _memPoint;
 
 if (_unit distance _pos > _distance) then {
-	_unit enableAI "PATH";
-	_unit enableAI "ANIM";
 	_unit moveTo _pos;
+	_unit enableAI "ANIM";
+	_unit enableAI "PATH";
+	_unit enableAI "MOVE";
 } else {
 	_action = ["getinDriver", "getInCommander", "getInGunner", "getInTurret", "getInCargo"] select _seat-1;
 	_params = [_action]+_special;

@@ -15,6 +15,7 @@ if (_distance > 100) then {
 	if (_distance > 10) then {
 		_veh moveTo _landPos;
 		_unit enableAI "PATH";
+		_unit enableAI "MOVE";
 		_veh setVariable ["AIO_flightHeight", _height];
 	} else {
 		_veh moveTo _landPos;

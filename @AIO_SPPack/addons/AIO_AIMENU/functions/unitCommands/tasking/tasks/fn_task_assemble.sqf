@@ -15,8 +15,11 @@ if (!_otherUnitDone && {!(_unit in (_otherUnit getVariable ["AIO_sync", []]))}) 
 _destination = [_unit, 0, 2] call AIO_fnc_getTask;
 _pos = _destination select 0;
 if (_unit distance _pos > 5) then {
-	_unit enableAI "PATH";
 	_unit moveTo _pos;
+	_unit enableAI "ANIM";
+	_unit enableAI "PATH";
+	_unit enableAI "MOVE";
+	
 } else {
 	//hint str [_unit,_otherUnitDone];
 	if (!_otherUnitDone) exitWith {
