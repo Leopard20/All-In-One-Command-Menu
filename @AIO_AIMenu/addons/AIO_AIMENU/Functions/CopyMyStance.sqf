@@ -125,14 +125,15 @@ AIO_copy_my_stance_fnc =
 			};
 		} forEach AIO_copyStanceUnits;
 	};
-	while {AIO_copy_my_stance} do {
+	waitUntil {
+		sleep 1; 
 		_pos = stance player;
 		_posIndex = _stanceArray find _pos;
 		_pos = _posArray select _posIndex;
 		{
 			_x setUnitPos _pos;
 		} forEach AIO_copyStanceUnits;
-		sleep 1;
+		!(AIO_copy_my_stance)
 	};
 	player groupChat "Stop copying my stance.";
 	{

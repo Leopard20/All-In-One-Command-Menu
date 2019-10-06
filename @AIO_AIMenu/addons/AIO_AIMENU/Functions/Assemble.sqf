@@ -35,7 +35,7 @@ AIO_staticAssemble_Fnc = {
 		_unit1 doMove _pos;
 		_unit2 doMove _pos;
 		sleep 1;
-		while {!(unitReady _unit1) && !(unitReady _unit2) && (alive _unit1) && (alive _unit2)} do {sleep 1};
+		waitUntil {sleep 1; !(!(unitReady _unit1) && !(unitReady _unit2) && (alive _unit1) && (alive _unit2))};
 		if (_unit1 distance _pos > 10 OR _unit2 distance _pos > 10) exitWith {_units doMove (getpos _unit1)}; 
 		_base = unitBackpack _unit2;
 		_unit2 action ["PutBag"];
@@ -46,7 +46,7 @@ AIO_staticAssemble_Fnc = {
 	_unit1 = _units select 0;
 	if (vehicle _unit1 != _unit1) exitWith {};
 	_unit1 doMove _pos;
-	while {!(unitReady _unit1) && (alive _unit1)} do {sleep 1;};
+	waitUntil {sleep 1; !(!(unitReady _unit1) && (alive _unit1))};
 	if (_unit1 distance _pos > 10) exitWith {_units doMove (getpos _unit1)}; 
 	_array = nearestObjects [_unit1, ["WeaponHolder"], 10];
 	_base = firstBackpack (_array select 0);

@@ -5,7 +5,7 @@ _movetoCover_Fnc =
 {
 	scopeName "AIO_main_cover_scope";
 	params ["_unit", "_range", "_units", "_mode"];
-	private ["_objs", "_bb", "_pos", "_stance", "_coverPos", "_num", "_cover", "_factor", "_objs1", "_objs2", "_exit0", "_exit1"];
+	private ["_objs", "_bb", "_pos", "_stance", "_coverPos", "_num", "_cover", "_factor", "_objs1", "_objs2", "_exit0", "_exit1", "_dist"];
 	if (vehicle _unit != _unit) exitWith {};
 	_unit setVariable ["AIO_unitInCover", nil];
 	_unit setUnitPos "MIDDLE";
@@ -43,7 +43,7 @@ _movetoCover_Fnc =
 		_pos = (_bb select 0);
 		sleep 0.2;
 		_unit moveTo _pos;
-		while {_unit distance _pos > 2 && (alive _unit) && currentCommand _unit == "STOP"} do {sleep 1};
+		waitUntil {sleep 1; !(_unit distance _pos > 2 && (alive _unit) && currentCommand _unit == "STOP")};
 		_unit setUnitPos _stance;
 		 sleep 0.5;
 		_coverPos = getPos _unit;
@@ -51,16 +51,14 @@ _movetoCover_Fnc =
 		if (_mode == 1) exitWith {_unit setVariable ["AIO_unitInCover", 0]; breakOut "AIO_main_cover_scope"};
 		doStop _unit; _unit setUnitPos "DOWN"; sleep 0.5; _coverPos = getPos _unit; _unit setVariable ["AIO_unitInCover", 0];
 	};
-	
+	_dist = 6;
 	if (unitPos _unit == "DOWN") then 
 	{
-		while {(!isNil {_unit getVariable "AIO_unitInCover"}) && currentCommand _unit == "STOP" && _unit distance _coverPos < 1.5 && (alive _unit)} do {sleep 2};
-	} else
-	{
-		while {(!isNil {_unit getVariable "AIO_unitInCover"}) && currentCommand _unit == "STOP" && _unit distance _coverPos < 2.5 && (alive _unit)} do {sleep 2};
+		_dist = 4;
 	};
+	waitUntil {sleep 1; (_unit getVariable ["AIO_unitInCover", 0] == 0) || currentCommand _unit != "STOP" || _unit distance _coverPos > _dist || !(alive _unit)};
 	_unit setUnitPos "AUTO";
-	_unit doFollow player;
+	_unit setVariable ["AIO_unitInCover", 0];
 };
 {
 	[_x, _range, _units, _mode] spawn _movetoCover_Fnc;

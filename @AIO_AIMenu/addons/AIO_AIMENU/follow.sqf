@@ -10,14 +10,14 @@ _AIO_followFnc =
 	sleep 0.5;
 	private _tarPos = getPos _target;
 	_unit moveTo _tarPos;
-	while {(alive _unit) && (alive _target) && (_unit distance _target > 0)} do
-	{
+	waitUntil {
+		sleep 1;
 		if (currentCommand _unit != "STOP") exitWith {_unit doFollow player};
 		if (_target distance _tarPos > 5) then {
 			_tarPos = getPos _target;
 			_unit moveTo _tarPos;
-			sleep 1;
 		};
+		!((alive _unit) && (alive _target))
 	};
 };
 {
