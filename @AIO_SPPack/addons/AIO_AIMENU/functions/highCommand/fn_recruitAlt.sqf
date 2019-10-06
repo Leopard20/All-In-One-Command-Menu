@@ -5,4 +5,4 @@ if (_cond && !(_unit in (units group player)) && !(_unit isKindOf "Animal")) the
 	AIO_recruitedUnits pushback [[_unit, group _unit]];
 	[_unit] join group player;
 };
-player doFollow player;
+if (player == leader player) then {player doFollow player};
