@@ -8,7 +8,7 @@ _veh setVariable ["AIO_disableControls", false];
 _distance = _veh distance2D _target;
 _height = 50;
 if (_distance < 30 && {speed _veh < 10}) then {_height = 25};
-if (_distance > 10 || {_veh getVariable ["AIO_landContact", false] || {speed _veh > 10}}) then {
+if (_distance > 10 || {isTouchingGround _veh || {speed _veh > 10}}) then {
 	_veh setVariable ["AIO_flightHeight", _height];
 	_veh moveTo ASLToAGL(getPosASL _target);
 	_unit enableAI "MOVE";

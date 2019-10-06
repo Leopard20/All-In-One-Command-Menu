@@ -40,7 +40,7 @@ if (_useAgent) then {
 
 	private _movePositions = [];
 
-	private _intersec = lineIntersectsSurfaces [_lastPos ,_position, _unit, objNull, false, 1, "GEOM", "FIRE"];
+	private _intersec = lineIntersectsSurfaces [_lastPos ,_position, _unit, objNull, true, 1, "GEOM", "FIRE"];
 
 	if (count _intersec == 0) exitWith {if !(isNull _patient) then {[_unit, _patient, [_position]] call AIO_fnc_dragWounded}; [_position]};
 
@@ -59,7 +59,7 @@ if (_useAgent) then {
 	{
 		_newDir = [_unitVec, _x] call BIS_fnc_rotateVector2D;
 		_testPos = _lastPos vectorAdd _newDir;
-		_intersec = lineIntersectsSurfaces [_lastPos ,_testPos, _unit, objNull, false, 1, "GEOM", "FIRE"];
+		_intersec = lineIntersectsSurfaces [_lastPos ,_testPos, _unit, objNull, true, 1, "GEOM", "FIRE"];
 		if (count _intersec != 0) exitWith {_startDir = _newDir};
 	} forEach _angles;
 
@@ -79,14 +79,14 @@ if (_useAgent) then {
 		_array = [];
 		_lastPos = _temp;
 		_unfinished = false;
-		while {_lastPos distance2D _position > 2 && {count (lineIntersectsSurfaces [_lastPos ,_position, _unit, objNull, false, 1, "GEOM", "FIRE"]) != 0}} do {
+		while {_lastPos distance2D _position > 2 && {count (lineIntersectsSurfaces [_lastPos ,_position, _unit, objNull, true, 1, "GEOM", "FIRE"]) != 0}} do {
 			if (_meters > 100) exitWith {_unfinished = true};
 			_testPos = _lastPos vectorAdd _checkDir;
 			_terrainH = getTerrainHeightASL _testPos;
 			if (_testPos#2 < _terrainH) then {
 				_testPos set [2, _terrainH + 0.35];
 			};
-			_intersec = lineIntersectsSurfaces [_lastPos ,_testPos, _unit, objNull, false, 1, "GEOM", "FIRE"];
+			_intersec = lineIntersectsSurfaces [_lastPos ,_testPos, _unit, objNull, true, 1, "GEOM", "FIRE"];
 			if (count _intersec == 0) then {
 				_array pushBackUnique _lastPos;
 				_lastPos = _testPos;
@@ -109,7 +109,7 @@ if (_useAgent) then {
 				if (_testPos#2 < _terrainH) then {
 					_testPos set [2, _terrainH + 0.35];
 				};
-				_intersec = lineIntersectsSurfaces [_lastPos ,_testPos, _unit, objNull, false, 1, "GEOM", "FIRE"];
+				_intersec = lineIntersectsSurfaces [_lastPos ,_testPos, _unit, objNull, true, 1, "GEOM", "FIRE"];
 				if (count _intersec == 0) then {
 					_lastPos = _testPos;
 				} else {

@@ -66,7 +66,7 @@ class AIO_coverSubMenu {
 			speechId = 0;
 		};
 		class Building {
-			title = "<img color='#fffb44' image='\A3\ui_f\data\IGUI\Cfg\simpleTasks\types\getin_ca.paa'/><t font='PuristaBold'> Move into building %POINTED_TARGET_NAME</t>"; 
+			title = "<img color='#fffb44' image='\A3\ui_f\data\IGUI\Cfg\simpleTasks\types\getin_ca.paa'/><t font='PuristaBold'> Move into building</t>"; 
 			shortcuts[] = {6};  
 			shortcutsAction = "CommandingMenu5";
 			show = "1";  

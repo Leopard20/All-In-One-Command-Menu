@@ -26,7 +26,7 @@ if (_distance > 10 || !_lowSpeed) then {
 		_unit setVariable ["AIO_landPad", _landPad];
 		_veh land (["Land", "GET OUT"] select _landMode-1);
 	};
-	if !(_veh getVariable ["AIO_landContact", false]) then {
+	if !(isTouchingGround _veh) then {
 		_veh land "GET OUT";
 		_veh flyInHeight 20;
 		_unit setVariable ["AIO_landTimer", -1];

@@ -68,7 +68,7 @@ class RscTitles
 		duration = 86400; 
 		fadeIn = 0;
 		fadeOut = 0;
-		onLoad = "uiNamespace setVariable ['BlackScreen', _this select 0]"; 
+		onLoad = "uiNamespace setVariable ['AIO_BlackScreen', _this select 0]"; 
 		onUnLoad = ""; 
 		class Controls
 		{

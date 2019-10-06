@@ -93,7 +93,7 @@ waitUntil {
 			} else {
 				_vehHeight = _pos select 2;
 				_terrainHeight = _vehHeight;
-				if !(_veh getVariable ["AIO_landContact", false]) then {
+				if !(isTouchingGround _veh) then {
 					_cntContact = 0;
 					_skids = _veh getVariable ["AIO_skidPoints", []];
 					_contacts = [];
@@ -240,7 +240,7 @@ waitUntil {
 				
 				_flightHeight = _veh getVariable ["AIO_flightHeight", 40];
 				
-				if !(_veh getVariable ["AIO_landContact", false]) then {
+				if !(isTouchingGround _veh) then {
 					_cntContact = 0;
 					_skids = _veh getVariable ["AIO_skidPoints", []];
 					_contacts = [];

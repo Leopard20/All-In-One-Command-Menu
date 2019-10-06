@@ -107,13 +107,16 @@ _veh setVariable ["AIO_skidPoints", _skids];
 
 //Default heli mechanics is based on Littlebird, so adjust for other helicopters for realism
 
-_hasContact = false;
+_hasContact = isTouchingGround _veh;
+
+/*
 {
 	_skid = _veh modelToWorldWorld _x;
 	_skidbottom = _skid vectorDiff [0,0,0.25];
 	_hasContact = count (lineIntersectsSurfaces [_skid, _skidbottom, _veh, objNull, true, 1, "GEOM", "FIRE"]) > 0;
 	if (_hasContact) exitWith {};
 } forEach _skids;
+*/
 
 if !(_addToSuperHeli) exitWith {_hasContact};
 
@@ -161,7 +164,7 @@ if (_id == -1) then {
 		if (_engineOn) then {
 			_time = time;
 			_vehicle setVariable ["AIO_engineOn", _time];
-			_vehicle setVariable ["AIO_engineReady", _time + ((_time - (_vehicle getVariable ["AIO_engineOff", _time])) min 18)];
+			_vehicle setVariable ["AIO_engineReady", _time + ((_time - (_vehicle getVariable ["AIO_engineOff", _time-18])) min 18)];
 		} else {
 			_vehicle setVariable ["AIO_engineOff", time];
 		};

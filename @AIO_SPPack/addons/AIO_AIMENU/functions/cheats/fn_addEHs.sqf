@@ -87,7 +87,6 @@ _units pushBack player;
 					_unit setVariable ["AIO_lastDeath", time];
 					_unit setVariable ["AIO_killer", _killer];
 				} else {
-					_unit setVariable ["AIO_isDead", true];
 					if (_unit != player) then {
 						[_unit, _unit getVariable ["AIO_actionRevive", -1]] call BIS_fnc_holdActionRemove;
 					};
@@ -103,34 +102,40 @@ _units pushBack player;
 					AIO_ppVig ppEffectAdjust [1,1,0,[0.15,0,0,1],[1.0,0.5,0.5,1],[0.587,0.199,0.114,0],[1,1,0,0,0,0.2,1]];
 					AIO_ppDynBlur ppEffectAdjust [1];
 					AIO_ppRadBlur ppEffectAdjust [0.01, 0.01, 0.06, 0.06];
-					(findDisplay 77823) closeDisplay 2;
+					
 					{_x ppEffectCommit 0; _x ppEffectEnable true; _x ppEffectForceInNVG true} forEach [AIO_ppColor, AIO_ppVig, AIO_ppDynBlur, AIO_ppRadBlur];
-					/*
-					("BlackScreen" call BIS_fnc_rscLayer) cutRsc ["AIO_EmptyScreen", "PLAIN", -1 , false];		
-					_disp = uiNamespace getVariable ["BlackScreen", displayNull];
+					
+					("AIO_BlackScreen" call BIS_fnc_rscLayer) cutRsc ["AIO_EmptyScreen", "PLAIN", -1 , false];		
+					_disp = uiNamespace getVariable ["AIO_BlackScreen", displayNull];
 					_ctrl =_disp displayCtrl 1100;
-					_ctrl ctrlSetText "You are unconscious. Wait for a medic.";	
-					*/
-					if !(player getVariable ["AIO_timerActive", false]) then {
-						[] spawn {
-							_time = 0; 
-							_lastCheck = time;
-							waitUntil {
-								if (time - _lastCheck > 1) then {
-									_time = _time + 1; 
-									_lastCheck = time;
-								};
-								(_time > 300) || (lifeState player != "INCAPACITATED")
-							};
-							if (lifeState player == "INCAPACITATED") then {player setDamage 1};
-							player setVariable ["AIO_timerActive", false];
-						};
-						player setVariable ["AIO_timerActive", true];
-					};
+					_ctrl ctrlSetText "Wait for a medic.";	
 				};
 				
-				_damage = 0;
+				if (scriptDone (_unit getVariable ["AIO_deathTimer", scriptNull])) then {
+					_h = _unit spawn {
+						_unit = _this;
+						_time = 0; 
+						_lastCheck = time;
+						waitUntil {
+							if (time - _lastCheck > 1) then {
+								_time = _time + 1; 
+								_lastCheck = time;
+							};
+							(_time > 300) || (lifeState _unit != "INCAPACITATED")
+						};
+						if (lifeState _unit == "INCAPACITATED") then {_unit setDamage 1};
 						
+						if (isPlayer _unit) then {
+							("AIO_BlackScreen" call BIS_fnc_rscLayer) cutFadeOut 01;
+							if !(isNil "AIO_ppColor") then {{ppEffectDestroy _x} forEach [AIO_ppColor, AIO_ppVig, AIO_ppDynBlur, AIO_ppRadBlur]};
+							["AIO_medicIcon", "onEachFrame"] call BIS_fnc_removeStackedEventHandler;
+						};
+						
+					};
+					_unit setVariable ["AIO_deathTimer", _h];
+				};
+				
+				_damage = 0;	
 			} else {
 				_unit setVariable ["AIO_damage", _damage];
 			};
@@ -162,7 +167,7 @@ _units pushBack player;
 				_unit allowDamage false;
 				_unit setUnconscious true;		
 				if (_DELTA < 1) exitWith {_damage = 0};
-				if (_DELTA >= 90 || _unit == player) then {
+				if (_DELTA >= 60 || _unit == player) then {
 					if (_unit != player) then {
 						[_unit] call AIO_fnc_addAction;
 						
@@ -182,7 +187,6 @@ _units pushBack player;
 					_unit setVariable ["AIO_lastDeath", time];
 					_unit setVariable ["AIO_killer", _killer];
 				} else {
-					_unit setVariable ["AIO_isDead", true];
 					if (_unit != player) then {
 						[_unit, _unit getVariable ["AIO_actionRevive", -1]] call BIS_fnc_holdActionRemove;
 					};
@@ -198,30 +202,38 @@ _units pushBack player;
 					AIO_ppVig ppEffectAdjust [1,1,0,[0.15,0,0,1],[1.0,0.5,0.5,1],[0.587,0.199,0.114,0],[1,1,0,0,0,0.2,1]];
 					AIO_ppDynBlur ppEffectAdjust [1];
 					AIO_ppRadBlur ppEffectAdjust [0.01, 0.01, 0.06, 0.06];
-					(findDisplay 77823) closeDisplay 2;
+					
 					{_x ppEffectCommit 0; _x ppEffectEnable true; _x ppEffectForceInNVG true} forEach [AIO_ppColor, AIO_ppVig, AIO_ppDynBlur, AIO_ppRadBlur];
-					/*
-					("BlackScreen" call BIS_fnc_rscLayer) cutRsc ["AIO_EmptyScreen", "PLAIN", -1 , false];		
-					_disp = uiNamespace getVariable ["BlackScreen", displayNull];
+					
+					("AIO_BlackScreen" call BIS_fnc_rscLayer) cutRsc ["AIO_EmptyScreen", "PLAIN", -1 , false];		
+					_disp = uiNamespace getVariable ["AIO_BlackScreen", displayNull];
 					_ctrl =_disp displayCtrl 1100;
-					_ctrl ctrlSetText "You are unconscious. Wait for a medic.";	
-					*/
-					if !(player getVariable ["AIO_timerActive", false]) then {
-						[] spawn {
-							_time = 0; 
-							_lastCheck = time;
-							waitUntil {
-								if (time - _lastCheck > 1) then {
-									_time = _time + 1; 
-									_lastCheck = time;
-								};
-								(_time > 300) || (lifeState player != "INCAPACITATED")
+					_ctrl ctrlSetText "Wait for a medic.";	
+					
+				};
+				
+				if (scriptDone (_unit getVariable ["AIO_deathTimer", scriptNull])) then {
+					_h = _unit spawn {
+						_unit = _this;
+						_time = 0; 
+						_lastCheck = time;
+						waitUntil {
+							if (time - _lastCheck > 1) then {
+								_time = _time + 1; 
+								_lastCheck = time;
 							};
-							if (lifeState player == "INCAPACITATED") then {player setDamage 1};
-							player setVariable ["AIO_timerActive", false];
+							(_time > 300) || (lifeState _unit != "INCAPACITATED")
 						};
-						player setVariable ["AIO_timerActive", true];
+						if (lifeState _unit == "INCAPACITATED") then {_unit setDamage 1};
+						
+						if (isPlayer _unit) then {
+							("AIO_BlackScreen" call BIS_fnc_rscLayer) cutFadeOut 01;
+							if !(isNil "AIO_ppColor") then {{ppEffectDestroy _x} forEach [AIO_ppColor, AIO_ppVig, AIO_ppDynBlur, AIO_ppRadBlur]};
+							["AIO_medicIcon", "onEachFrame"] call BIS_fnc_removeStackedEventHandler;
+						};
+						
 					};
+					_unit setVariable ["AIO_deathTimer", _h];
 				};
 				
 				_damage = 0;					

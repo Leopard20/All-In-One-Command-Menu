@@ -173,6 +173,9 @@ if (_distance > _bounds) then {
 			_unit enableAI "PATH";
 			_unit enableAI "MOVE";
 			[_unit, _target, false] call AIO_fnc_desync;
+			if (isPlayer _target) then {
+				["AIO_medicIcon", "onEachFrame"] call BIS_fnc_removeStackedEventHandler;
+			};
 		} else {
 			_unit playMoveNow _move;
 		};
@@ -194,8 +197,9 @@ if (_distance > _bounds) then {
 		_unit enableAI "MOVE";
 		[_unit, 2, _wait+20] call AIO_fnc_setTask;
 		if (_target == player) then {
-			("BlackScreen" call BIS_fnc_rscLayer) cutFadeOut 01;
+			("AIO_BlackScreen" call BIS_fnc_rscLayer) cutFadeOut 01;
 			if !(isNil "AIO_ppColor") then {{ppEffectDestroy _x} forEach [AIO_ppColor, AIO_ppVig, AIO_ppDynBlur, AIO_ppRadBlur]};
+			["AIO_medicIcon", "onEachFrame"] call BIS_fnc_removeStackedEventHandler;
 		} else {
 			_id = _target getVariable ["AIO_actionRevive", -1];
 			if (_id != -1) then {[_target, _id] call BIS_fnc_holdActionRemove; _target setVariable ["AIO_actionRevive", -1]};

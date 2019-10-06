@@ -17,6 +17,7 @@ if (isNil "AIO_enableMod") then {
 	AIO_FixedWatchDir = true;
 	AIO_copyExactStance = true;
 	AIO_autoMedicEnabled = false;
+	AIO_showMedicIcon = true;
 	[] spawn {
 		if (allDisplays isEqualTo [findDisplay 0] || is3DEN) exitWith {};
 		

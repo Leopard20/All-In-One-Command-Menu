@@ -21,7 +21,7 @@
 			
 			_currentCollective = _velocity select 2;
 			_desiredColl = _veh getVariable ["AIO_collective", 0];
-			if (_veh getVariable ["AIO_landContact", false]) then {_desiredColl = _desiredColl max -1};
+			if (isTouchingGround _veh) then {_desiredColl = _desiredColl max -1};
 			
 			_verticalVelocity = _currentCollective + _acc/_fps*(_desiredColl - _currentCollective);
 			
@@ -103,14 +103,15 @@
 			
 			_skids = _veh getVariable ["AIO_skidPoints", []];
 			
-			_hasContact = false;
+			_hasContact = isTouchingGround _veh;
+			/*
 			{
 				_skid = _veh modelToWorldWorld _x;
 				_skidbottom = _skid vectorDiff [0,0,0.38];
 				_hasContact = (terrainIntersectASL[_skid, _skidbottom] || {lineIntersects [_skid, _skidbottom, _veh]});
 				if (_hasContact) exitWith {};
 			} forEach _skids;
-			
+			*/
 			if !(_hasContact) then {
 				_velocity set [2, _verticalVelocity - 0.75*_velocitySize*_lift/_fps];
 				if !(_veh getVariable ["AIO_disableControls", false]) then {

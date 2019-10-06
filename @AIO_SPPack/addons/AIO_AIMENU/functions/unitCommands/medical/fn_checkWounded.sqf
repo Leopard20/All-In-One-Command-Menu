@@ -67,7 +67,7 @@ if (_cntMedic != 0) then {
 			_medic = _suitableMedics select 0;
 			_task = [_medic,0,0] call AIO_fnc_getTask;
 			_queuePos = [0,1] select (_task == 4);
-			[_medic, [4,_patient,60+time,0], _queuePos] call AIO_fnc_pushToQueue;
+			[_medic, [4,_patient,time+90*_perMedic,0], _queuePos] call AIO_fnc_pushToQueue;
 			_patient setVariable ["AIO_medic", _medic];
 			if (_patient != player) then {
 				if (behaviour _patient == "Combat") then {
@@ -77,6 +77,16 @@ if (_cntMedic != 0) then {
 					_midWay set [2, 0];
 					[_patient, [1,_midWay,0,0], 0] call AIO_fnc_pushToQueue;
 					[_patient, [2,_medic,time+120*_perMedic,0], 1] call AIO_fnc_pushToQueue;
+				};
+			} else {
+				if (lifeState _patient == "INCAPACITATED" || AIO_showMedicIcon) then {
+					_disp = uiNamespace getVariable ["AIO_BlackScreen", displayNull];
+					_ctrl =_disp displayCtrl 1100;
+					_ctrl ctrlSetText "A medic is coming to revive you.";
+					["AIO_medicIcon", "onEachFrame", {
+						params ["_medic"];
+						drawIcon3D["\A3\ui_f\data\IGUI\Cfg\Cursors\select_ca.paa", [1,0.2,0.2,1], (_medic modelToWorldVisual (_medic selectionPosition "aimPoint")), 1, 1, 0, format["Medic, %1m", floor (_medic distance player)], 0, 0.0315, "PuristaMedium", "center", true];
+					}, [_medic]] call BIS_fnc_addStackedEventHandler;
 				};
 			};
 			if (count(_medic getVariable ["AIO_queue", []])+1 >= _perMedic) then {_availableMedics = _availableMedics - [_medic]};
@@ -98,12 +108,23 @@ if (_cntMedic != 0) then {
 			_medic = _suitableMedics select 0;
 			_task = [_medic,0,0] call AIO_fnc_getTask;
 			_queuePos = [0,1] select (_task == 4);
-			[_medic, [4,_patient,60+time,0], _queuePos] call AIO_fnc_pushToQueue;
+			[_medic, [4,_patient,time+90*_perMedic,0], _queuePos] call AIO_fnc_pushToQueue;
 			_patient setVariable ["AIO_medic", _medic];
 			[_patient, _medic] call AIO_fnc_sync;
+			if (isPlayer _patient) then {
+				["AIO_medicIcon", "onEachFrame", {
+					if !(player getVariable ["ACE_isUnconscious", false]) exitWith {
+						["AIO_medicIcon", "onEachFrame"] call BIS_fnc_removeStackedEventHandler;
+					};
+					params ["_medic"];
+					drawIcon3D["\A3\ui_f\data\IGUI\Cfg\Cursors\select_ca.paa", [1,0.2,0.2,1], (_medic modelToWorldVisual (_medic selectionPosition "aimPoint")), 1, 1, 0, format["Medic, %1m", floor (_medic distance player)], 0, 0.0315, "PuristaMedium", "center", true];
+				}, [_medic]] call BIS_fnc_addStackedEventHandler;
+			};
 		};
 	} forEach _special;
+	
 	[_wounded] spawn {{_x directSay "SentHealthCritical"; sleep (0.5 + random 2)} forEach (_this select 0)};
+	
 } else {
 	_unattended = _wounded;
 };
@@ -118,7 +139,7 @@ if (count _unattended > 0) then {
 		if (count _medics == 0) exitWith {};
 		_medics = [_medics, [], {_x distance player}, "ASCEND"] call BIS_fnc_sortBy;
 		_medic = _medics select 0;
-		[_medic, [4,player,80+time,0], 0] call AIO_fnc_pushToQueue;
+		[_medic, [4,player,90+time,0], 0] call AIO_fnc_pushToQueue;
 		
 	};
 	

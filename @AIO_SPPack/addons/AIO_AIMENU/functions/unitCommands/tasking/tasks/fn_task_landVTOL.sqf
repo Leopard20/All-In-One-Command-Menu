@@ -29,15 +29,17 @@ if (_veh distance2D _landPos > _distance) then {
 	
 	_veh land (["Land", "GET OUT", "GET OUT", "GET OUT"] select _landMode-1);
 	
-	_skids = _veh getVariable ["AIO_skidPoints", []];
+	_hasContact = isTouchingGround _veh;
 	
-	_hasContact = false;
+	/*
+	_skids = _veh getVariable ["AIO_skidPoints", []];
 	{
 		_skid = _veh modelToWorldWorld _x;
 		_skidbottom = _skid vectorDiff [0,0,0.25];
 		_hasContact = (terrainIntersectASL[_skid, _skidbottom] || {lineIntersects [_skid, _skidbottom, _veh]});
 		if (_hasContact) exitWith {};
 	} forEach _skids;
+	*/
 	
 	if !(_hasContact) exitWith {};
 	

@@ -62,6 +62,7 @@
 ["AIO_autoMedicEnabled", "CHECKBOX", "Enable Auto-Medic", ["All-In-One Command Menu", "Initialization"] ,false, 0] call CBA_Settings_fnc_init;
 ["AIO_copyExactStance", "CHECKBOX", ["Use Exact Copy Stance", "Units follow the exact stance of player, including intermediate ones"], ["All-In-One Command Menu", "Initialization"] ,true, 0] call CBA_Settings_fnc_init;
 ["AIO_useNumpadKeys", "LIST", ["Menu selection mode", "Choose the prefered method for selecting menu items"], ["All-In-One Command Menu", "Initialization"] ,[[false, true], ["Numeric Keys", "Numeric and Numpad Keys"], 0], 0] call CBA_Settings_fnc_init;
+["AIO_showMedicIcon", "CHECKBOX", "Show the medic icon when player is wounded", ["All-In-One Command Menu", "Initialization"] ,true, 0] call CBA_Settings_fnc_init;
 //zeus
 ["AIO_Zeus_Enabled", "CHECKBOX", "Create Zeus Module", ["All-In-One Command Menu", "Zeus"] ,true, 1] call CBA_Settings_fnc_init;
 ["AIO_forceActivateAddons", "CHECKBOX", ["Force-enable all mods", "Mission makers can deactivate some addons. You can force activate them."], ["All-In-One Command Menu", "Zeus"] ,false, 1] call CBA_Settings_fnc_init;
