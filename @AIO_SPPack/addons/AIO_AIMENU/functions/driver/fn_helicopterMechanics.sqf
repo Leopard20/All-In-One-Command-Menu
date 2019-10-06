@@ -141,6 +141,11 @@
 				_veh setVariable ["AIO_pitch", _desiredPitch];
 			};
 			
+			
+			_height = _veh getVariable ["AIO_height", 0];
+			
+			if (_height < 15 && _speed < 15) then {_veh action ["LandGear", _veh]};
+			
 			if (_veh == AIO_vehiclePlayer) then {
 				_disp = uiNamespace getVariable ['AIO_helicopter_UI', displayNull];
 				(_disp displayCtrl 1301) ctrlSetText str floor(3.6*_speed);
@@ -159,7 +164,7 @@
 					(_disp displayCtrl 1306) ctrlSetText str floor(_desiredBank);
 					(_disp displayCtrl 1305) ctrlSetText "0";
 				};
-				(_disp displayCtrl 1300) ctrlSetText str floor (_veh getVariable ["AIO_height", 0]);
+				(_disp displayCtrl 1300) ctrlSetText str floor _height;
 			};
 		} else {
 			_veh setVariable ["AIO_lastVelocity", velocity _veh];

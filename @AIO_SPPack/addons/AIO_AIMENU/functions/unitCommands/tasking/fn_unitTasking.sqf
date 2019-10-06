@@ -169,6 +169,9 @@ waitUntil {
 			};
 		} else {
 			[_unit] call AIO_fnc_cancelAllTasks;
+			if (_task == 4 && {isPlayer ([_unit,0,1] call AIO_fnc_getTask)}) then {
+				["AIO_medicIcon", "onEachFrame"] call BIS_fnc_removeStackedEventHandler;
+			};
 		};
 	} forEach AIO_taskedUnits;};
 	(count AIO_taskedUnits == 0)

@@ -20,6 +20,7 @@ if (!alive _target || {time > _wait || {(_target getVariable ["AIO_medic", objNu
 		[_unit, _target, false] call AIO_fnc_desync;
 		_target forceSpeed -1;
 		_target setVariable ["AIO_medic", objNull];
+		if (isPlayer _target) then {["AIO_medicIcon", "onEachFrame"] call BIS_fnc_removeStackedEventHandler;};
 	};
 	[_unit, 0, 0] call AIO_fnc_setTask;
 };
@@ -135,6 +136,7 @@ if (_distance > _bounds) then {
 		_target enableAI "MOVE";
 		[_unit, _target, false] call AIO_fnc_desync;
 		[_unit, 0, 0] call AIO_fnc_setTask;
+		if (isPlayer _target) then {["AIO_medicIcon", "onEachFrame"] call BIS_fnc_removeStackedEventHandler;};
 	};
 	
 	_dir = (getPosASL _target) vectorDiff (getPosASL _unit);
@@ -173,9 +175,7 @@ if (_distance > _bounds) then {
 			_unit enableAI "PATH";
 			_unit enableAI "MOVE";
 			[_unit, _target, false] call AIO_fnc_desync;
-			if (isPlayer _target) then {
-				["AIO_medicIcon", "onEachFrame"] call BIS_fnc_removeStackedEventHandler;
-			};
+			if (isPlayer _target) then {["AIO_medicIcon", "onEachFrame"] call BIS_fnc_removeStackedEventHandler;};
 		} else {
 			_unit playMoveNow _move;
 		};
