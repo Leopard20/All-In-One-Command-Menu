@@ -8,8 +8,13 @@ if (count _units == 0) exitWith {};
 _crew = [];
 {
 	_veh = vehicle _x;
-	if (_veh != _x) then {_temp = fullCrew [_veh, "", false]; _temp = _temp apply {[_x select 0, _x select 1, _x select 3, _veh]}; {_crew = _crew + [_x]} 
-forEach _temp};
+	if (_veh != _x) then {
+		_temp = fullCrew [_veh, "", false]; 
+		_temp = _temp apply {[_x select 0, _x select 1, _x select 3, _veh]}; 
+		{
+			_crew pushBack _x
+		} forEach _temp
+	};
 } forEach _units;
 
 _group = createGroup (side player);

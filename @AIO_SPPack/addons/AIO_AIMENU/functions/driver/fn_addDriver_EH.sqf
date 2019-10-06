@@ -47,6 +47,7 @@ _id = _display displayAddEventHandler ["KeyDown", {
 	};
 	if (_shift) then {
 		_vehiclePlayer = vehicle player;
+		_vehiclePlayer land "NONE";
 		_vehiclePlayer engineOn true;
 		_pos = getPosASL _vehiclePlayer;
 		_flightHeight = (((_pos select 2) - ((getTerrainHeightASL _pos) max 0)) + 10) min 200;

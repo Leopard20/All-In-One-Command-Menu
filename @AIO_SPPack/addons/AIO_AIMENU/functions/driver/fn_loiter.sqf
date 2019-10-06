@@ -26,3 +26,9 @@ _vehiclePlayer setVariable ["AIO_loiter", _loiter];
 if (_loiter < 0) then {("AIO_helicopter_UI" call BIS_fnc_rscLayer) cutRsc ["AIO_loiterUI_left", "PLAIN", -1 , false]} else {("AIO_helicopter_UI" call BIS_fnc_rscLayer) cutRsc ["AIO_loiterUI_right", "PLAIN", -1 , false]};
 
 ((uiNamespace getVariable ["AIO_helicopter_UI", displayNull]) displayCtrl 1307) ctrlSetText str (floor _radius);
+
+_vehiclePlayer land "NONE";
+
+if ((_vehiclePlayer getVariable ["AIO_flightHeight", 40]) < 25) then {
+	_vehiclePlayer setVariable ["AIO_flightHeight", 25];
+};

@@ -1,6 +1,6 @@
 params ["_veh", ["_addToSuperHeli", true]];
 
-private ["_pos", "_tempVeh", "_bb", "_pos", "_height", "_size"];
+private ["_tempVeh", "_bb", "_pos", "_height", "_size"];
 
 _veh setVariable ["AIO_lastVelocity", velocity _veh];
 _veh setVariable ["AIO_pitch", 0];
@@ -12,11 +12,11 @@ _veh setVariable ["AIO_flightHeight", 50];
 _vehType = typeOf _veh;
 
 //create a duplicated model for analysis
-_tempVeh = createVehicle [_vehType, [0,0,0]];
-
-_tempVeh setPosASL [0,0,10000];
+_tempVeh = createVehicle [_vehType, [0,0,1000]];
 
 _tempVeh enableSimulation false;
+
+_tempVeh setPosASL [0,0,1000];
 
 _tempVeh setVectorUp [0,0,1];
 
@@ -203,7 +203,7 @@ AIO_superHelicopters pushBackUnique _veh;
 
 AIO_AI_superHelicopters pushBackUnique _veh;
 
-if !(driver _veh in AIO_taskedUnits) then {_veh setVariable ["AIO_disableControls", false]};
+if !((driver _veh) in AIO_taskedUnits) then {_veh setVariable ["AIO_disableControls", false]; _veh land "NONE"};
 
 _veh engineOn true;
 

@@ -103,6 +103,7 @@ for "_i" from 0 to (_cntU - 1) do
 	(_menuNum + 1)];
 			call compile _text1;
 		};
+		
 		/*
 		if (_menuNum > 1) then {
 			_text = formatText ["<< %1", parseText"<t font=""PuristaBold"">Back"];
@@ -111,10 +112,11 @@ for "_i" from 0 to (_cntU - 1) do
 			call compile _text1;
 		};
 		*/
+		
 		_text1 = format ['AIO_chooseSupUnits%1 pushBack ["", [], "", -1, [["expression", ""]], "1", "0"]', _menuNum];
 		call compile _text1;
 		
-		_text1 = format ['AIO_chooseSupUnits%1 pushBack [parseText"<t font=""PuristaBold""> Done", [], "", -5, [["expression", "_units = []; {_units pushBack (AIO_HCSelectedUnits select _x)} forEach AIO_HCSelectedUnitsNum; [_units, AIO_selectedSupport, false] spawn AIO_fnc_addSupport"]], "1", "1"]', _menuNum, _supType];
+		_text1 = format ['AIO_chooseSupUnits%1 pushBack [parseText"<t font=""PuristaBold""> Done", [], "", -5, [["expression", "if (%2 == 4) then {[] call AIO_fnc_addHCGroup} else {_units = []; {_units pushBack (AIO_HCSelectedUnits select _x)} forEach AIO_HCSelectedUnitsNum; [_units, AIO_selectedSupport, false] spawn AIO_fnc_addSupport};"]], "1", "1"]', _menuNum, _supType];
 		call compile _text1;
 		
 		_menuNum = _menuNum + 1;

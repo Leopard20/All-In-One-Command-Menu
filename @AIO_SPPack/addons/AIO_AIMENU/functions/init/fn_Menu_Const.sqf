@@ -208,16 +208,21 @@ AIO_superPilotMode_subMenu =
 	["Super Pilot",true],
 	[parseText"<img color='#95ff44' image='\A3\ui_f\data\GUI\Rsc\RscDisplayGarage\helicopter_ca.paa'/><t font='PuristaBold'> Enable Super Pilot", [2], "", -5, [["expression", "
 		_units = groupSelectedUnits player;
-		_units = (_units select {_veh = vehicle _x; (_veh != _x && {_veh isKindOf 'Helicopter'})}) apply {vehicle _x};
+		_vehs = [];
 		{
-			[_x] call AIO_fnc_analyzeHeli
+			_veh = vehicle _x;
+			if (_veh isKindOf 'Helicopter' && !(_veh in _vehs)) then {
+				[_veh, true] call AIO_fnc_analyzeHeli;
+				_vehs pushBack _veh
+			};
 		} forEach _units;
 	"]], "1", "1"],
 	[parseText"<img color='#f94a4a' image='\A3\ui_f\data\GUI\Rsc\RscDisplayGarage\helicopter_ca.paa'/><t font='PuristaBold'> Disable Super Pilot", [3], "", -5, [["expression", "
 		_units = groupSelectedUnits player;
-		_units = (_units select {_veh = vehicle _x; (_veh != _x && {_veh isKindOf 'Helicopter'})}) apply {vehicle _x};
+		_units = (_units select {(vehicle _x) isKindOf 'Helicopter'}) apply {vehicle _x};
 		AIO_superHelicopters = AIO_superHelicopters - _units;
 		AIO_AI_superHelicopters = AIO_AI_superHelicopters - _units;
+		if (count AIO_superHelicopters == 0) then {['AIO_helicopter_control', 'onEachFrame'] call BIS_fnc_removeStackedEventHandler}
 	"]], "1", "1"]
 ];
 

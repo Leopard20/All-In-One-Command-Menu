@@ -1,6 +1,7 @@
 _display = findDisplay 46;
 if (AIO_enableSuperPilot) then {
 	AIO_vehiclePlayer = vehicle player;
+	AIO_vehiclePlayer land "NONE";
 	AIO_vehiclePlayer setVariable ["AIO_flightHeight", 50];
 	AIO_vehiclePlayer setVariable ["AIO_isBanking", false];
 	AIO_vehiclePlayer setVariable ["AIO_controlPitch", false];
@@ -41,8 +42,13 @@ if (AIO_enableSuperPilot) then {
 				
 				_vehiclePlayer setVariable ["AIO_AiPilot", false];
 				
-				if (_ctrl) then {
+				if (_ctrl && (_vehiclePlayer getVariable ["AIO_loiter", 0]) == 0) then {
 					_vehiclePlayer setVariable ["AIO_forcePitch", !_forcePitch];
+					if !(_forcePitch) then {
+						if ((_vehiclePlayer getVariable ["AIO_flightHeight", 40]) < 25) then {
+							_vehiclePlayer setVariable ["AIO_flightHeight", 25];
+						};
+					};
 				};
 			};
 			case 31: //s
@@ -57,8 +63,13 @@ if (AIO_enableSuperPilot) then {
 				
 				_vehiclePlayer setVariable ["AIO_AiPilot", false];
 				
-				if (_ctrl) then {
+				if (_ctrl && (_vehiclePlayer getVariable ["AIO_loiter", 0]) == 0) then {
 					_vehiclePlayer setVariable ["AIO_forcePitch", !_forcePitch];
+					if !(_forcePitch) then {
+						if ((_vehiclePlayer getVariable ["AIO_flightHeight", 40]) < 25) then {
+							_vehiclePlayer setVariable ["AIO_flightHeight", 25];
+						};
+					};
 				};
 			};
 			case 30: //a
@@ -79,6 +90,9 @@ if (AIO_enableSuperPilot) then {
 						
 						_vehiclePlayer setVariable ["AIO_loiterCenter", ((getPosASLVisual _vehiclePlayer) vectorAdd (([(vectorDirVisual _vehiclePlayer), 90] call BIS_fnc_rotateVector2D) apply {_x*100}))];
 						//TEST_POINTS = [ ((getPosASLVisual _vehiclePlayer) vectorAdd (([(vectorDirVisual _vehiclePlayer), 90] call BIS_fnc_rotateVector2D) apply {_x*100}))];
+						if ((_vehiclePlayer getVariable ["AIO_flightHeight", 40]) < 25) then {
+							_vehiclePlayer setVariable ["AIO_flightHeight", 25];
+						};
 					} else {
 						"AIO_helicopter_UI" cutFadeOut 0; ("AIO_helicopter_UI" call BIS_fnc_rscLayer) cutRsc ["AIO_cruiseUI", "PLAIN", -1 , false];
 						_vehiclePlayer setVariable ["AIO_forcePitch", false];
@@ -115,6 +129,9 @@ if (AIO_enableSuperPilot) then {
 						
 						_vehiclePlayer setVariable ["AIO_loiterCenter", ((getPosASLVisual _vehiclePlayer) vectorAdd (([(vectorDirVisual _vehiclePlayer), -90] call BIS_fnc_rotateVector2D) apply {_x*100}))];
 						//TEST_POINTS = [ ((getPosASLVisual _vehiclePlayer) vectorAdd (([(vectorDirVisual _vehiclePlayer), -90] call BIS_fnc_rotateVector2D) apply {_x*100}))];
+						if ((_vehiclePlayer getVariable ["AIO_flightHeight", 40]) < 25) then {
+							_vehiclePlayer setVariable ["AIO_flightHeight", 25];
+						};
 					} else {
 						"AIO_helicopter_UI" cutFadeOut 0; ("AIO_helicopter_UI" call BIS_fnc_rscLayer) cutRsc ["AIO_cruiseUI", "PLAIN", -1 , false];
 						_vehiclePlayer setVariable ["AIO_forcePitch", false];
@@ -149,7 +166,9 @@ if (AIO_enableSuperPilot) then {
 			};
 		};
 		if (_shift) then {
+			_vehiclePlayer land "NONE";
 			_vehiclePlayer engineOn true;
+			
 			if (_vehiclePlayer getVariable ["AIO_forcePitch", false]) then {
 				_height = ((_vehiclePlayer getVariable ["AIO_flightHeight", 50])+5) min 500;
 				[0, (formatText ["Flight Height: %1 m", parseText format ["<t color='#FFFF00'>%1", _height]])] call AIO_fnc_customHint;

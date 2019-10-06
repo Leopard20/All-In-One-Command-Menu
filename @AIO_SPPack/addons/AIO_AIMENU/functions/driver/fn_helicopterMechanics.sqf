@@ -106,7 +106,7 @@
 			_hasContact = false;
 			{
 				_skid = _veh modelToWorldWorld _x;
-				_skidbottom = _skid vectorDiff [0,0,0.4];
+				_skidbottom = _skid vectorDiff [0,0,0.38];
 				_hasContact = (terrainIntersectASL[_skid, _skidbottom] || {lineIntersects [_skid, _skidbottom, _veh]});
 				if (_hasContact) exitWith {};
 			} forEach _skids;
