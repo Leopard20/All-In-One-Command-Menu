@@ -16,5 +16,5 @@ The source code is outdated.
 
 # Want to contribute?
 You can contribute to the project by:
-* Submitting issues and bugs
-* Submitting feature requests
+* [Submitting issues and bugs](https://github.com/leopard20/All-In-One-Command-Menu/issues/new?template=bug_report.md)
+* [Submitting feature requests](https://github.com/leopard20/All-In-One-Command-Menu/issues/new?template=feature_request.md)
