@@ -4,7 +4,7 @@ waitUntil {
 		
 		_loiter = _veh getVariable ["AIO_loiter", 0];
 		
-		_pos = getPosWorld _veh;
+		_pos = getPosASL _veh;
 		
 		_onCourse = true;
 		_forcePitch = _veh getVariable ["AIO_forcePitch", false];
@@ -99,7 +99,7 @@ waitUntil {
 					_contacts = [];
 					{
 						_skid =_veh modelToWorldWorld _x;
-						_contacts = lineIntersectsSurfaces [_skid, _skid vectorDiff [0,0,_flightHeight], _veh, getSlingLoad _veh, true, 1, "GEOM", "FIRE"];
+						_contacts = lineIntersectsSurfaces [_skid, _skid vectorDiff [0,0,(_flightHeight max 50)], _veh, getSlingLoad _veh, true, 1, "GEOM", "FIRE"];
 						_cntContact = count _contacts;
 						if (_cntContact > 0) exitWith {};
 					} forEach _skids;
@@ -111,8 +111,11 @@ waitUntil {
 					};
 				};
 				_terrainHeight = _terrainHeight max 0;
-				_veh setVariable ["AIO_height", _vehHeight - _terrainHeight];
-				_collective = ((((_terrainHeight + _flightHeight - _vehHeight) max -10) min 10) + (_veh getVariable ["AIO_collective", 0]))/2;
+				_height = _vehHeight - _terrainHeight;
+				_veh setVariable ["AIO_height", _height];
+				if (surfaceIsWater _pos && _vehHeight < 2 && _flightHeight < 0) then {_flightHeight = 0};
+				_max = [-10, (-0.66*(abs _height) min -1)] select (_height < 10);
+				_collective = ((((_flightHeight - _height) max _max) min 10) + (_veh getVariable ["AIO_collective", 0]))/2;
 				_veh setVariable ["AIO_collective", _collective];
 			};
 			

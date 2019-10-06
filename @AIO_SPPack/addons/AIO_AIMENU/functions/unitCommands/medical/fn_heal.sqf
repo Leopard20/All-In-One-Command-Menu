@@ -1,5 +1,3 @@
-params ["_unit", "_target"];
-
 _damages = (getAllHitPointsDamage _target) select 2;
 
 _medication = _unit getVariable ["AIO_usedMed", -1];
@@ -75,24 +73,30 @@ if (AIO_UseAceMedical) then {
 	};
 };
 
+_heal = _heal * _multiplier;
+
 _damage = 0;
 _cnt = 0;
 {
-	if (_x != 0) then {
-		_newDmg = (_x - _heal) max 0;
-		_target setHitIndex [_foreachindex, _newDmg];
-		_damage = _damage + _newDmg; 
-		_cnt = _cnt + 1;
-	};
+	_newDmg = (_x - _heal) max 0;
+	_target setHitIndex [_foreachindex, _newDmg];
+	_damage = _damage + _newDmg; 
+	_cnt = _cnt + 1;
 } forEach _damages;
+
+_damage = _damage/_cnt;
+
+if (_damage < getDammage _target) then {
+	_target setDamage _damage
+} else {
+	_damage = (((getDammage _target) - _heal) max 0);
+	_target setDamage _damage;
+};
 
 
 if (_damage == 0) then {
 	_target setVariable ["ACE_MEDICAL_isBleeding", false, true];
-	_target setDamage 0;
 };
-
-_cnt = _cnt + 1;
 
 if (_target getVariable ["AIO_damageHandler", -1] != -1) then {
 	_target setVariable ["AIO_damage", _damage/_cnt];

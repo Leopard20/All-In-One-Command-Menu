@@ -29,15 +29,15 @@ _txt3 = parseText format ["<img image='%1'/><t font='PuristaBold'> Launcher", _i
 _txt4 = parseText format ["<img image='%1'/><t font='PuristaBold'> Grenade", getText(configFile >> "cfgMagazines" >> "HandGrenade" >> "picture")];
 _txt5 = parseText format ["<img image='%1'/><t font='PuristaBold'> Misc Items", getText (_cfgWeapons >> "FirstAidKit" >> "picture")];
 
-
+_useNumpad = AIO_useNumpadKeys;
 AIO_addMagazine_subMenu =
 [
 	["Add Ammo",true],
-	[_txt1, ([[2], [2, 79]] select AIO_useNumpadKeys), "", -5, [["expression", "[groupSelectedUnits player, 0] spawn AIO_fnc_addAmmo; [(groupSelectedUnits player)] spawn AIO_fnc_createMagsMenu"]], "1", "1"],
-	[_txt2, ([[3], [3, 80]] select AIO_useNumpadKeys), "", -5, [["expression", "[groupSelectedUnits player, 1] spawn AIO_fnc_addAmmo; [(groupSelectedUnits player)] spawn AIO_fnc_createMagsMenu"]], "1", "1"],
-	[_txt3, ([[4], [4, 81]] select AIO_useNumpadKeys), "", -5, [["expression", "[groupSelectedUnits player, 2] spawn AIO_fnc_addAmmo; [(groupSelectedUnits player)] spawn AIO_fnc_createMagsMenu"]], "1", "1"],
-	[_txt4, ([[5], [5, 75]] select AIO_useNumpadKeys), "", -5, [["expression", "[groupSelectedUnits player, 3] spawn AIO_fnc_addAmmo; [(groupSelectedUnits player)] spawn AIO_fnc_createMagsMenu"]], "1", "1"],
-	[_txt5, ([[6], [6, 76]] select AIO_useNumpadKeys), "", -5, [["expression", "[groupSelectedUnits player, 4] spawn AIO_fnc_addAmmo; [(groupSelectedUnits player)] spawn AIO_fnc_createMagsMenu"]], "1", "1"]
+	[_txt1, ([[2], [2, 79]] select _useNumpad), "", -5, [["expression", "[groupSelectedUnits player, 0] spawn AIO_fnc_addAmmo; [(groupSelectedUnits player)] spawn AIO_fnc_createMagsMenu"]], "1", "1"],
+	[_txt2, ([[3], [3, 80]] select _useNumpad), "", -5, [["expression", "[groupSelectedUnits player, 1] spawn AIO_fnc_addAmmo; [(groupSelectedUnits player)] spawn AIO_fnc_createMagsMenu"]], "1", "1"],
+	[_txt3, ([[4], [4, 81]] select _useNumpad), "", -5, [["expression", "[groupSelectedUnits player, 2] spawn AIO_fnc_addAmmo; [(groupSelectedUnits player)] spawn AIO_fnc_createMagsMenu"]], "1", "1"],
+	[_txt4, ([[5], [5, 75]] select _useNumpad), "", -5, [["expression", "[groupSelectedUnits player, 3] spawn AIO_fnc_addAmmo; [(groupSelectedUnits player)] spawn AIO_fnc_createMagsMenu"]], "1", "1"],
+	[_txt5, ([[6], [6, 76]] select _useNumpad), "", -5, [["expression", "[groupSelectedUnits player, 4] spawn AIO_fnc_addAmmo; [(groupSelectedUnits player)] spawn AIO_fnc_createMagsMenu"]], "1", "1"]
 ];
 
 showCommandingMenu "#USER:AIO_addMagazine_subMenu";

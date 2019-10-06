@@ -59,10 +59,14 @@
 ["AIO_HC_Module_Enabled", "CHECKBOX", "Create High Command Module", ["All-In-One Command Menu", "Initialization"], false, 1, {}, true] call CBA_Settings_fnc_init;
 ["AIO_becomeLeaderOnSwitch", "CHECKBOX", "Become Leader on Team Switch", ["All-In-One Command Menu", "Initialization"] ,false, 0] call CBA_Settings_fnc_init;
 ["AIO_useVoiceChat", "CHECKBOX", "Use radio chat for reporting", ["All-In-One Command Menu", "Initialization"] ,true, 0] call CBA_Settings_fnc_init;
-["AIO_autoMedicEnabled", "CHECKBOX", "Enable Auto-Medic", ["All-In-One Command Menu", "Initialization"] ,false, 0] call CBA_Settings_fnc_init;
 ["AIO_copyExactStance", "CHECKBOX", ["Use Exact Copy Stance", "Units follow the exact stance of player, including intermediate ones"], ["All-In-One Command Menu", "Initialization"] ,true, 0] call CBA_Settings_fnc_init;
 ["AIO_useNumpadKeys", "LIST", ["Menu selection mode", "Choose the prefered method for selecting menu items"], ["All-In-One Command Menu", "Initialization"] ,[[false, true], ["Numeric Keys", "Numeric and Numpad Keys"], 0], 0] call CBA_Settings_fnc_init;
-["AIO_showMedicIcon", "CHECKBOX", "Show the medic icon when player is wounded", ["All-In-One Command Menu", "Initialization"] ,true, 0] call CBA_Settings_fnc_init;
+["AIO_useVanillaMenus", "CHECKBOX", ["Use Vanilla Menus", "Uses vanilla menus in the Root Menu instead of Custom ones"], ["All-In-One Command Menu", "Initialization"] ,false, 0] call CBA_Settings_fnc_init;
+
+//medic
+["AIO_autoMedicEnabled", "CHECKBOX", "Enable Auto-Medic", ["All-In-One Command Menu", "Medic"] ,false, 0] call CBA_Settings_fnc_init;
+["AIO_showMedicIcon", "CHECKBOX", "Show the medic icon when player is wounded", ["All-In-One Command Menu", "Medic"] ,true, 0] call CBA_Settings_fnc_init;
+["AIO_healSpeedMultiplier", "SLIDER", ["Healing speed multiplier", "X > 1: Faster; X < 1 Slower. Only for healing others. Recommended a value above 0.5"], ["All-In-One Command Menu", "Medic"] ,[0.25, 2, 1, 2], 1] call CBA_Settings_fnc_init;
 //zeus
 ["AIO_Zeus_Enabled", "CHECKBOX", "Create Zeus Module", ["All-In-One Command Menu", "Zeus"] ,true, 1] call CBA_Settings_fnc_init;
 ["AIO_forceActivateAddons", "CHECKBOX", ["Force-enable all mods", "Mission makers can deactivate some addons. You can force activate them."], ["All-In-One Command Menu", "Zeus"] ,false, 1] call CBA_Settings_fnc_init;

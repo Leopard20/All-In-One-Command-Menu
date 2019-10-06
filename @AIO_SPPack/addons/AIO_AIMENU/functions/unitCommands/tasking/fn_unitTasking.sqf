@@ -19,7 +19,7 @@ waitUntil {
 			if (_task == -1) exitWith {
 				_currentCommand = currentCommand (vehicle _unit);
 				if (_currentCommand == "MOVE" || _currentCommand == "") exitWith {[_unit] call AIO_fnc_cancelAllTasks;};
-				if !(_unit in AIO_animatedUnits) then {_unit enableAI "ANIM"};
+				if !(_unit in AIO_animatedUnits) then {_unit enableAI "ANIM"; _unit enableAI "MOVE";};
 			};
 			//-----------------------------------------------------------cancel-----------------------------------------------------------
 			if (_task == 100) exitWith {[_unit] call AIO_fnc_cancelAllTasks};
@@ -29,6 +29,7 @@ waitUntil {
 				_unit setVariable ["AIO_animation", [[], [], [], [],0]];
 				_unit enableAI "PATH";
 				_unit enableAI "ANIM";
+				_unit enableAI "MOVE";
 				if (vehicle _unit == _unit) then {_unit playActionNow "STOP"};
 				[_unit] call AIO_fnc_followLastOrder;
 				[_unit, 0, 100] call AIO_fnc_setTask;
@@ -46,6 +47,7 @@ waitUntil {
 				if ((_veh distance2D _target) - (speed _veh)/2 > _dist) then {
 					_unit enableAI "PATH";
 					_unit enableAI "ANIM";
+					_unit enableAI "MOVE";
 					if (_target distance2D ((expectedDestination _veh) select 0) != 0) then {
 						if (_target isEqualType objNull) then {_target = ASLToAGL(getPosASL _target)};
 						if (_veh isKindOf "Helicopter") then {_veh land "NONE"};

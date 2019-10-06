@@ -1,6 +1,9 @@
 _currentCommand = currentCommand _unit;
-if (_currentCommand == "MOVE" || _currentCommand == "") exitWith {[_unit] call AIO_fnc_cancelAllTasks};
 _target = [_unit, 0, 1] call AIO_fnc_getTask;
+if ((_currentCommand == "MOVE" || _currentCommand == "") && isPlayer (leader _unit)) exitWith {
+	if (isPlayer _target) then {["AIO_medicIcon", "onEachFrame"] call BIS_fnc_removeStackedEventHandler};
+	[_unit] call AIO_fnc_cancelAllTasks;
+};
 
 if (_currentCommand != "STOP") exitWith {
 	_unit doWatch objNull;
@@ -149,7 +152,8 @@ if (_distance > _bounds) then {
 	if !(_isDown) then {
 		_damage = 1;
 		if (_animState == "ainv") then {
-			_damage = [_unit, _target] call AIO_fnc_heal;
+			_multiplier = AIO_healSpeedMultiplier;
+			_damage = call AIO_fnc_heal;
 			if (time - (_unit getVariable ["AIO_lastPlayMove", -10]) > 7) then {_unit switchMove _move; _unit setVariable ["AIO_lastPlayMove", time]};
 		};
 

@@ -14,11 +14,13 @@ _move = format ["ainvp%1mstpslayw%2dnon_medic", _stance, _wpn];
 _animState = animationState _unit;
 
 _medication = 1;
-if (_animState != _move) then {_medication = [_unit, false] call AIO_fnc_useMedication};
+if (count _animState <= 35 && _animState != _move) then {_medication = [_unit, false] call AIO_fnc_useMedication};
 if (_medication == -1) exitWith {};
 _damage = 1;
 if (_animState == _move) then {
-	_damage = [_unit, _unit] call AIO_fnc_heal;
+	_target = _unit;
+	_multiplier = 1;
+	_damage = call AIO_fnc_heal;
 };
 _aceDamage = (_unit getVariable ["ACE_MEDICAL_openWounds", []]) findIf {_x select 2 > 0};
 

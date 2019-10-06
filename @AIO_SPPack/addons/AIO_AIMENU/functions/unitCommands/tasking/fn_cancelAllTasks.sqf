@@ -7,6 +7,7 @@ AIO_animatedUnits = AIO_animatedUnits - [_unit];
 _unit enableAI "PATH";
 _unit enableAI "AUTOCOMBAT";
 _unit enableAI "ANIM";
+_unit enableAI "MOVE";
 
 _unit setUnitPos "AUTO";
 
@@ -20,6 +21,8 @@ if (_veh isKindOf "Helicopter" && {_unit == effectiveCommander _veh && _veh != A
 _synced = +(_unit getVariable ["AIO_sync", []]);
 {
 	_x enableAI "PATH";
+	_x enableAI "MOVE";
+	_x enableAI "ANIM";
 	[_x, _unit, true] call AIO_fnc_desync;
 } forEach _synced;
 

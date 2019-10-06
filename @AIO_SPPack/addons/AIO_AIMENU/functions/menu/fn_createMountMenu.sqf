@@ -3,25 +3,26 @@ private ["_farUnits", "_nearVeh1", "_vehCnt", "_dispNm", "_vehU", "_text"];
 
 AIO_nearVehicles = [];
 
+_useNumpad = AIO_useNumpadKeys;
 AIO_vehRole_subMenu = [
 	["Get in as...",true],
 	[parseText"<t font='PuristaBold'>Any", [], "", -5, [["expression", "[AIO_selectedunits, AIO_assignedvehicle, 0, true] call AIO_fnc_getIn "]], "1", "1"],
-	[parseText"<img color='#2da7ff' image='\A3\ui_f\data\IGUI\RscIngameUI\RscUnitInfo\role_driver_ca.paa'/><t font='PuristaBold'> Driver", ([[2], [2, 79]] select AIO_useNumpadKeys), "", -5, [["expression", "
+	[parseText"<img color='#2da7ff' image='\A3\ui_f\data\IGUI\RscIngameUI\RscUnitInfo\role_driver_ca.paa'/><t font='PuristaBold'> Driver", ([[2], [2, 79]] select _useNumpad), "", -5, [["expression", "
 	AIO_selectedUnits = groupSelectedUnits player;
 	[AIO_selectedunits, AIO_assignedvehicle, 1, true] call AIO_fnc_getIn; 
 	[1, 2] spawn AIO_fnc_createSeatSubMenu;
 	"]], "1", "1"],
-	[parseText"<img color='#2da7ff' image='\A3\ui_f\data\IGUI\RscIngameUI\RscUnitInfo\role_commander_ca.paa'/><t font='PuristaBold'> Commander", ([[3], [3, 80]] select AIO_useNumpadKeys), "", -5, [["expression", "
+	[parseText"<img color='#2da7ff' image='\A3\ui_f\data\IGUI\RscIngameUI\RscUnitInfo\role_commander_ca.paa'/><t font='PuristaBold'> Commander", ([[3], [3, 80]] select _useNumpad), "", -5, [["expression", "
 	AIO_selectedUnits = groupSelectedUnits player;
 	[AIO_selectedunits, AIO_assignedvehicle, 2, true] call AIO_fnc_getIn;
 	[1, 3] spawn AIO_fnc_createSeatSubMenu;
 	"]], "1", "1"],
-	[parseText"<img color='#2da7ff' image='\A3\ui_f\data\IGUI\RscIngameUI\RscUnitInfo\role_gunner_ca.paa'/><t font='PuristaBold'> Gunner", ([[4], [4, 81]] select AIO_useNumpadKeys), "", -5, [["expression", "
+	[parseText"<img color='#2da7ff' image='\A3\ui_f\data\IGUI\RscIngameUI\RscUnitInfo\role_gunner_ca.paa'/><t font='PuristaBold'> Gunner", ([[4], [4, 81]] select _useNumpad), "", -5, [["expression", "
 	AIO_selectedUnits = groupSelectedUnits player;
 	[AIO_selectedunits, AIO_assignedvehicle, 3, true] call AIO_fnc_getIn;
 	[1, 4] spawn AIO_fnc_createSeatSubMenu;		
 	"]], "1", "1"],
-	[parseText"<img color='#2da7ff' image='\A3\ui_f\data\IGUI\RscIngameUI\RscUnitInfo\role_cargo_ca.paa'/><t font='PuristaBold'> Passenger", ([[5], [5, 75]] select AIO_useNumpadKeys), "", -5, [["expression", "
+	[parseText"<img color='#2da7ff' image='\A3\ui_f\data\IGUI\RscIngameUI\RscUnitInfo\role_cargo_ca.paa'/><t font='PuristaBold'> Passenger", ([[5], [5, 75]] select _useNumpad), "", -5, [["expression", "
 	AIO_selectedUnits = groupSelectedUnits player;
 	[AIO_selectedunits, AIO_assignedvehicle, 4, true] call AIO_fnc_getIn;
 	[1, 5] spawn AIO_fnc_createSeatSubMenu;

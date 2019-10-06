@@ -1,6 +1,6 @@
 params ["_units", "_type"];
 
-_units pushBackUnique player;
+if (count _units == 0) then {_units = [player]};
 
 if (_type == 3) exitWith {
 	{

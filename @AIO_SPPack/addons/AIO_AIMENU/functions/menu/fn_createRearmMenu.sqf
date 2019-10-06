@@ -37,16 +37,16 @@ _txt3 = parseText format ["<img image='%1'/><t font='PuristaBold'> Launcher", _i
 _txt4 = parseText format ["<img image='%1'/><t font='PuristaBold'> Grenade", getText(configFile >> "cfgMagazines" >> "HandGrenade" >> "picture")];
 _txt5 = parseText format ["<img image='%1'/><t font='PuristaBold'> Misc Items", getText (_cfgWeapons >> "FirstAidKit" >> "picture")];
 
-
+_useNumpad = AIO_useNumpadKeys;
 AIO_rearm_subMenu =
 [
 	["Rearm",true],
 	[parseText "<t font='PuristaBold'> Automatic", [], "", -5, [["expression", "[groupSelectedUnits player, 0, []] call AIO_fnc_rearmAtObj"]], "1", "1"],
-	[_txt1, ([[2], [2, 79]] select AIO_useNumpadKeys), "", -5, [["expression", "[groupSelectedUnits player, 1, []] call AIO_fnc_rearmAtObj; [(groupSelectedUnits player)] spawn AIO_fnc_createRearmMenu"]], "1", "1"],
-	[_txt2, ([[3], [3, 80]] select AIO_useNumpadKeys), "", -5, [["expression", "[groupSelectedUnits player, 2, []] call AIO_fnc_rearmAtObj; [(groupSelectedUnits player)] spawn AIO_fnc_createRearmMenu"]], "1", "1"],
-	[_txt3, ([[4], [4, 81]] select AIO_useNumpadKeys), "", -5, [["expression", "[groupSelectedUnits player, 3, []] call AIO_fnc_rearmAtObj; [(groupSelectedUnits player)] spawn AIO_fnc_createRearmMenu"]], "1", "1"],
-	[_txt4, ([[5], [5, 75]] select AIO_useNumpadKeys), "", -5, [["expression", "[groupSelectedUnits player, 4, []] call AIO_fnc_rearmAtObj; [(groupSelectedUnits player)] spawn AIO_fnc_createRearmMenu"]], "1", "1"],
-	[_txt5, ([[6], [6, 76]] select AIO_useNumpadKeys), "", -5, [["expression", "[groupSelectedUnits player, 5, []] call AIO_fnc_rearmAtObj; [(groupSelectedUnits player)] spawn AIO_fnc_createRearmMenu"]], "1", "1"],
+	[_txt1, ([[2], [2, 79]] select _useNumpad), "", -5, [["expression", "[groupSelectedUnits player, 1, []] call AIO_fnc_rearmAtObj; [(groupSelectedUnits player)] spawn AIO_fnc_createRearmMenu"]], "1", "1"],
+	[_txt2, ([[3], [3, 80]] select _useNumpad), "", -5, [["expression", "[groupSelectedUnits player, 2, []] call AIO_fnc_rearmAtObj; [(groupSelectedUnits player)] spawn AIO_fnc_createRearmMenu"]], "1", "1"],
+	[_txt3, ([[4], [4, 81]] select _useNumpad), "", -5, [["expression", "[groupSelectedUnits player, 3, []] call AIO_fnc_rearmAtObj; [(groupSelectedUnits player)] spawn AIO_fnc_createRearmMenu"]], "1", "1"],
+	[_txt4, ([[5], [5, 75]] select _useNumpad), "", -5, [["expression", "[groupSelectedUnits player, 4, []] call AIO_fnc_rearmAtObj; [(groupSelectedUnits player)] spawn AIO_fnc_createRearmMenu"]], "1", "1"],
+	[_txt5, ([[6], [6, 76]] select _useNumpad), "", -5, [["expression", "[groupSelectedUnits player, 5, []] call AIO_fnc_rearmAtObj; [(groupSelectedUnits player)] spawn AIO_fnc_createRearmMenu"]], "1", "1"],
 	["", [], "", -1, [["expression", ""]], "1", "0"],
 	[parseText "<img color='#2da7ff' image='\A3\ui_f\data\IGUI\Cfg\simpleTasks\types\target_ca.paa'/><t font='PuristaBold'> At cursor *", [], "", -5, [["expression", "[[groupSelectedUnits player, 0], 'call', 'rearmAtObj'] call AIO_fnc_mapProxy"]], "1", "CursorOnGround" , "\a3\Ui_f\data\IGUI\Cfg\Cursors\iconCursorSupport_ca.paa"]
 ];

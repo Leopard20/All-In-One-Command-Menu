@@ -21,7 +21,10 @@
 			
 			_currentCollective = _velocity select 2;
 			_desiredColl = _veh getVariable ["AIO_collective", 0];
-			if (isTouchingGround _veh) then {_desiredColl = _desiredColl max -1};
+			
+			_hasContact = isTouchingGround _veh;
+			
+			if (_hasContact) then {_desiredColl = _desiredColl max -1};
 			
 			_verticalVelocity = _currentCollective + _acc/_fps*(_desiredColl - _currentCollective);
 			
@@ -103,7 +106,6 @@
 			
 			_skids = _veh getVariable ["AIO_skidPoints", []];
 			
-			_hasContact = isTouchingGround _veh;
 			/*
 			{
 				_skid = _veh modelToWorldWorld _x;
@@ -144,7 +146,7 @@
 			
 			_height = _veh getVariable ["AIO_height", 0];
 			
-			if (_height < 15 && _speed < 15) then {_veh action ["LandGear", _veh]};
+			if (_height < 15 && _speed < 20) then {_veh action ["LandGear", _veh]};
 			
 			if (_veh == AIO_vehiclePlayer) then {
 				_disp = uiNamespace getVariable ['AIO_helicopter_UI', displayNull];

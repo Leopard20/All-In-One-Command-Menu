@@ -32,11 +32,8 @@ if (_distance > 10 || !_lowSpeed) then {
 		_unit setVariable ["AIO_landTimer", -1];
 		_height = _veh getVariable ["AIO_height", 0];
 		call {
-			if (_height <= 2.4) exitWith {
-				_veh setVariable ["AIO_flightHeight", 0];
-			};
 			if (_height <= 5.4) exitWith {
-				_veh setVariable ["AIO_flightHeight", 2];
+				_veh setVariable ["AIO_flightHeight", -1];
 			};
 			if (_height <= 10.4) exitWith {
 				_veh setVariable ["AIO_flightHeight", 5];
