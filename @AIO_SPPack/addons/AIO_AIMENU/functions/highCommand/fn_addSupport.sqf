@@ -39,7 +39,7 @@ if (isNil "AIO_support_requester" || {isNull AIO_support_requester}) then {
 
 call {
 	_continue = false;
-	if (_supType == 0) exitWith {
+	if (_subType == 0) exitWith {
 		{
 			_unit = _x;
 			if ((vehicle _unit) isKindOf "Tank" || (vehicle _unit) isKindOf "staticweapon") exitWith {_continue = true};
@@ -108,7 +108,7 @@ call {
 	};
 	
 	
-	if (_supType == 1) exitWith {
+	if (_subType == 1) exitWith {
 		
 		{
 			_unit = _x;
@@ -162,7 +162,7 @@ call {
 	};
 	
 	
-	if (_supType == 2) exitWith {
+	if (_subType == 2) exitWith {
 		{
 			_unit = _x;
 			if ((vehicle _unit) isKindOf "Plane") exitWith {_continue = true};
@@ -198,7 +198,7 @@ call {
 	};
 	
 	
-	if (_supType == 3) exitWith {
+	if (_subType == 3) exitWith {
 		{
 			_unit = _x;
 			_veh = vehicle _unit;
