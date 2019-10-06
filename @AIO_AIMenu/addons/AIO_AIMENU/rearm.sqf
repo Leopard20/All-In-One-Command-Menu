@@ -10,6 +10,17 @@ if (_mode == 2) then {
 if (_mode == 3) then {_target = _this select 2};
 
 player groupChat "Rearm.";
+if (AIO_useVoiceChat) then {
+/*
+[] spawn {
+	private _dummy = "#particlesource" createVehicleLocal ASLToAGL getPosWorld player;
+	_dummy say2D "AIO_say_Rearm";
+	sleep 2; 
+	deleteVehicle _dummy;
+};
+*/
+player groupRadio "SentCmdRearm";
+};
 
 AIO_moveToRearm =
 {

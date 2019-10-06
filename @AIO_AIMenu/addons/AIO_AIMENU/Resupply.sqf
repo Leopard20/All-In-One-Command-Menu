@@ -86,6 +86,16 @@ AIO_resupply_fnc =
 	_unit = _this select 0;
 	_suppVeh = (_this select 1) select 0;
 	_action = (_this select 1) select 1;
+	if (AIO_useVoiceChat) then {
+	_action spawn {
+		//private _dummy = "#particlesource" createVehicleLocal ASLToAGL getPosWorld player;
+		if (_this == 1) then {player groupRadio "SentCmdRearm";};
+		if (_this == 2) then {player groupRadio "SentCmdRefuel";};
+		if (_this == 3) then {player groupRadio "SentCmdRepair";};
+		//sleep 2; 
+		//deleteVehicle _dummy;
+	};
+	};
 	_veh = vehicle _unit;
 	_commander = effectiveCommander _veh;
 	_cond = (_commander != _unit && _commander != player);

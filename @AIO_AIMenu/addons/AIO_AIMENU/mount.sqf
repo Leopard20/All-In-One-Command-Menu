@@ -29,50 +29,56 @@ _getInFnc =
 	private _cond = ((vehicle _unit) isKindOf "Air" && (getPos (vehicle _unit)) select 2 > 0);
 	if (vehicle _unit == _target OR _cond) exitWith {_unit setVariable ["AIO_Mount_Canceled", 1]};
 	if (vehicle _unit != _unit) then {doGetOut _unit; waitUntil {vehicle _unit == _unit OR !alive _unit OR !alive (vehicle _unit)};};
+	doStop _unit;
+	sleep 0.2;
 	if (_getInAs == 1) then {
 		_driver = getText (configfile >> "CfgVehicles" >> (typeOf _target) >> "memoryPointsGetInDriver");
-		if (_driver == "") exitWith {_targetPos = getPos _target;_unit doMove _targetPos;};
+		if (_driver == "") exitWith {_targetPos = getPos _target;_unit moveTo _targetPos;};
 		_targetPos = (_target modelToWorld (_target selectionPosition _driver));
-		_unit doMove _targetPos;
+		_unit moveTo _targetPos;
 	};
 	if (_getInAs == 2) then {
 		_commander = getText (configfile >> "CfgVehicles" >> (typeOf _target) >> "memoryPointsGetInCoDriver");
-		if (_commander == "") exitWith {_targetPos = getPos _target;_unit doMove _targetPos;};
+		if (_commander == "") exitWith {_targetPos = getPos _target;_unit moveTo _targetPos;};
 		_targetPos = (_target modelToWorld (_target selectionPosition _commander));
-		_unit doMove _targetPos;
+		_unit moveTo _targetPos;
 	};
 	if (_getInAs == 3 OR _getInAs == 4) then {
 		_cargo = getText (configfile >> "CfgVehicles" >> (typeOf _target) >> "memoryPointsGetInCargo");
-		if (_cargo == "") exitWith {_targetPos = getPos _target;_unit doMove _targetPos;};
+		if (_cargo == "") exitWith {_targetPos = getPos _target;_unit moveTo _targetPos;};
 		_targetPos = (_target modelToWorld (_target selectionPosition _cargo));
-		_unit doMove _targetPos;
+		_unit moveTo _targetPos;
 	};
 	sleep 0.2;
 	_lastPos = getPos _unit;
-	while {currentCommand _unit == "MOVE" && !(unitReady _unit) && (alive _unit) && (alive _target)} do 
+	while {currentCommand _unit == "STOP" && !(moveToCompleted _unit) && (alive _unit) && (alive _target)} do 
 	{
 		if ((_target distance _lastPos) > 2) then {
 				if (_getInAs == 1) then {
-					if (_driver == "") exitWith {_targetPos = getPos _target;_unit doMove _targetPos;};
+					if (_driver == "") exitWith {_targetPos = getPos _target;_unit moveTo _targetPos;};
 					_targetPos = (_target modelToWorld (_target selectionPosition _driver));
-					_unit doMove _targetPos;
+					_unit moveTo _targetPos;
 				};
 				if (_getInAs == 2) then {
-					if (_commander == "") exitWith {_targetPos = getPos _target;_unit doMove _targetPos;};
+					if (_commander == "") exitWith {_targetPos = getPos _target;_unit moveTo _targetPos;};
 					_targetPos = (_target modelToWorld (_target selectionPosition _commander));
-					_unit doMove _targetPos;
+					_unit moveTo _targetPos;
 				};
 				if (_getInAs == 3 OR _getInAs == 4) then {
-					if (_cargo == "") exitWith {_targetPos = getPos _target;_unit doMove _targetPos;};
+					if (_cargo == "") exitWith {_targetPos = getPos _target;_unit moveTo _targetPos;};
 					_targetPos = (_target modelToWorld (_target selectionPosition _cargo));
-					_unit doMove _targetPos;
+					_unit moveTo _targetPos;
 				};
 		};
 		_lastPos = getPos _target;
 		sleep 1;
 	};
 	
-	if (_unit distance _target > _distance OR !(alive _unit) OR !(alive _target)) exitWith {_unit doMove (position _unit); _unit setVariable ["AIO_Mount_Canceled", 1]};
+	if (_unit distance _target > _distance OR !(alive _unit) OR !(alive _target)) exitWith {_unit setVariable ["AIO_Mount_Canceled", 1]};
+	_unit doFollow player;
+	sleep 0.2;
+	_unit doMove (getPos _unit);
+	sleep 0.1;
 	if (_getInAs == 1) then {
 		_unit assignAsDriver _target;
 		_unit action ["getinDriver", _target];
@@ -106,6 +112,15 @@ _getInFnc =
 		[_unit] orderGetIn true;
 	};
 };
+if (AIO_useVoiceChat) then {
+[] spawn {
+	private _dummy = "#particlesource" createVehicleLocal ASLToAGL getPosWorld player;
+	_dummy say2D "AIO_say_BoardVeh";
+	sleep 2; 
+	deleteVehicle _dummy;
+};
+};
+
 private _roleArray = ["" ,"as Driver","as Commander","as Gunner","as Passenger"];
 player groupChat (format ["Get in that %1 %2", _vehname, (_roleArray select _vehrole)]);
 _vehiclePositions = fullCrew [_veh, "", true];
@@ -162,6 +177,6 @@ AIO_selectedUnits = AIO_selectedUnits - (_unitsToMount apply {_x select 0});
 		while {(vehicle _driver == _veh) && (alive _veh) && (alive _driver) && (alive _unit) && !(_unit in (crew _veh)) && (_unit getVariable ["AIO_Mount_Canceled", 0] != 1)} do {sleep 1};
 	} forEach _unitsToMount;
 	_driver enableAI "MOVE";
-	if ((_veh isKindOf "Helicopter") && (_driver in (units group player))) then {_veh flyInHeight 50; _driver doMove (getPos _driver)};
+	if ((_veh isKindOf "Helicopter") && (_driver in (units group player))) then {_veh flyInHeight 50; _driver moveTo (getPos _driver)};
 	};
 };

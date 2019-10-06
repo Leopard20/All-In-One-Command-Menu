@@ -9,6 +9,8 @@ while {isNull _display} do {
 private _ctrl = _display displayCtrl 51;
 
 //Default Variables
+AIO_sprintingUnits = [];
+AIO_EnableSprintMode = 0;
 AIO_driver_mode_enabled = false;
 AIO_MAP_EMPTY_VEHICLES_MODE = false;
 AIO_selectedunits = [];
@@ -19,6 +21,7 @@ AIO_nearPlane = [];
 AIO_nearHeli = [];
 AIO_nearcargo = [];
 AIO_rearmTargets = [];
+AIO_copyExactStance = AIO_useExactStanceCopy;
 if (isNil "AIO_unitsToHoldFire") then {AIO_unitsToHoldFire = []};
 if (isNil "AIO_dismissedUnits") then {AIO_dismissedUnits = []};
 if (isNil "AIO_recruitedUnits") then {AIO_recruitedUnits = []};
@@ -50,6 +53,7 @@ call compile preprocessFileLineNumbers "AIO_AIMENU\Functions\Mount.sqf";
 call compile preprocessFileLineNumbers "AIO_AIMENU\Functions\Rearm.sqf";
 call compile preprocessFileLineNumbers "AIO_AIMENU\Functions\SlingLoadingMenu.sqf";
 call compile preprocessFileLineNumbers "AIO_AIMENU\Functions\Taxi.sqf";
+AIO_retreatFnc = compile preprocessFileLineNumbers "AIO_AIMENU\Functions\Retreat.sqf";
 
 //Call main script, which opens the menu
 call compile preprocessFileLineNumbers "AIO_AIMENU\Aimenu.sqf";
