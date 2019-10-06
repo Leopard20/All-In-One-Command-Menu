@@ -8,7 +8,7 @@ _queue = _unit getVariable ["AIO_queue", []];
 
 [_unit] call AIO_fnc_getLastOrder;
 
-if (_unit in (units group player) && {currentCommand  (vehicle _unit) != "STOP"}) then {doStop vehicle _unit};
+if (_unit != leader _unit && {currentCommand  (vehicle _unit) != "STOP"}) then {doStop vehicle _unit};
 
 _index = -1;
 if ((_task-100)*_task != 0) then {

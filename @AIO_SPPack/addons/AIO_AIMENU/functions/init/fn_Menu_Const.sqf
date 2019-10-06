@@ -427,6 +427,17 @@ AIO_supportTypes_subMenu =
 	[parseText"<img image='\A3\ui_f\data\GUI\Cfg\CommunicationMenu\call_ca.paa'/><t font='PuristaBold'> Infantry Squad", [6], "", -5, [["expression", "[4] spawn AIO_fnc_createSupportMenu"]], "1", "1"]
 ];
 
+AIO_supportTypes_HC_subMenu =
+[
+	["Create Support Group",true],
+	[parseText"<img image='\A3\ui_f\data\GUI\Cfg\CommunicationMenu\artillery_ca.paa'/><t font='PuristaBold'> Artillary Support", [2], "", -5, [["expression", "[0] spawn AIO_fnc_createSupportMenu_HC"]], "1", "1"],
+	[parseText"<img image='\A3\ui_f\data\GUI\Cfg\CommunicationMenu\casheli_ca.paa'/><t font='PuristaBold'> CAS (Helicopter Attack)", [3], "", -5, [["expression", "[1] spawn AIO_fnc_createSupportMenu_HC"]], "1", "1"],
+	[parseText"<img image='\A3\ui_f\data\GUI\Cfg\CommunicationMenu\cas_ca.paa'/><t font='PuristaBold'> CAS (Bombing Run)", [4], "", -5, [["expression", "[2] spawn AIO_fnc_createSupportMenu_HC"]], "1", "1"],
+	[parseText"<img image='\A3\ui_f\data\GUI\Cfg\CommunicationMenu\transport_ca.paa'/><t font='PuristaBold'> Helicopter Transport", [5], "", -5, [["expression", "[3] spawn AIO_fnc_createSupportMenu_HC"]], "1", "1"],
+	[parseText"<img image='\A3\ui_f\data\GUI\Cfg\CommunicationMenu\call_ca.paa'/><t font='PuristaBold'> Add HC Group To Player", [6], "", -5, [["expression", "[] spawn AIO_fnc_createHCGroupsMenu"]], "1", "1"]
+];
+	
+
 AIO_clearMem_subMenu =
 [
 	["Clear Memory",true],
@@ -446,7 +457,7 @@ AIO_backup_subMenu =
 		_unit = _x;
 		{
 			if (_x == AIO_support_trans || _x == AIO_support_cas_heli || _x == AIO_support_cas_bomb || _x == AIO_support_arty || _x == AIO_support_requester) then {
-			_unit synchronizeObjectsRemove [_x];
+				_unit synchronizeObjectsRemove [_x];
 			};
 		} forEach (synchronizedObjects _x);
 	} forEach (AIO_supportGroups + [player]); AIO_supportGroups join group player; AIO_supportGroups = []; player doFollow player;"]], "1", "1"],
@@ -458,9 +469,9 @@ AIO_HighCommand_Menu =
 	["High Command Mode",true],
 	[parseText"<img color='#f94a4a' image='\A3\ui_f\data\IGUI\Cfg\simpleTasks\types\meet_ca.paa'/><t font='PuristaBold'> Dismiss Units", [2], "#USER:AIO_squadDismiss_subMenu1", -5, [["expression", ""]], "1", "1"],
 	[parseText"<img color='#95ff44' image='\A3\ui_f\data\IGUI\Cfg\simpleTasks\types\meet_ca.paa'/><t font='PuristaBold'> Recruit Units", [3], "#USER:AIO_recruit_subMenu1", -5, [["expression", ""]], "1", "1"],
-	[parseText"<img image='\A3\ui_f\data\GUI\Cfg\CommunicationMenu\supplydrop_ca.paa'/><t font='PuristaBold'> Create Support Group", [4], "#USER:AIO_supportTypes_subMenu", -5, [["expression", ""]], "1", "1"],
-	[parseText"<img image='\A3\ui_f\data\IGUI\Cfg\Cursors\leader_ca.paa'/><t font='PuristaBold'> Select Squad Leader", [5], "#USER:AIO_giveLead_subMenu1", -5, [["expression", ""]], "1", "1"],
-	[parseText"<img image='\A3\ui_f\data\GUI\Rsc\RscDisplayDLCContentBrowser\platform_ca.paa'/><t font='PuristaBold'> Add HC Group To Player", [6], "", -5, [["expression", "[] spawn AIO_fnc_createHCGroupsMenu"]], "1", "1"],
+	[parseText"<img color='#95ff44' image='\A3\ui_f\data\GUI\Cfg\CommunicationMenu\supplydrop_ca.paa'/><t font='PuristaBold'> Create Support Group", [4], "#USER:AIO_supportTypes_subMenu", -5, [["expression", ""]], "1", "1"],
+	[parseText"<img color='#2da7ff' image='\A3\ui_f\data\GUI\Cfg\CommunicationMenu\supplydrop_ca.paa'/><t font='PuristaBold'> Create Support Group (HC)", [5], "#USER:AIO_supportTypes_HC_subMenu", -5, [["expression", ""]], "1", "1"],
+	[parseText"<img image='\A3\ui_f\data\IGUI\Cfg\Cursors\leader_ca.paa'/><t font='PuristaBold'> Select Squad Leader", [6], "#USER:AIO_giveLead_subMenu1", -5, [["expression", ""]], "1", "1"],
 	["", [], "", -1, [["expression", ""]], "1", "0"],
 	[parseText"<img image='AIO_AIMENU\pictures\monitor.paa'/><t font='PuristaBold'> Monitor Squad Units", [7], "#USER:AIO_monitor_subMenu1", -5, [["expression", ""]], "1", "1"],
 	["", [], "", -1, [["expression", ""]], "1", "0"],

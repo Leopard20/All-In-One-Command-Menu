@@ -57,6 +57,8 @@ for "_i" from 0 to (_cntU - 1) do
 {
 	_unit = _units select _i;
 	_number = [_unit] call AIO_fnc_getUnitNumber;
+	
+	//_menuSize = [9,10] select (_menuNum == 1);
 	_mod = (_i + 1) mod 10;
 	if (_mod == 0) then {_mod = 10};
 	_veh = "";
@@ -64,14 +66,14 @@ for "_i" from 0 to (_cntU - 1) do
 	call {
 		if (_supType == 0) exitWith {
 			if ((backpack _unit) != "") then {
-			_veh = getText (_cfgVeh >> (backpack _unit) >> "displayName");
-			_img = getText (_cfgVeh >> (backpack _unit) >> "picture");
-			_veh = format ["- %1", _veh];
+				_veh = getText (_cfgVeh >> (backpack _unit) >> "displayName");
+				_img = getText (_cfgVeh >> (backpack _unit) >> "picture");
+				_veh = format ["- %1", _veh];
 			};
 			if (vehicle _unit != _unit) then {
-			_veh = getText (_cfgVeh >> typeOf (vehicle _unit) >> "displayName");
-			_img = getText (_cfgVeh >> typeOf(vehicle _unit) >> "picture");
-			_veh = format ["- %1", _veh];
+				_veh = getText (_cfgVeh >> typeOf (vehicle _unit) >> "displayName");
+				_img = getText (_cfgVeh >> typeOf(vehicle _unit) >> "picture");
+				_veh = format ["- %1", _veh];
 			};
 		};
 		if (vehicle _unit != _unit) then {
@@ -80,25 +82,41 @@ for "_i" from 0 to (_cntU - 1) do
 			_veh = format ["- %1", _veh];
 		};
 	};
+	
 	_text = parseText format ["<img image='%4'/><t font='PuristaBold'> %1 - %2 %3</t>", _number, name _unit, _veh, _img];
+	
 	AIO_HCSelectedUnits pushBack _unit;
+	
 	_text1 = if (_unit != player && _unit in _temp) then {
-		format ['AIO_chooseSupUnits%1 pushBack [_text, [2+_i], "", -5, [["expression", "AIO_HCSelectedUnitsNum pushBack %3; [%1, %2, 2] spawn 
+		format ['AIO_chooseSupUnits%1 pushBack [_text, [2+_mod-1], "", -5, [["expression", "AIO_HCSelectedUnitsNum pushBack %3; [%1, %2, 2] spawn 
 		AIO_fnc_disableMenu"]], "1", "1"]', _menuNum , _mod, _i]
 	} else {
-		format ['AIO_chooseSupUnits%1 pushBack [_text, [], "", -5, [["expression", ""]], "1", "0"]', _menuNum]
+		format ['AIO_chooseSupUnits%1 pushBack [_text, [2+_mod-1], "", -5, [["expression", ""]], "1", "0"]', _menuNum]
 	};
 	call compile _text1;
 	
 	if ((_cntU - 1) == _i || _mod == 10) then {
-		_text1 = format ['AIO_chooseSupUnits%1 pushBack [parseText"<t font=""PuristaBold""> Next >>", [], "#USER:AIO_chooseSupUnits%2", -5, [["expression", ""]], "1", "1"]', _menuNum , 
-(_menuNum + 1)];
-		call compile _text1;
 		_text1 = format ['AIO_chooseSupUnits%1 pushBack ["", [], "", -1, [["expression", ""]], "1", "0"]', _menuNum];
 		call compile _text1;
-		_text1 = format ['AIO_chooseSupUnits%1 pushBack [parseText"<t font=""PuristaBold""> Done", [], "", -5, [["expression", "if (%2 == 4) then {[] spawn AIO_fnc_addHCGroup} else 
-{[AIO_selectedSupport] spawn AIO_fnc_addSupport}"]], "1", "1"]', _menuNum, _supType];
+		if (_cntU > _i + 1) then {
+			_text1 = format ['AIO_chooseSupUnits%1 pushBack [parseText"<t font=""PuristaBold""> Next >>", [], "#USER:AIO_chooseSupUnits%2", -5, [["expression", ""]], "1", "1"]', _menuNum , 
+	(_menuNum + 1)];
+			call compile _text1;
+		};
+		/*
+		if (_menuNum > 1) then {
+			_text = formatText ["<< %1", parseText"<t font=""PuristaBold"">Back"];
+			_text1 = format ['AIO_chooseSupUnits%1 pushBack [_text, [], "#USER:AIO_chooseSupUnits%2", -5, [["expression", ""]], "1", "1"]', _menuNum , 
+	(_menuNum - 1)];
+			call compile _text1;
+		};
+		*/
+		_text1 = format ['AIO_chooseSupUnits%1 pushBack ["", [], "", -1, [["expression", ""]], "1", "0"]', _menuNum];
 		call compile _text1;
+		
+		_text1 = format ['AIO_chooseSupUnits%1 pushBack [parseText"<t font=""PuristaBold""> Done", [], "", -5, [["expression", "_units = []; {_units pushBack (AIO_HCSelectedUnits select _x)} forEach AIO_HCSelectedUnitsNum; [_units, AIO_selectedSupport, false] spawn AIO_fnc_addSupport"]], "1", "1"]', _menuNum, _supType];
+		call compile _text1;
+		
 		_menuNum = _menuNum + 1;
 	};
 };

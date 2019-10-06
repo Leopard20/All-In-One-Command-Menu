@@ -1,14 +1,72 @@
-private ["_groups", "_cntGrps", "_menuNum", "_cntMenu", "_text"];
+params ["_supType"];
+private ["_groups", "_cntU", "_cntMenu", "_text", "_menuNum", "_number", "_mod", "_text1", "_text2", "_group", "_temp", "_veh", "_back"];
+AIO_HCSelectedUnits = [];
+AIO_selectedSupport = _supType;
+AIO_HCSelectedUnitsNum = [];
+
 _groups = allGroups select {(side _x) == (side player)};
 _groups = [_groups,[],{player distance (leader _x)},"ASCEND"] call BIS_fnc_sortBy;
-_cntGrps = count _groups;
-_cntMenu = floor (_cntGrps/10) + 1;
-_menuNum = 1;
+
+_temp = [];
+
+_cfgVeh = configFile >> "CfgVehicles";
+call {
+	if (_supType == 0) exitWith {
+		{	
+			_grp = _x;
+			{
+				_back = backpack _x;
+				_veh = vehicle _x;
+				_cond = (getText (_cfgVeh >> _back >> "faction") == "Default" || _back == "");
+				if !(_cond && !(_veh isKindOf "Staticweapon") && {(getText(_cfgVeh >> typeOf _veh >> "editorSubcategory") != "EdSubcat_Artillery")}) exitWith {_temp pushBack _grp};
+			} forEach units _x;
+		} forEach _groups;
+	};
+	if (_supType == 1) exitWith {
+		{
+			_grp = _x;
+			{
+				_veh = vehicle _x;
+				if (_veh isKindOf "Helicopter" || {_veh isKindOf "VTOL_BASE_F"}) then {
+					_gun = count ((fullCrew[_veh, "Gunner", false]) + (fullCrew[_veh, "Turret", false]));
+					if (_gun != 0) exitWith {_temp pushBack _grp}
+				};
+			} forEach units _x;
+		} forEach _groups;
+	};
+	if (_supType == 2) exitWith {
+		{
+			_grp = _x;
+			{
+				_veh = vehicle _x;
+				if (_veh isKindOf "Plane") exitWith {_temp pushBack _grp};
+			} forEach units _x;
+		} forEach _groups;
+	};
+	if (_supType == 3) exitWith {
+		{
+			_grp = _x;
+			{
+				_veh = vehicle _x;
+				if (_veh isKindOf "Helicopter" || {_veh isKindOf "VTOL_BASE_F"}) then {
+					_gun = count (fullCrew[_veh, "", true]) - count (fullCrew[_veh, "", false]);
+					if (_gun != 0) exitWith {_temp pushBack _grp}
+				};
+			} forEach units _x;
+		} forEach _groups;
+	};
+	_temp = _groups;
+};
+
+_cntU = count _groups;
+_cntMenu = floor (_cntU/10) + 1;
 for "_i" from 1 to (_cntMenu) do
 {
-	_text = format ['AIO_allHCgroups_subMenu%1 = [["High Command Groups",true]]', _i];
+	_text = format ['AIO_chooseSupUnits%1 = [["Choose Groups",true]]', _i];
 	call compile _text;
 };
+_menuNum = 1;
+
 
 _getGroupType = 
 {
@@ -113,32 +171,9 @@ _sides = ["o", "b", "i", "n"];
 _cfgGroupIcons = ConfigFile >> "CfgGroupIcons";
 _groupIcons = ("true" configClasses _cfgGroupIcons) apply {configName _x};
 
-/*
-_getHex = 
-{
-	_num = _this;
-	
-	_d1 = floor (_num/16);
-	if (_d1 > 9) then {
-		_d1 = ['a', 'b', 'c', 'd', 'e', 'f'] select (_d1 - 10);
-	} else {
-		_d1 = str _d1;
-	};
-	
-	_d2 = _num mod 16;
-	if (_d2 > 9) then {
-		_d2 = ['a', 'b', 'c', 'd', 'e', 'f'] select (_d2 - 10);
-	} else {
-		_d2 = str _d2;
-	};
-	
-	(_d1+_d2)
-};
-*/
 
-for "_i" from 0 to (_cntGrps - 1) do
+for "_i" from 0 to (_cntU - 1) do
 {
-	private "_name";
 	_group = _groups select _i;
 	
 	_sideID = (side _group) call BIS_fnc_sideID;
@@ -154,20 +189,46 @@ for "_i" from 0 to (_cntGrps - 1) do
 
 	
 	_dist = floor (player distance (leader _group));
+	
+	_text = format ["%1 - %2 m", _group, _dist];
+	
 	_mod = (_i + 1) mod 10;
 	if (_mod == 0) then {_mod = 10};
 	
-	_text = format ["%1 - %2 m", _group, _dist];
-	AIO_HCgroup_array pushBack _group;
-	_text1 = format ['AIO_allHCgroups_subMenu%1 pushBack [parseText"<img color=""#%7"" image=""%6""/><t font=""PuristaBold""> %3", [2+_mod-1], "", -5, [["expression", "[%5] call AIO_fnc_addHCGroup_Alt; [%1, %2, 3] spawn AIO_fnc_disableMenu"]], "1", "1"]', _menuNum , _mod, _text, _group, _i, _grpIcon, _colorID];
-	_text2 = format ['AIO_allHCgroups_subMenu%1 pushBack [parseText"<img color=""#%5"" image=""%4""/><t font=""PuristaBold""> %3", [2+_mod-1], "", -5, [["expression", ""]], "1", "0"]', _menuNum , _mod, _text, _grpIcon, _colorID];
-	if (_group != (group player) && player != hcLeader _group) then {call compile _text1} else {call compile _text2};
-	if (_mod == 10 && (_cntGrps - 1) != _i) then {
-		_text1 = format ['AIO_allHCgroups_subMenu%1 pushBack ["", [], "", -1, [["expression", ""]], "1", "0"]', _menuNum , 12];
+	AIO_HCSelectedUnits pushBack _group;
+	
+	_text1 = if (_group != group player && _group in _temp) then {
+		format ['AIO_chooseSupUnits%1 pushBack [parseText"<img color=""#%4"" image=""%5""/><t font=""PuristaBold""> %6", [2+_mod-1], "", -5, [["expression", "AIO_HCSelectedUnitsNum pushBack %3; [%1, %2, 2] spawn 
+		AIO_fnc_disableMenu"]], "1", "1"]', _menuNum , _mod, _i, _colorID, _grpIcon, _text]
+	} else {
+		format ['AIO_chooseSupUnits%1 pushBack [parseText"<img color=""#%2"" image=""%3""/><t font=""PuristaBold""> %4", [2+_mod-1], "", -5, [["expression", ""]], "1", "0"]', _menuNum, _colorID, _grpIcon, _text]
+	};
+	call compile _text1;
+	
+	if ((_cntU - 1) == _i || _mod == 10) then {
+		_text1 = format ['AIO_chooseSupUnits%1 pushBack ["", [], "", -1, [["expression", ""]], "1", "0"]', _menuNum];
 		call compile _text1;
-		_text2 = format ['AIO_allHCgroups_subMenu%1 pushBack [parseText"<t font=""PuristaBold""> Next >>", [], "#USER:AIO_allHCgroups_subMenu%3", -5, [["expression", ""]], "1", "1"]', _menuNum , 13 , (_menuNum + 1)];
+		if (_cntU > _i + 1) then {
+			_text1 = format ['AIO_chooseSupUnits%1 pushBack [parseText"<t font=""PuristaBold""> Next >>", [], "#USER:AIO_chooseSupUnits%2", -5, [["expression", ""]], "1", "1"]', _menuNum , 
+	(_menuNum + 1)];
+			call compile _text1;
+		};
+		/*
+		if (_menuNum > 1) then {
+			_text = formatText ["<< %1", parseText"<t font=""PuristaBold"">Back"];
+			_text1 = format ['AIO_chooseSupUnits%1 pushBack [_text, [], "#USER:AIO_chooseSupUnits%2", -5, [["expression", ""]], "1", "1"]', _menuNum , 
+	(_menuNum - 1)];
+			call compile _text1;
+		};
+		*/
+		_text1 = format ['AIO_chooseSupUnits%1 pushBack ["", [], "", -1, [["expression", ""]], "1", "0"]', _menuNum];
+		call compile _text1;
+		
+		_text1 = format ['AIO_chooseSupUnits%1 pushBack [parseText"<t font=""PuristaBold""> Done", [], "", -5, [["expression", "[] spawn {{[(units (AIO_HCSelectedUnits select _x)), AIO_selectedSupport, true] spawn AIO_fnc_addSupport; sleep 0.1} forEach AIO_HCSelectedUnitsNum}"]], "1", "1"]', _menuNum];
+		call compile _text1;
+		
 		_menuNum = _menuNum + 1;
-		call compile _text2;
-	};	
+	};
 };
-showCommandingMenu "#USER:AIO_allHCgroups_subMenu1";
+
+showCommandingMenu "#USER:AIO_chooseSupUnits1";

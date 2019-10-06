@@ -51,6 +51,7 @@ class CfgFunctions
 			class createTargetMenu {};
 			class createCheatsMenu {};
 			class createExplosivesMenu {};
+			class createSupportMenu_HC {};
 		};
 		class highCommand 
 		{
