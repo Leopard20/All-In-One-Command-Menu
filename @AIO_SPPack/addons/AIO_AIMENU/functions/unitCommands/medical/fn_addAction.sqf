@@ -7,8 +7,8 @@ _id = [
 	"Revive", //title
 	"\A3\Ui_f\data\IGUI\Cfg\HoldActions\holdAction_revive_ca.paa", //idleIcon
 	"\A3\Ui_f\data\IGUI\Cfg\HoldActions\holdAction_revive_ca.paa", //progressIcon 
-	"(_this distance _target < 3) && {alive _target}", //condition show
-	"!(_target in (attachedObjects _this)) && {(_this distance _target < 4) && (currentWeapon _this != secondaryWeapon _this) && (alive _this) && (alive _target)}", //condition progress
+	"(_this distance _target < 3) && {alive _target && !(_target in (attachedObjects _this))}", //condition show
+	"(_this distance _target < 4) && (currentWeapon _this != secondaryWeapon _this) && (alive _this) && (alive _target)", //condition progress
 	{
 		//codeStart
 		params ["_target", "_caller", "_actionId", "_argsuments"];

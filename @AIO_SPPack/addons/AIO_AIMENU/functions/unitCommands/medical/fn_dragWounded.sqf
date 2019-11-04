@@ -11,18 +11,16 @@ if (_mode == 2) then {
 		params ["_target"];
 		if (_target distance2D _x > 5) exitWith {true};
 		_animS = animationState _x;
-		_target disableAI "MOVE";
-		_target disableAI "ANIM";
 		_target playMoveNow "AinjPpneMstpSnonWrflDb";
-		if (_animS == "amovpercmstpslowwrfldnon_acinpknlmwlkslowwrfldb_2") exitWith {false};
-		_fail = ((lifeState _x == "INCAPACITATED") || (lifeState _target != "INCAPACITATED") || {_animS select [0,5] != "AcinP"});
+		if (count _animS > 26) exitWith {false};
+		_fail = ((lifeState _x == "INCAPACITATED") || (lifeState _target != "INCAPACITATED") || {_animS select [0,4] != "Acin"});
 		_fail
 	};
 	_code1 = {
 		params ["_target"];
 		detach _target;
-		_target disableAI "PATH";
-		_target disableAI "ANIM";
+		_target disableAI "MOVE";
+		_target enableAI "ANIM";
 		_target switchMove "AinjPpneMstpSnonWrflDb_Death";
 		_target playMoveNow "unconsciousReviveDefault";
 		if (lifeState _x != "INCAPACITATED") then {_x playMoveNow "AcinPknlMstpSrasWrflDnon_AmovPknlMstpSrasWrflDnon"} else {_x playMoveNow "unconsciousReviveDefault"};
@@ -31,14 +29,18 @@ if (_mode == 2) then {
 		params ["_target", "_lastPos"];
 		_x setVariable ["AIO_inCover", true];
 		detach _target;
-		_target disableAI "PATH";
-		_target disableAI "ANIM";
+		_target disableAI "MOVE";
+		_target enableAI "ANIM";
 		_target switchMove "AinjPpneMstpSnonWrflDb_Death";
 		_target playMoveNow "unconsciousReviveDefault";
 		if (lifeState _x != "INCAPACITATED") then {_x playMoveNow "AcinPknlMstpSrasWrflDnon_AmovPknlMstpSrasWrflDnon"} else {_x playMoveNow "unconsciousReviveDefault"};
 		_x setPosASL _lastPos;
 		_target setPosASL _lastPos;
 	};
+	
+	_target disableAI "MOVE";
+	_target disableAI "ANIM";
+	
 	_unit setVariable ["AIO_animation", [_positions, [], [_cond1, _code1, {true}, _code2, [_target, _lastPos]], ["AcinPknlMwlkSrasWrflDb", -1],100*_mode+time]];
 	if (!(_target in AIO_animatedUnits) || {(animationState _target) select [0,4] != "Ainj"}) then {
 		_target switchMove "AinjPpneMstpSnonWrflDb";
@@ -51,31 +53,26 @@ if (_mode == 2) then {
 	_target setDir 180;
 	AIO_animatedUnits pushBackUnique _unit;
 } else {
-	_target setAnimSpeedCoef 2.3;
-	_unit setAnimSpeedCoef 2;
+	_target setAnimSpeedCoef 2.02;
+	_unit setAnimSpeedCoef 1.75;
 	_cond1 = {
 		params ["_target"];
 		if (_target distance2D _x > 5) exitWith {true};
 		_animS = animationState _x;
-		_target disableAI "PATH";
-		_target disableAI "ANIM";
-		_isStill = animationState _target == "ainjpfalmstpsnonwrfldnon_carried_still";
-		if !(_isStill) then {_target playMoveNow "AinjPfalMstpSnonWrflDnon_carried_Up"} else {
-			if (abs((getDir _target) - (getDir _x)) > 5) then {
-				_target setDir 0; _target attachTo [_x, [0.2,0.1,0.1]]
-			};
+		if (animationState _target == "ainjpfalmstpsnonwrfldnon_carried_still" && {abs((getDir _target) - (getDir _x)) > 5}) then {
+			_target setDir 0; _target attachTo [_x, [0.2,0.1,0.1]]
 		};
-		if (_animS == "acinpknlmstpsraswrfldnon_acinpercmrunsraswrfldnon") exitWith {false};
+		if (count _animS > 26) exitWith {false};
 		_x setAnimSpeedCoef 1;
 		_target setAnimSpeedCoef 1;
-		_fail = ((lifeState _x == "INCAPACITATED") || (lifeState _target != "INCAPACITATED") || {_animS select [0,5] != "AcinP"});
+		_fail = ((lifeState _x == "INCAPACITATED") || (lifeState _target != "INCAPACITATED") || {_animS select [0,4] != "Acin"});
 		_fail
 	};
 	_code1 = {
 		params ["_target"];
 		detach _target;
-		_target disableAI "PATH";
-		_target disableAI "ANIM";
+		_target disableAI "MOVE";
+		_target enableAI "ANIM";
 		_target playMoveNow "unconsciousReviveDefault";
 		_target setAnimSpeedCoef 1;
 		_x setAnimSpeedCoef 1;
@@ -85,8 +82,8 @@ if (_mode == 2) then {
 		params ["_target", "_lastPos"];
 		_x setVariable ["AIO_inCover", true];
 		detach _target;
-		_target disableAI "PATH";
-		_target disableAI "ANIM";
+		_target disableAI "MOVE";
+		_target enableAI "ANIM";
 		_target setAnimSpeedCoef 1;
 		_x setAnimSpeedCoef 1;
 		_target playMoveNow "unconsciousReviveDefault";
@@ -94,6 +91,9 @@ if (_mode == 2) then {
 		_x setPosASL _lastPos;
 		_target setPosASL _lastPos;
 	};
+	
+	_target disableAI "MOVE";
+	_target disableAI "ANIM";
 	_unit setVariable ["AIO_animation", [_positions, [], [_cond1, _code1, {true}, _code2, [_target, _lastPos]], ["acinpercmrunsraswrfldf", 1],100*_mode+time]]; 
 	
 	if (!(_target in AIO_animatedUnits) || {(animationState _target) select [0,4] != "Ainj"}) then {

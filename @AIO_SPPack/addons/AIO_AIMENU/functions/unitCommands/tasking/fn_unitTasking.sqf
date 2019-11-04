@@ -187,4 +187,4 @@ waitUntil {
 	(count AIO_taskedUnits == 0)
 };
 
-terminate AIO_animHandler;
+if ({lifeState _x == "INCAPACITATED"} count AIO_animatedUnits == 0) then {terminate AIO_animHandler};

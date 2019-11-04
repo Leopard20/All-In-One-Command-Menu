@@ -11,6 +11,7 @@ if (_useAgent) then {
 			_path = _this#1;
 			if (count _path > 1 && {(_path select 0) distance2D _unit < 1}) then {_path deleteAt 0};
 			_path pushBack AGLToASL ((expectedDestination _agent) select 0);
+			t_points = _path apply {[_x#0, _x#1, 0]};
 			[_unit, (_agent getVariable ["AIO_target", objNull]), _path] call AIO_fnc_dragWounded;
 			_agent setVariable ["AIO_deleted", true];
 			deleteVehicle _agent;

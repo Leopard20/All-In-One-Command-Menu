@@ -43,12 +43,13 @@ waitUntil {
 					_watchDir = (vectorNormalized _watchDir) apply {_x*_dir};
 					if (_watchDir isEqualTo [0,0,0]) then {_watchDir = [0,1,0]};
 					_vecDir = vectorDir _x;
-					_angle = accTime * acos(_vecDir vectorCos _watchDir);
+					_accTime = accTime;
+					_angle = _accTime * acos(_vecDir vectorCos _watchDir);
 					_turn = 1;
 					if (_angle > 0) then {
-						_turn = [-accTime,accTime] select (_x getRelDir _nextPos > 180);
+						_turn = [-_accTime,_accTime] select (((_x getRelDir _nextPos) + -180*(_dir - 1)/2) mod 360 > 180);
 						
-						if (_angle > 5 * accTime) then {
+						if (_angle > 5 * _accTime) then {
 							_newDir = [_vecDir, 5*_turn] call BIS_fnc_rotateVector2D;
 							_x setVectorDir _newDir;
 						} else {
@@ -107,5 +108,5 @@ waitUntil {
 			};
 		};
 	} forEach AIO_animatedUnits;
-	(count AIO_taskedUnits == 0)
+	false
 };

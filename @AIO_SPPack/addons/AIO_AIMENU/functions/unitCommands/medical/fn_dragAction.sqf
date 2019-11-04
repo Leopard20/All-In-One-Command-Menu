@@ -7,40 +7,43 @@ if (_type == 0) then {
 			params ["_target", "_caller", "_actionId", "_arguments"];
 			_anim = (animationState _target) select [0,11];
 			if (_anim != "unconscious") exitWith {[0,"Patient isn't Ready!"] call AIO_fnc_customHint};
-			_target setAnimSpeedCoef 2.4;
-			_caller setAnimSpeedCoef 2;
+			_target setAnimSpeedCoef 2.02;
+			_caller setAnimSpeedCoef 1.75;
 			_target switchMove "AinjPfalMstpSnonWrflDnon_carried_Up";
 			_target playMoveNow "AinjPfalMstpSnonWrflDnon_carried_Up";
 			_caller switchMove "AcinPknlMstpSrasWrflDnon_AcinPercMrunSrasWrflDnon";
 			_caller playMoveNow "AcinPknlMstpSrasWrflDnon_AcinPercMrunSrasWrflDnon";
-			_target disableAI "ANIM";
 			_cond1 = {
 				params ["_caller", "_initTime"];
 				if (_x distance2D _caller > 5) exitWith {true};
 				_animS = animationState _caller;
-				if (_animS == "acinpknlmstpsraswrfldnon_acinpercmrunsraswrfldnon" && time - _initTime < 8) exitWith {false};
-				_x setAnimSpeedCoef 1;
+				if (animationState _x == "ainjpfalmstpsnonwrfldnon_carried_still" && {abs((getDir _x) - (getDir _caller)) > 5}) then {
+					_x setDir 0; _x attachTo [_caller, [0.2,0.1,0.1]]
+				};
+				if (count _animS > 26 && time - _initTime < 8) exitWith {false};
+				hintSilent str count _animS;
 				_caller setAnimSpeedCoef 1;
-				_fail = ((lifeState _caller == "INCAPACITATED") || (lifeState _x != "INCAPACITATED") || {_animS select [0,5] != "AcinP"});
+				_x setAnimSpeedCoef 1;
+				_fail = ((lifeState _caller == "INCAPACITATED") || (lifeState _x != "INCAPACITATED") || {_animS select [0,4] != "Acin"});
 				_fail
 			};
 			_code1 = {
 				params ["_caller"];
 				//_caller playMoveNow "AcinPercMrunSrasWrflDf_AmovPercMstpSlowWrflDnon";
 				//_x switchMove "AinjPfalMstpSnonWrflDnon_carried_Down";
+				_x enableAI "ANIM";
 				detach _x;
 				_x playMoveNow "unconsciousReviveDefault";
 				_x setAnimSpeedCoef 1;
 				_caller setAnimSpeedCoef 1;
 				_x setVariable ["AIO_medic", objNull];
 				if (lifeState _caller != "INCAPACITATED") then {_caller switchMove ""};
-				_x enableAI "PATH";
-				_x enableAI "ANIM";
 				_caller removeAction (_caller getVariable ["AIO_actionDrop", -1]);
-				_x setPos ([_caller, 0.5] call AIO_fnc_exactPos);
 				_caller setVariable ["AIO_actionDrop", -1];
 				[_x, 0] call AIO_fnc_dragAction;
 			};
+			_target disableAI "MOVE";
+			_target disableAI "ANIM";
 			_cond2 = {false};
 			_code2 = {};
 			_target setVariable ["AIO_animation", [[], [], [_cond1, _code1, _cond2, _code2, [_caller, time]], ["AinjPfalMstpSnonWrflDnon_carried_Up",1], time+1000]]; 
@@ -76,21 +79,19 @@ if (_type == 0) then {
 				params ["_caller"];
 				if (_x distance2D _caller > 5) exitWith {true};
 				_animS = animationState _caller;
-				if (_animS == "amovpercmstpslowwrfldnon_acinpknlmwlkslowwrfldb_2") exitWith {false};
-				_fail = ((lifeState _caller == "INCAPACITATED") || (lifeState _x != "INCAPACITATED") || {_animS select [0,5] != "AcinP"});
+				if (count _animS > 26) exitWith {false};
+				_fail = ((lifeState _caller == "INCAPACITATED") || (lifeState _x != "INCAPACITATED") || {_animS select [0,4] != "Acin"});
 				_fail
 			};
 			_code1 = {
 				params ["_caller"];
 				//_caller playMoveNow "AcinPknlMstpSrasWrflDnon_AmovPknlMstpSrasWrflDnon";
+				_x enableAI "ANIM";
 				detach _x;
 				_x switchMove "AinjPpneMstpSnonWrflDb_release";
 				_x playMoveNow "unconsciousReviveDefault";
 				_x setVariable ["AIO_medic", objNull];
-				_x enableAI "PATH";
-				_x enableAI "ANIM";
 				_caller playMoveNow "AcinPknlMstpSrasWrflDnon_AmovPknlMstpSrasWrflDnon";
-				_x setPos ([_caller, 0.5] call AIO_fnc_exactPos);
 				_caller removeAction (_caller getVariable ["AIO_actionDrop", -1]);
 				_caller setVariable ["AIO_actionDrop", -1];
 				[_x, 0] call AIO_fnc_dragAction;
@@ -106,7 +107,8 @@ if (_type == 0) then {
 			AIO_animatedUnits pushBackUnique _target;
 			
 			_target setVariable ["AIO_medic", _caller];
-			
+			_target disableAI "MOVE";
+			_target disableAI "ANIM";
 			_target attachTo [_caller, [0,0.8,0]];
 			_target setDir 180;
 			_target removeAction _actionId;
@@ -133,26 +135,24 @@ if (_type == 0) then {
 			_arguments params ["_type", "_target"];
 			_animS = animationState _caller;
 			if (_type == 1) then {
-				if (_animS select [0,5] != "AcinP") exitWith {[0,"Try again in a moment."] call AIO_fnc_customHint};
+				if (count _animS > 26) exitWith {[0,"Try again in a moment."] call AIO_fnc_customHint};
 				AIO_animatedUnits = AIO_animatedUnits - [_target];
+				_target enableAI "ANIM";
 				detach _target;
 				_target playMoveNow "unconsciousReviveDefault";
 				_caller playMoveNow "AcinPercMrunSrasWrflDf_AmovPercMstpSlowWrflDnon";
 				_target setVariable ["AIO_medic", objNull];
-				_target enableAI "PATH";
-				_target enableAI "ANIM";
 				//_target setPos ([_caller, 0.5] call AIO_fnc_exactPos);
 				_unit removeAction _actionId;
 				[_target, 0] call AIO_fnc_dragAction;
 			} else {
-				if (_animS select [0,5] != "AcinP") exitWith {[0,"Try again in a moment."] call AIO_fnc_customHint};
+				if (count _animS > 26) exitWith {[0,"Try again in a moment."] call AIO_fnc_customHint};
 				AIO_animatedUnits = AIO_animatedUnits - [_target];
+				_target enableAI "ANIM";
 				detach _target;
 				_caller playMoveNow "AcinPknlMstpSrasWrflDnon_AmovPknlMstpSrasWrflDnon";
 				_target playMoveNow "unconsciousReviveDefault";
 				_target setVariable ["AIO_medic", objNull];
-				_target enableAI "PATH";
-				_target enableAI "ANIM";
 				//_target setPos ([_caller, 0.5] call AIO_fnc_exactPos);
 				_unit removeAction _actionId;
 				[_target, 0] call AIO_fnc_dragAction;

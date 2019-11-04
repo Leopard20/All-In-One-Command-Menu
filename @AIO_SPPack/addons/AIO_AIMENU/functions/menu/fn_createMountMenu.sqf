@@ -255,7 +255,7 @@ call
 			call compile _text;
 		};
 		AIO_VehList_subMenu append [["", [], "", -1, [["expression", ""]], "1", "0"],
-			[parseText"<img image='\A3\ui_f\data\IGUI\Cfg\simpleTasks\types\target_ca.paa'/><t font='PuristaBold'> %POINTED_TARGET_NAME", [], "", -5, [["expression", "[AIO_selectedunits, cursorTarget] call AIO_fnc_disassembleUAV"]], "IsLeader * ((NotEmptySoldiers) * (CursorOnVehicleCanGetIn) * (CursorOnEmptyVehicle))", "CursorOnGround", 
+			[parseText"<img image='\A3\ui_f\data\IGUI\Cfg\simpleTasks\types\target_ca.paa'/><t font='PuristaBold'> %POINTED_TARGET_NAME", [], "", -5, [["expression", "[AIO_selectedunits, cursorTarget] call AIO_fnc_disassembleUAV"]], "IsLeader * NotEmptySoldiers", "CursorOnGround", 
 "\a3\Ui_f\data\IGUI\Cfg\Cursors\iconCursorSupport_ca.paa"]];
 
 	};
