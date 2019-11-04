@@ -1,6 +1,6 @@
 ["AIO_helicopter_control", "onEachFrame", {
-	if (!isNull (findDisplay 49) && {time - (missionNamespace getVariable ["AIO_lastMissionTime", 0]) == 0}) exitWith {};
-	missionNamespace setVariable ["AIO_lastMissionTime", time];
+	if (isGamePaused) exitWith {};
+	
 	{
 		_veh = _x;
 		_driver = driver _veh;
@@ -46,7 +46,7 @@
 			_VDIR = vectorDir _veh;
 			_diff = _PB vectorDiff _VUP;
 			
-			_newVUP = _VUP vectorAdd (_diff apply {_controlCoeff*1.5*_acc*_x/_fps});
+			_newVUP = _VUP vectorAdd (_diff vectorMultiply _controlCoeff*1.5*_acc/_fps);
 			
 			
 			//_bladeCenter = _veh modelToWorldVisual (_veh getVariable ["AIO_bladeCenter", [0,0,0]]);
@@ -58,7 +58,7 @@
 			
 			_maxSpeed = _veh getVariable ["AIO_maxSpeed", 100];
 			
-			_velocity = _velocity vectorAdd ((_newVUP vectorDiff (_velocity apply {_x/_maxSpeed/4})) apply {_weightCoeff*_x/_fps*15});
+			_velocity = _velocity vectorAdd ((_newVUP vectorDiff (_velocity vectorMultiply 1/_maxSpeed/4)) vectorMultiply _weightCoeff/_fps*15);
 			
 			_turn = 1;
 			
@@ -116,7 +116,7 @@
 				if !(_veh getVariable ["AIO_disableControls", false]) then {
 					_veh setVectorDir ([_VDIR, -_newDir*_acc] call BIS_fnc_rotateVector2D);
 					_veh setVectorUp _newVUP;
-					_veh setPosWorld ((getPosWorld _veh) vectorAdd (_velocity apply {_acc*_x/_fps}));
+					_veh setPosWorld ((getPosWorldVisual _veh) vectorAdd (_velocity vectorMultiply _acc/_fps));
 					_veh setVelocity _velocity;
 				};
 				

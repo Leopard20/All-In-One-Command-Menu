@@ -135,12 +135,14 @@ if !(AIO_enableMod) exitWith {};
 	private _menu = commandingMenu;
 	if (_menu == "RscGroupRootMenu" || {_menu == "" && {count (groupSelectedUnits player) != 0}}) then {[] spawn {sleep 0.001; showCommandingMenu "#USER:AIO_action_subMenu"}};
 	}, {true}, [7, [false, false, false]], false] call CBA_fnc_addKeybind;
-
 ["All-In-One Custom Menus","AIO_AIMENU_menu8", ["Formation Menu", "Customized vanilla Formation Menu. Unbind this key to disable this feature."], {
 	private _menu = commandingMenu;
 	if (_menu == "RscGroupRootMenu" || {_menu == "" && {count (groupSelectedUnits player) != 0}}) then {[] spawn {sleep 0.001; showCommandingMenu "AIO_formationSubMenu"}};
 	}, {true}, [9, [false, false, false]], false] call CBA_fnc_addKeybind;
-	
+["All-In-One Custom Menus","AIO_AIMENU_LIST", "List all menus", {
+	if (commandingMenu == "#USER:AIO_command_subMenus") then {showCommandingMenu ""} else {[] spawn {sleep 0.001; showCommandingMenu "#USER:AIO_command_subMenus"}}
+}, "", [], false] call CBA_fnc_addKeybind;
+
 ["All-In-One Command Menu","AIO_AIMENU_FireOnMyLead", "Fire On My Lead", {
 	if (player != leader player) exitWith {};
 	_units = groupSelectedUnits player;

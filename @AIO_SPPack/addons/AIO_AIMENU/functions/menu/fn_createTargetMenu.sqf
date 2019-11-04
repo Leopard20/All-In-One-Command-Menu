@@ -18,7 +18,7 @@ _targets = [_targets,[],{player distance _x},"ASCEND"] call BIS_fnc_sortBy;
 {
 	if ([position player, getdir player, 75, position _x] call BIS_fnc_inAngleSector) then {
 		_eyepos = eyePos player;
-		_averagePos = (AGLtoASL (_x modelToWorldVisual (_x selectionPosition "pilot")) apply {_x*0.7}) vectorAdd ((getPosASL _x) apply {_x*0.3});
+		_averagePos = (AGLtoASL (_x modelToWorldVisual (_x selectionPosition "pilot")) vectorMultiply 0.7) vectorAdd ((getPosASL _x) vectorMultiply 0.3);
 		_l = lineIntersectsSurfaces [_eyepos, _averagePos, _x, player, true, 1,"VIEW","NONE"];
 		if (count _l > 0) exitWith {AIO_secondaryTargets pushBack _x};
 		AIO_primaryTargets pushBack _x;

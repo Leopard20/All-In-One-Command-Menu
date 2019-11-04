@@ -91,8 +91,8 @@ _bladeCenter = _bladeCenter vectorDiff [0,0,0.25];
 _bladeR = _bladeCenter vectorAdd [_bladeRadius, 0, 0];
 _bladeL = _bladeCenter vectorAdd [-_bladeRadius, 0, 0];
 _bladeF = _bladeCenter vectorAdd [0, _bladeRadius, 0];
-_bladeFL = (_bladeL vectorAdd _bladeF) apply {_x/2};
-_bladeFR = (_bladeR vectorAdd _bladeF) apply {_x/2};
+_bladeFL = (_bladeL vectorAdd _bladeF) vectorMultiply 0.5;
+_bladeFR = (_bladeR vectorAdd _bladeF) vectorMultiply 0.5;
 deleteVehicle _tempVeh;
 
 _center = +_bladeCenter;
@@ -101,7 +101,7 @@ _front = +_bladeF;
 _center set [2, _bottomHeight];
 _front set [2, _bottomHeight];
 
-_center = ((_front vectorAdd _center) vectorAdd _tail) apply {_x/3};
+_center = ((_front vectorAdd _center) vectorAdd _tail) vectorMultiply 1/3;
 
 _veh setVariable ["AIO_sensitivePoints", [_bladeF, _bladeL, _bladeR,_tail]];
 _veh setVariable ["AIO_skidPoints", [_center, _skidL1, _skidR1]];

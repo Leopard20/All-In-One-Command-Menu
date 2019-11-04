@@ -1,5 +1,5 @@
 waitUntil {
-	t_points10 = [];
+	//t_points10 = [];
 	{
 		_veh = _x;
 		
@@ -23,7 +23,7 @@ waitUntil {
 			
 			_angle = _radius atan2 _dest;
 			
-			_destination = (_center vectorAdd ([((vectorNormalized _diff) apply {_x*_radius}), -_loiter*180*20/3.14/_radius*(_veh getVariable ["AIO_forcePitchCoeff", 1])] call BIS_fnc_rotateVector2D))
+			_destination = _center vectorAdd ([((vectorNormalized _diff) vectorMultiply _radius), -_loiter*180*20/3.14/_radius*(_veh getVariable ["AIO_forcePitchCoeff", 1])] call BIS_fnc_rotateVector2D);
 			
 			//(_center vectorAdd ([((vectorNormalized _diff) apply {_x*_requiredRadius}), -_loiter*_angle] call BIS_fnc_rotateVector2D))
 		} else {
@@ -65,7 +65,7 @@ waitUntil {
 			{
 				_p1 = _veh modelToWorldWorld _x;
 				_p2 = _p1 vectorAdd _velocity2;
-				t_points10 pushBack [_p1,_p2];
+				//t_points10 pushBack [_p1,_p2];
 				_intersect = lineIntersectsSurfaces [_p1, _p2, _veh, getSlingLoad _veh, false, 1,"GEOM","FIRE"];
 				_contacts append _intersect;
 			} forEach _sensitivePoitns;
@@ -77,7 +77,7 @@ waitUntil {
 			{
 				_p1 = _veh modelToWorldWorld _x;
 				_p2 = _p1 vectorAdd _velocity1;
-				t_points10 pushBack [_p1,_p2];
+				//t_points10 pushBack [_p1,_p2];
 				_intersect = lineIntersectsSurfaces [_p1, _p2, _veh, getSlingLoad _veh, false, 1,"GEOM","FIRE"];
 				_contacts1 append _intersect;
 			} forEach _skids;
@@ -104,14 +104,14 @@ waitUntil {
 				_normal = _firstContact select 1;
 				_contact = _firstContact select 0;
 				_contactDist = _pos distance _contact;
-				_contact = _pos vectorAdd (_vecDir apply {_x*_contactDist});
+				_contact = _pos vectorAdd (_vecDir vectorMultiply _contactDist);
 				_vcos = abs(_normal vectorCos [0,0,1]);
 				if (_vcos < 0.97) then {
 					_diff = (1 - _vcos)*10;
 					_normal = _normal vectorAdd [0,0,_diff];
-					_normal = _normal apply {_x/(_diff+1)};
+					_normal = _normal vectorMultiply (_diff+1);
 				};
-				_destination = _contact vectorAdd (_normal apply {_x*_flightHeight});
+				_destination = _contact vectorAdd (_normal vectorMultiply _flightHeight);
 				_collective = (([10, -10] select (_actualVZ > 0 && _speed < 10 && _hasIntersect1)) + (_veh getVariable ["AIO_collective", 0]))/2;
 				_veh setVariable ["AIO_collective", _collective];
 				_veh setVariable ["AIO_height", _flightHeight];
@@ -191,9 +191,9 @@ waitUntil {
 					};
 				};
 				
-				if (_dist > 1) then {
+				if (_dist + _speed > 1) then {
 					_dir = ((_veh getVariable ["AIO_dir", 0]) + _turn*-1*(_angle min _dirFactor*5))/2;
-					_veh setVariable ["AIO_dir", _dir]
+					_veh setVariable ["AIO_dir", _dir];
 				} else {
 					_veh setVariable ["AIO_dir", 0];
 				};

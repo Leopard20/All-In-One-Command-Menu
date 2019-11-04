@@ -31,9 +31,11 @@ _openChute =
 	
 	//_pack setPos [(getPos _unit) select 0,(getPos _unit) select 1,-50];
 	
-	waitUntil {isTouchingGround _unit};
+	waitUntil {!alive _unit || isTouchingGround _unit};
 	
-	deletevehicle (vehicle _unit);
+	_chute = vehicle _unit;
+	
+	if (_chute != _unit) then {deleteVehicle _chute};
 	
 	if !(isNull _pack) then {
 		detach _packObj;
