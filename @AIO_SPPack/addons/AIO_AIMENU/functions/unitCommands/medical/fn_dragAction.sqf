@@ -21,7 +21,6 @@ if (_type == 0) then {
 					_x setDir 0; _x attachTo [_caller, [0.2,0.1,0.1]]
 				};
 				if (count _animS > 26 && time - _initTime < 8) exitWith {false};
-				hintSilent str count _animS;
 				_caller setAnimSpeedCoef 1;
 				_x setAnimSpeedCoef 1;
 				_fail = ((lifeState _caller == "INCAPACITATED") || (lifeState _x != "INCAPACITATED") || {_animS select [0,4] != "Acin"});
