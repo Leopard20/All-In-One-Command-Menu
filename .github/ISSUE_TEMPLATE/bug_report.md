@@ -1,11 +1,10 @@
 ---
 name: Bug report
 about: Bug report template
-
 ---
 
-***Describe the bug:***
+**_Describe the bug:_**
 
-***Steps to reproduce:***
+**_Steps to reproduce:_**
 
-***Additional context:***
+**_Additional context:_**
