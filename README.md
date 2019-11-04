@@ -6,7 +6,7 @@ By Leopard20
 
 The deluxe version of the older mod, All-In-One Command Menu, with updated visuals, new features and many bug fixes.
 
-[BI Forum Thread](https://forums.bohemia.net/forums/topic/224834-all-in-one-single-player-project/)
+[BI Forum Thread](https://forums.bohemia.net/forums/topic/224834-all-in-one-single-player-project/) | [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=1893300731)
 
 
 
