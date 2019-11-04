@@ -12,10 +12,6 @@ if !(visibleMap) then {openMap true};
 	params ["_selectedUnits"];
 	waitUntil {visibleMap};
 	
-	_rearmVeh = ["B_Truck_01_ammo_F", "I_Truck_02_ammo_F", "O_Truck_02_Ammo_F", "O_Truck_03_ammo_F", "B_APC_Tracked_01_CRV_F"];
-	_refuelVeh = ["rhsusf_M978A4_BKIT_usarmy_wd", "rhsusf_M978A4_BKIT_usarmy_d", "B_G_Van_01_fuel_F", "B_Truck_01_fuel_F", "C_Van_01_fuel_F", "C_Van_01_fuel_red_F", "C_Van_01_fuel_red_v2_F", "C_Van_01_fuel_white_F", "C_Van_01_fuel_white_v2_F", "C_Truck_02_fuel_F", "I_G_Van_01_fuel_F", "I_Truck_02_fuel_F", "O_G_Van_01_fuel_F", "O_Truck_02_fuel_F", "O_Truck_03_fuel_F", "B_APC_Tracked_01_CRV_F"];
-	_repairVeh = ["B_Truck_01_Repair_F", "O_Truck_03_repair_F", "B_APC_Tracked_01_CRV_F"];
-	
 	while {visibleMap} do {
 		_playerSide = (side group player) call BIS_fnc_sideID; 
 		_color = [ [1,0,0], [0,0,1], [0,1,0], [1,1,0] ] select _playerSide;
@@ -37,11 +33,11 @@ if !(visibleMap) then {openMap true};
 			} forEach _nearVehs1;
 		} forEach _farUnits;
 
-		AIO_nearRearmVeh = _nearVehs select {_name = getText(_cfgVehicles >> typeOf _x >> "DisplayName");((typeOf _x) in _rearmVeh || {(["ammo", _name] call BIS_fnc_inString) || {(["supply", _name] call BIS_fnc_inString)}})};
+		AIO_nearRearmVeh = _nearVehs select {getAmmoCargo _x > 0};
 		
-		AIO_nearRefuelVeh = _nearVehs select {_name = getText(_cfgVehicles >> typeOf _x >> "DisplayName");((typeOf _x) in _refuelVeh || {(["fuel", _name] call BIS_fnc_inString) || {(["supply", _name] call BIS_fnc_inString)}})};
+		AIO_nearRefuelVeh = _nearVehs select {getFuelCargo _x > 0};
 		
-		AIO_nearRepairVeh = _nearVehs select {_name = getText(_cfgVehicles >> typeOf _x >> "DisplayName");((typeOf _x) in _repairVeh || {(["repair", _name] call BIS_fnc_inString) || {(["supply", _name] call BIS_fnc_inString)}})};
+		AIO_nearRepairVeh = _nearVehs select {getRepairCargo _x > 0};
 		
 		// From the vehicle gather the data
 		AIO_MAP_Vehicles append ((AIO_nearRearmVeh + AIO_nearRefuelVeh + AIO_nearRepairVeh) apply {
@@ -79,10 +75,10 @@ call AIO_fnc_addMapEH;
 		_veh = (AIO_MAP_Vehicles select _index) select 0;
 		
 		_index = AIO_nearRearmVeh findIf {_x == _veh};
-		if (_index != -1) exitWith {[_selectedUnits, [AIO_nearRepairVeh select _index, 1]] call AIO_fnc_resupply};
+		if (_index != -1) exitWith {[_selectedUnits, [AIO_nearRearmVeh select _index, 1]] call AIO_fnc_resupply};
 		
 		_index = AIO_nearRefuelVeh findIf {_x == _veh};
-		if (_index != -1) exitWith {[_selectedUnits, [AIO_nearRepairVeh select _index, 2]] call AIO_fnc_resupply};
+		if (_index != -1) exitWith {[_selectedUnits, [AIO_nearRefuelVeh select _index, 2]] call AIO_fnc_resupply};
 		
 		_index = AIO_nearRepairVeh findIf {_x == _veh};
 		if (_index != -1) then {[_selectedUnits, [AIO_nearRepairVeh select _index, 3]] call AIO_fnc_resupply};

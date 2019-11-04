@@ -283,7 +283,7 @@ AIO_switchweapon_subMenu =
 	[parseText"<img image='\A3\ui_f\data\IGUI\Cfg\Actions\Reload_ca.paa'/><t font='PuristaBold'> Reload", [], "", -5, [["expression", "[(groupSelectedUnits player), 0] spawn AIO_fnc_switchWeapon"]], "1", "1"],
 	[parseText"<img image='AIO_AIMENU\pictures\rifle.paa'/><t font='PuristaBold'> Rifle", ([[2], [2, 79]] select _useNumpad), "", -5, [["expression", "[(groupSelectedUnits player), 1] spawn AIO_fnc_switchWeapon"]], "1", "1"],
 	[parseText"<img image='AIO_AIMENU\pictures\hgun.paa'/><t font='PuristaBold'> Handgun", ([[3], [3, 80]] select _useNumpad), "", -5, [["expression", "[(groupSelectedUnits player), 2] spawn AIO_fnc_switchWeapon"]], "1", "1"],
-	[parseText"<img image='AIO_AIMENU\pictures\launcher.paa'/><t font='PuristaBold'> Launcher", ([[4], [4, 81]] select _useNumpad), "", -5, [["expression", "[(groupSelectedUnits player), 4] spawn AIO_fnc_switchWeapon"]], "1", "1"]
+	[parseText"<img image='AIO_AIMENU\pictures\launcher.paa'/><t font='PuristaBold'> Launcher", ([[4], [4, 81]] select _useNumpad), "", -5, [["expression", "[(groupSelectedUnits player), 4] spawn AIO_fnc_switchWeapon"]], "1", "0"]
 ];
 
 AIO_weaponAcessories_subMenu =
@@ -311,16 +311,15 @@ AIO_action_subMenu =
     ["Actions",true],
 	[parseText"<img image='AIO_AIMENU\pictures\slingloading.paa'/><t font='PuristaBold'> Sling Load", ([[2], [2, 79]] select _useNumpad), "#USER:AIO_sling_subMenu", -5, [["expression", ""]], "1", "IsLeader * IsHelicopterPilotSelected"],
 	["", [], "", -1, [["expression", ""]], "1", "0"],
-	[parseText"<img color='#95ff44' image='AIO_AIMENU\pictures\assemble.paa'/><t font='PuristaBold'> Assemble *", ([[3], [3, 80]] select _useNumpad), "", -5, [["expression", "[(groupSelectedUnits player), screenToWorld [0.5,0.5]] spawn AIO_fnc_assembleProxy "]], "1", "NotEmpty * CursorOnGround", "\a3\Ui_f\data\IGUI\Cfg\Cursors\iconCursorSupport_ca.paa"],
-	[parseText"<img color='#f94a4a' image='AIO_AIMENU\pictures\assemble.paa'/><t font='PuristaBold'> Disassemble", ([[4], [4, 81]] select _useNumpad), "", -5, [["expression", "
-	AIO_selectedunits = (groupSelectedUnits player);
-	[7] spawn AIO_fnc_createMountMenu"]], "1", "NotEmpty"],
+	[parseText"<img color='#95ff44' image='AIO_AIMENU\pictures\assemble.paa'/><t font='PuristaBold'> Assemble/Disassemble", ([[3], [3, 80]] select _useNumpad), "#USER:AIO_assemble_subMenu", -5, [["expression", ""]], "1", "NotEmpty", "\a3\Ui_f\data\IGUI\Cfg\Cursors\iconCursorSupport_ca.paa"],
 	["", [], "", -1, [["expression", ""]], "1", "0"],
-	[parseText"<img color='#ffd6df' image='AIO_AIMENU\pictures\take.paa'/><t font='PuristaBold'> Take Weapon", ([[5], [5, 75]] select _useNumpad), "", -5, [["expression", "
+	[parseText"<img color='#ffd6df' image='AIO_AIMENU\pictures\take.paa'/><t font='PuristaBold'> Take Weapon", ([[4], [4, 81]] select _useNumpad), "", -5, [["expression", "
 	AIO_selectedunits = (groupSelectedUnits player);
 	[AIO_selectedunits] spawn AIO_fnc_createTakeWpnMenu "]], "1", "NotEmpty"],
-	[parseText"<img color='#ffff00' image='AIO_AIMENU\pictures\rearm.paa'/><t font='PuristaBold'> Rearm", ([[6], [6, 76]] select _useNumpad), "", -5, [["expression", "[groupSelectedUnits player] spawn AIO_fnc_createRearmMenu"]], "1", "NotEmpty"],
-	[parseText"<img color='#ff8844' image='AIO_AIMENU\pictures\explosive.paa'/><t font='PuristaBold'> Plant Explosive", ([[7], [7, 77]] select _useNumpad), "", -5, [["expression", "[groupSelectedUnits player] spawn AIO_fnc_createExplosivesMenu"]], "1", "NotEmpty"]
+	[parseText"<img color='#ffff00' image='AIO_AIMENU\pictures\rearm.paa'/><t font='PuristaBold'> Rearm", ([[5], [5, 75]] select _useNumpad), "", -5, [["expression", "[groupSelectedUnits player] spawn AIO_fnc_createRearmMenu"]], "1", "NotEmpty"],
+	["", [], "", -1, [["expression", ""]], "1", "0"],
+	[parseText"<img color='#ff8844' image='AIO_AIMENU\pictures\explosive.paa'/><t font='PuristaBold'> Plant Explosive", ([[6], [6, 76]] select _useNumpad), "", -5, [["expression", "[groupSelectedUnits player] spawn AIO_fnc_createExplosivesMenu"]], "1", "NotEmpty"],
+	[parseText"<img color='#f94a4a' image='AIO_AIMENU\pictures\disarm.paa'/><t font='PuristaBold'> Disarm Explosive", ([[7], [7, 77]] select _useNumpad), "", -5, [["expression", "[groupSelectedUnits player] spawn AIO_fnc_createExplosivesMenu"]], "1", "0"]
 	//\A3\ui_f\data\IGUI\Cfg\simpleTasks\types\mine_ca.paa
 ];
 
@@ -330,6 +329,20 @@ AIO_weaponType_subMenu =
 	[parseText"<img image='AIO_AIMENU\pictures\rifle.paa'/><t font='PuristaBold'> Rifle", ([[2], [2, 79]] select _useNumpad), "#USER:AIO_Rifle_subMenu", -5, [["expression", ""]], "1", "1"],
 	[parseText"<img image='AIO_AIMENU\pictures\hgun.paa'/><t font='PuristaBold'> Handgun", ([[3], [3, 80]] select _useNumpad), "#USER:AIO_Hgun_subMenu", -5, [["expression", ""]], "1", "1"],
 	[parseText"<img image='AIO_AIMENU\pictures\launcher.paa'/><t font='PuristaBold'> Launcher", ([[4], [4, 81]] select _useNumpad), "#USER:AIO_launcher_subMenu", -5, [["expression", ""]], "1", "1"]
+];
+
+AIO_assemble_subMenu =
+[
+	["Assemble",true],
+	[parseText"<img color='#95ff44' image='AIO_AIMENU\pictures\assemble.paa'/><t font='PuristaBold'> Assemble Weapon *", ([[2], [2, 79]] select _useNumpad), "", -5, [["expression", "[(groupSelectedUnits player), screenToWorld [0.5,0.5]] spawn AIO_fnc_assembleProxy "]], "1", "NotEmpty * CursorOnGround", "\a3\Ui_f\data\IGUI\Cfg\Cursors\iconCursorSupport_ca.paa"],
+	[parseText"<img color='#f94a4a' image='AIO_AIMENU\pictures\assemble.paa'/><t font='PuristaBold'> Disassemble Weapon", ([[3], [3, 80]] select _useNumpad), "", -5, [["expression", "
+	AIO_selectedunits = (groupSelectedUnits player);
+	[7] spawn AIO_fnc_createMountMenu"]], "1", "NotEmpty"],
+	["", [], "", -1, [["expression", ""]], "1", "0"],
+	[parseText"<img color='#2da7ff' image='AIO_AIMENU\pictures\UAV.paa'/><t font='PuristaBold'> Assemble UAV *", ([[4], [4, 81]] select _useNumpad), "", -5, [["expression", "[[groupSelectedUnits player], 'call', 'assembleUAV', false] call AIO_fnc_mapProxy"]], "1", "NotEmpty * CursorOnGround", "\a3\Ui_f\data\IGUI\Cfg\Cursors\iconCursorSupport_ca.paa"],
+	[parseText"<img color='#e9a53a' image='AIO_AIMENU\pictures\UAV.paa'/><t font='PuristaBold'> Disassemble UAV", ([[5], [5, 75]] select _useNumpad), "", -5, [["expression", "
+	AIO_selectedunits = (groupSelectedUnits player);
+	[8] spawn AIO_fnc_createMountMenu"]], "1", "NotEmpty"]
 ];
 
 AIO_sling_subMenu =

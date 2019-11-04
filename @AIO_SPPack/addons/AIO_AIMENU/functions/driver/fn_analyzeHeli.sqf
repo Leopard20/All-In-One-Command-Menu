@@ -59,40 +59,35 @@ for "_i" from 0 to _size step _step1 do {
 	};
 };
 
+_contacts = [_contacts, [], {10*_x#1 + _x#2}, "ASCEND"] call BIS_fnc_sortBy; //tail is the first contact point
+_tail = _contacts select 0;
 
-_tails = [_contacts select [0,3], [], {_x select 2}, "ASCEND"] call BIS_fnc_sortBy; //tail is the first contact point
-_tail = _tails select 0;
-
-_contacts = [_contacts, [], {_x select 2}, "ASCEND"] call BIS_fnc_sortBy; //skid (or wheel) is at the bottom
-
+_contacts = [_contacts, [], {-1*_x#1 + 5*_x#2}, "ASCEND"] call BIS_fnc_sortBy; //skid (or wheel) is at the bottom
 _skidL1 = _contacts select 0;
 
-_skidL_H = _skidL1 select 2;
+_avgX = 0;
+{
+	_avgX = _avgX + (_x#0);
+} forEach _contacts;
 
-_contacts = _contacts select {abs(_skidL_H - (_x select 2)) <= 0.25 && {_x distance2D _skidL1 > 2}}; //find other skid points (or wheels)
+_contacts = [_contacts, [], {_x#0}, "ASCEND"] call BIS_fnc_sortBy; //skid (or wheel) is at the bottom
 
-_contacts = [_contacts, [], {_x select 1}, "ASCEND"] call BIS_fnc_sortBy;
+_avgX = _avgX/(count _contacts);
 
-_cnt = count _contacts;
+_skidL1 set [0, (_avgX + _contacts#0#0)/2];
 
-_skidL2 = if (_cnt != 0) then {_contacts select _cnt-1} else {_skidL1};
+_bottomHeight = _skidL1#2;
 
-_SkidR1 = [-1*(_skidL1 select 0), _skidL1 select 1, _skidL1 select 2]; //mirror the left skid to get the right skid
-_SkidR2 = [-1*(_skidL2 select 0), _skidL2 select 1, _skidL2 select 2];
-
-_skids = [_skidL1, _skidL2];
-
-//Make sure skids are far apart; close points only waste performance without doing any good!
-if (_SkidR1 distance2D _skidL1 > 1) then {_skids pushBack _SkidR1};
-if (_SkidR1 distance2D _SkidR2 > 1) then {_skids pushBack _SkidR2};
-
+_SkidR1 = [-1*(_skidL1 select 0), _skidL1 select 1, _bottomHeight]; //mirror the left skid to get the right skid
 
 _cfgVeh = configFile >> "cfgVehicles";
+
 _bladeCenter = _tempVeh selectionPosition getText(_cfgVeh >> _vehType >>"mainBladeCenter");
+
 _bladeRadius = getNumber(_cfgVeh >> _vehType >>"mainBladeRadius");
 
 //Also detect primary blade contact points
-_bladeCenter = _bladeCenter vectorDiff [0,0,1];
+_bladeCenter = _bladeCenter vectorDiff [0,0,0.25];
 _bladeR = _bladeCenter vectorAdd [_bladeRadius, 0, 0];
 _bladeL = _bladeCenter vectorAdd [-_bladeRadius, 0, 0];
 _bladeF = _bladeCenter vectorAdd [0, _bladeRadius, 0];
@@ -100,11 +95,18 @@ _bladeFL = (_bladeL vectorAdd _bladeF) apply {_x/2};
 _bladeFR = (_bladeR vectorAdd _bladeF) apply {_x/2};
 deleteVehicle _tempVeh;
 
-_skids = _skids apply {_x vectorAdd [0,0,0.1]};
+_center = +_bladeCenter;
+_front = +_bladeF;
 
-_veh setVariable ["AIO_sensitivePoints", (_skids + [_bladeF, _bladeL, _bladeR,_bladeFL,_bladeFR,_tail])];
-_veh setVariable ["AIO_skidPoints", _skids];
+_center set [2, _bottomHeight];
+_front set [2, _bottomHeight];
 
+_center = ((_front vectorAdd _center) vectorAdd _tail) apply {_x/3};
+
+_veh setVariable ["AIO_sensitivePoints", [_bladeF, _bladeL, _bladeR,_tail]];
+_veh setVariable ["AIO_skidPoints", [_center, _skidL1, _skidR1]];
+_veh setVariable ["AIO_modelCenter", _center];
+_veh setVariable ["AIO_copilots", (allTurrets _veh select {getNumber ([_veh, _x] call BIS_fnc_turretConfig >> "isCopilot") > 0})];
 //Default heli mechanics is based on Littlebird, so adjust for other helicopters for realism
 
 _hasContact = isTouchingGround _veh;
@@ -118,7 +120,7 @@ _hasContact = isTouchingGround _veh;
 } forEach _skids;
 */
 
-if !(_addToSuperHeli) exitWith {_hasContact};
+if !(_addToSuperHeli) exitWith {};
 
 _maxSpeed = (getNumber(_cfgVeh >> _vehType >>"maxSpeed")) min 400;
 

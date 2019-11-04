@@ -6,7 +6,7 @@ _exit = false;
 call {
 	_cfg = configFile >> "cfgVehicles";
 	
-	if (_mode == 1) exitWith { //_units element is [_unit, his backpack]
+	if (_mode == 1) exitWith { //_units element is [_unit, his backpack]; one unit has backpack, the other is on the ground
 		_foundBoth = false;
 		_nearWeaponHolders = nearestObjects [_pos, ["WeaponHolder", "WeaponHolderSimulated"], 10];
 		{
@@ -25,7 +25,7 @@ call {
 		if !(_foundBoth) then {_exit = true};
 	};
 	
-	if (_mode == 2) exitWith { //_units is actual units
+	if (_mode == 2) exitWith { //_units is actual units; neither unit has backpack
 		_foundBoth = false;
 		_nearWeaponHolders = (nearestObjects [_pos, ["WeaponHolder", "WeaponHolderSimulated"], 10]) apply {everyBackpack _x};
 		_backpackNames = _nearWeaponHolders apply {_x apply {typeOf _x}};
@@ -34,8 +34,8 @@ call {
 			{
 				_backpack = typeOf _x;
 				_baseCfg = (_cfg >> _backpack >> "assembleInfo" >> "base");
-				//call {
-					if (isArray _baseCfg) then {
+				call {
+					if (isArray _baseCfg) exitWith {
 						_supports = getArray _baseCfg;
 						if !(_supports isEqualTo []) then { //array can be used to find other supports
 							//first search in units
@@ -61,19 +61,32 @@ call {
 							};
 						};
 					};
-					/*
+					
 					if (isText _baseCfg && {(getText _baseCfg != "")}) exitWith {
 						_support = getText _baseCfg;
 						_index = _units findIf {backpack _x == _support};
-						if (_index != -1) then {
+						if (_index != -1) then { //unit has the other 
 							_foundBoth = true;
-							_unit1 = _x; _unit2 = _units select _index;
+							_units = [_units select _index];
+							_matchingBackpacks pushBack _x;
 						} else {
-							_foundBases pushBack [_x, [_support]];
+							_weaponHolderIndex = -1;
+							{
+								_names = _x;
+								_index = _names findIf {_x == _support};
+								if (_index != -1) exitWith {_weaponHolderIndex = _foreachindex};
+							} forEach _backpackNames;
+							
+							if (_index != -1) then { //the other backpack is in the same weaponholder
+								_foundBoth = true;
+								_units = [([_units, [], {_x distance2D _pos}, "ASCEND"] call BIS_fnc_sortBy) select 0];
+								_matchingBackpacks pushBack _x;
+								_matchingBackpacks pushBack ((_nearWeaponHolders select _weaponHolderIndex) select _index); 
+							};
 						};
 					};
-					*/
-				//};
+					
+				};
 				if (_foundBoth) exitWith {};
 			} forEach _backpacks;
 			if (_foundBoth) exitWith {};

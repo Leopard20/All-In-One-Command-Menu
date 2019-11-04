@@ -12,7 +12,7 @@ _foundBases = [];
 	_backpack = backpack _x;
 	if (_backpack != "") then {
 		_baseCfg = (_cfg >> _backpack >> "assembleInfo" >> "base");
-		if (isArray _baseCfg && {!((getArray _baseCfg) isEqualTo [])}) then {
+		if (isArray _baseCfg && {!((getArray _baseCfg) isEqualTo [])}) exitWith {
 			_supports = getArray _baseCfg;
 			_index = _units findIf {(backpack _x) in _supports};
 			if (_index != -1) then {
@@ -22,8 +22,7 @@ _foundBases = [];
 				_foundBases pushBack [_x, _supports];
 			};
 		};
-		/*
-		if (isText _baseCfg && {(getText _baseCfg != "")}) exitWith {
+		if (isText _baseCfg && {(getText _baseCfg != "")}) then {
 			_support = getText _baseCfg;
 			_index = _units findIf {backpack _x == _support};
 			if (_index != -1) then {
@@ -33,7 +32,6 @@ _foundBases = [];
 				_foundBases pushBack [_x, [_support]];
 			};
 		};
-		*/
 	};
 	if (_foundBoth) exitWith {};
 } forEach _units;

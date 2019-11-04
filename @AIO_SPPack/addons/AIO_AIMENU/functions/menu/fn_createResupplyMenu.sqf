@@ -35,12 +35,6 @@ _nearVehs = [];
 
 _allVeh = [_nearVehs, [],{player distance _x},"ASCEND"] call BIS_fnc_sortBy;
 
-_rearmVeh = ["B_Truck_01_ammo_F", "I_Truck_02_ammo_F", "O_Truck_02_Ammo_F", "O_Truck_03_ammo_F", "B_APC_Tracked_01_CRV_F"];
-
-_refuelVeh = ["rhsusf_M978A4_BKIT_usarmy_wd", "rhsusf_M978A4_BKIT_usarmy_d", "B_G_Van_01_fuel_F", "B_Truck_01_fuel_F", "C_Van_01_fuel_F", "C_Van_01_fuel_red_F", "C_Van_01_fuel_red_v2_F", "C_Van_01_fuel_white_F", "C_Van_01_fuel_white_v2_F", "C_Truck_02_fuel_F", "I_G_Van_01_fuel_F", "I_Truck_02_fuel_F", "O_G_Van_01_fuel_F", "O_Truck_02_fuel_F", "O_Truck_03_fuel_F", "B_APC_Tracked_01_CRV_F"];
-
-_repairVeh = ["B_Truck_01_Repair_F", "O_Truck_03_repair_F", "B_APC_Tracked_01_CRV_F"];
-
 AIO_nearSupplyVeh = [];
 
 _cfg = configFile >> "CfgVehicles";
@@ -48,21 +42,21 @@ switch (_action) do
 {
 	case 1: 
 	{
-		AIO_nearSupplyVeh = _allVeh select {_name = getText(_cfg >> typeOf _x >> "DisplayName"); ((typeOf _x) in _rearmVeh || {(["ammo", _name] call BIS_fnc_inString) || {(["supply", _name] call BIS_fnc_inString)}})};
+		AIO_nearSupplyVeh = _allVeh select {getAmmoCargo _x > 0};
 
 		_dispNm = [AIO_nearSupplyVeh] call AIO_fnc_getVehicleNames;
 		AIO_nearSupplyVeh = AIO_nearSupplyVeh apply {[_x, 1]};
 	};
 	case 2: 
 	{
-		AIO_nearSupplyVeh = _allVeh select {_name = getText(_cfg >> typeOf _x >> "DisplayName"); ((typeOf _x) in _refuelVeh || {(["fuel", _name] call BIS_fnc_inString) || {(["supply", _name] call BIS_fnc_inString)}})};
+		AIO_nearSupplyVeh = _allVeh select {getFuelCargo _x > 0};
 
 		_dispNm = [AIO_nearSupplyVeh] call AIO_fnc_getVehicleNames;
 		AIO_nearSupplyVeh = AIO_nearSupplyVeh apply {[_x, 2]};
 	};
 	case 3:  
 	{
-		AIO_nearSupplyVeh = _allVeh select {_name = getText(_cfg >> typeOf _x >> "DisplayName"); ((typeOf _x) in _repairVeh || {(["repair", _name] call BIS_fnc_inString) || {(["supply", _name] call BIS_fnc_inString)}})};
+		AIO_nearSupplyVeh = _allVeh select {getRepairCargo _x > 0};
 
 		_dispNm = [AIO_nearSupplyVeh] call AIO_fnc_getVehicleNames;
 		AIO_nearSupplyVeh = AIO_nearSupplyVeh apply {[_x, 3]};

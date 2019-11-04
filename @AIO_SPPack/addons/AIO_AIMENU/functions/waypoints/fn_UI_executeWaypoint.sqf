@@ -141,7 +141,7 @@ if (_mode == 1) exitWith { //Rclick; delete tasks
 				//---------------------------------------------------------------------------------------------
 				if (_task == 16) exitWith { //resupply
 					if (!(_param1 isEqualType objNull) || {!(_param2 isEqualType 1) || {_param2 > 3 || _param2 < 1}}) exitWith {};
-					
+					_pos = ASLToAGL(getPosASL _param1); 
 					_veh = vehicle _unit;
 					call {
 						if (_veh isKindOf "Helicopter") exitWith {

@@ -30,6 +30,11 @@ if (_veh distance _target > _distance) then {
 			_done = [_veh] call AIO_fnc_rearmVeh;
 			if (_done) then {
 				[_unit, 0, 0] call AIO_fnc_setTask;
+				if (_helicopter) then {
+					_veh land "NONE";
+					_veh setVariable ["AIO_flightHeight", 50];
+					_veh flyInHeight 50;
+				};
 				_unit groupChat "Vehicle rearm is complete."
 			};	
 		};
@@ -37,6 +42,11 @@ if (_veh distance _target > _distance) then {
 			_done = [_veh] call AIO_fnc_refuel;
 			if (_done) then {
 				[_unit, 0, 0] call AIO_fnc_setTask;
+				if (_helicopter) then {
+					_veh land "NONE";
+					_veh setVariable ["AIO_flightHeight", 50];
+					_veh flyInHeight 50;
+				};
 				_unit groupChat "Vehicle refuel is complete."
 			};
 		};
@@ -44,6 +54,11 @@ if (_veh distance _target > _distance) then {
 			_done = [_veh] call AIO_fnc_repair;
 			if (_done) then {
 				[_unit, 0, 0] call AIO_fnc_setTask;
+				if (_helicopter) then {
+					_veh land "NONE";
+					_veh setVariable ["AIO_flightHeight", 50];
+					_veh flyInHeight 50;
+				};
 				_unit groupChat "Vehicle repair is complete."
 			};
 		};

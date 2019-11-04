@@ -42,19 +42,34 @@ private _playerSideID = _playerSide call BIS_fnc_sideID;
 
 _nearVeh = [];
 
-_vehTypes = ["Car", "Tank", "Helicopter", "Ship", "Plane", "Staticweapon", "Staticweapon"] select (_mode - 1);
+if (_mode <= 7) then {
 
-{
-	_unit = _x;
-	_nearVeh1 = _x nearObjects [_vehTypes, 200];
+	_vehTypes = ["Car", "Tank", "Helicopter", "Ship", "Plane", "Staticweapon", "Staticweapon"] select (_mode - 1);
+
 	{
-		if !(_x in _nearVeh) then {
-			if ((count (fullCrew [_x, "", true]))!=(count (fullCrew [_x, "", false])) && {side _x == _playerSide || {(getNumber (_cfgVehicles >> typeOf _x >> "side")) == _playerSideID || {_x distance _unit <= 50}}}) then {
-				_nearVeh pushBack _x;
+		_unit = _x;
+		_nearVeh1 = _x nearObjects [_vehTypes, 200];
+		{
+			if !(_x in _nearVeh) then {
+				if ((count (fullCrew [_x, "", true]))!=(count (fullCrew [_x, "", false])) && {side _x == _playerSide || {(getNumber (_cfgVehicles >> typeOf _x >> "side")) == _playerSideID || {_x distance _unit <= 50}}}) then {
+					_nearVeh pushBack _x;
+				};
 			};
-		};
-	} forEach _nearVeh1;
-} forEach _farUnits;
+		} forEach _nearVeh1;
+	} forEach _farUnits;
+} else {
+	{
+		_unit = _x;
+		_nearVeh1 = nearestObjects [_x, ["Plane", "Helicopter", "Car", "Tank"], 200];
+		{
+			if !(_x in _nearVeh) then {
+				if (side _x == _playerSide || {(getNumber (_cfgVehicles >> typeOf _x >> "side")) == _playerSideID || {_x distance _unit <= 50}}) then {
+					_nearVeh pushBack _x;
+				};
+			};
+		} forEach _nearVeh1;
+	} forEach _farUnits;
+};
 
 AIO_nearVehicles = [_nearVeh,[],{player distance _x},"ASCEND"] call BIS_fnc_sortBy;
 
@@ -213,6 +228,34 @@ call
 		};
 		AIO_VehList_subMenu append [["", [], "", -1, [["expression", ""]], "1", "0"],
 			[parseText"<img image='\A3\ui_f\data\IGUI\Cfg\simpleTasks\types\target_ca.paa'/><t font='PuristaBold'> %POINTED_TARGET_NAME", [], "", -5, [["expression", "[AIO_selectedunits, cursorTarget] call AIO_fnc_disassemble"]], "IsLeader * ((NotEmptySoldiers) * (CursorOnVehicleCanGetIn) * (CursorOnEmptyVehicle))", "CursorOnGround", 
+"\a3\Ui_f\data\IGUI\Cfg\Cursors\iconCursorSupport_ca.paa"]];
+
+	};
+	
+	if (_mode == 8) exitWith
+	{
+		AIO_nearVehicles = AIO_nearVehicles select {unitIsUAV _x};
+		
+		_vehCnt = count AIO_nearVehicles;
+		
+		_dispNm = [AIO_nearVehicles] call AIO_fnc_getVehicleNames;
+		AIO_VehList_subMenu = 
+		[
+			["Disassemble",true]
+		];
+		_vehCnt = _vehCnt min 11;
+		for "_i" from 0 to (_vehCnt - 1) do {
+			_vehicle = (AIO_nearVehicles select _i);
+			_vehType = typeOf _vehicle;
+			_colorID = if (side _vehicle != civilian) then {(side _vehicle) call BIS_fnc_sideID} else {(getNumber (_cfgVehicles >> _vehType >> "side"))};
+			_img = getText (_cfgVehicles >> _vehType >> "picture");
+			_displayName = parseText format ["<img color='#%3' image='%1'/><t font='PuristaBold'> %2", _img, _dispNm select _i, _colors select _colorID];
+			_text = format["AIO_VehList_subMenu pushBack [_displayName, [%2], '', -5, [['expression', '
+			[AIO_selectedunits, AIO_nearVehicles select %1] call AIO_fnc_disassembleUAV']], '1', '1']", _i, _i+2];
+			call compile _text;
+		};
+		AIO_VehList_subMenu append [["", [], "", -1, [["expression", ""]], "1", "0"],
+			[parseText"<img image='\A3\ui_f\data\IGUI\Cfg\simpleTasks\types\target_ca.paa'/><t font='PuristaBold'> %POINTED_TARGET_NAME", [], "", -5, [["expression", "[AIO_selectedunits, cursorTarget] call AIO_fnc_disassembleUAV"]], "IsLeader * ((NotEmptySoldiers) * (CursorOnVehicleCanGetIn) * (CursorOnEmptyVehicle))", "CursorOnGround", 
 "\a3\Ui_f\data\IGUI\Cfg\Cursors\iconCursorSupport_ca.paa"]];
 
 	};

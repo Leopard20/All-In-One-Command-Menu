@@ -155,8 +155,7 @@ call {
 		
 		if (isNil "_role") exitWith {hintSilent "Cannot create a group with the selected unit(s)"; _units joinSilent (_originalGroup)};
 		
-		_landed = [_veh, false] call AIO_fnc_analyzeHeli;
-		if (_landed) then {
+		if (isTouchingGround _veh) then {
 			_landPad = createVehicle ["Land_HelipadEmpty_F", [0,0,0]];
 			_landPad setPosASL (getPosASL _veh);
 		};
@@ -247,8 +246,7 @@ call {
 			if (_x select 0 == _unit) then {_role = _x select 1; if (_role == "Turret") then {_turret = _x select 3}};
 		} forEach _crew;
 		
-		_landed = [_veh, false] call AIO_fnc_analyzeHeli;
-		if (_landed) then {
+		if (isTouchingGround _veh) then {
 			_landPad = createVehicle ["Land_HelipadEmpty_F", [0,0,0]];
 			_landPad setPosASL (getPosASL _veh);
 		};

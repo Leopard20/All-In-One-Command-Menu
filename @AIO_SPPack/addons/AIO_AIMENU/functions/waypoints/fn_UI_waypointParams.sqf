@@ -109,18 +109,14 @@ if (AIO_waypointMode == 16) exitWith { //resupply
 	_playerSide = (side group player) call BIS_fnc_sideID; 
 	_color = [ [1,0,0], [0,0,1], [0,1,0], [1,1,0] ] select _playerSide;
 	
-	_rearmVeh = ["B_Truck_01_ammo_F", "I_Truck_02_ammo_F", "O_Truck_02_Ammo_F", "O_Truck_03_ammo_F", "B_APC_Tracked_01_CRV_F"];
-	_refuelVeh = ["rhsusf_M978A4_BKIT_usarmy_wd", "rhsusf_M978A4_BKIT_usarmy_d", "B_G_Van_01_fuel_F", "B_Truck_01_fuel_F", "C_Van_01_fuel_F", "C_Van_01_fuel_red_F", "C_Van_01_fuel_red_v2_F", "C_Van_01_fuel_white_F", "C_Van_01_fuel_white_v2_F", "C_Truck_02_fuel_F", "I_G_Van_01_fuel_F", "I_Truck_02_fuel_F", "O_G_Van_01_fuel_F", "O_Truck_02_fuel_F", "O_Truck_03_fuel_F", "B_APC_Tracked_01_CRV_F"];
-	_repairVeh = ["B_Truck_01_Repair_F", "O_Truck_03_repair_F", "B_APC_Tracked_01_CRV_F"];
+	_nearVehs = (_pos nearObjects ["allVehicles", 2000]) select {!(_x isKindOf "Man") && !(_x isKindOf "Animal") && {(getNumber (_cfgVehicles >> typeOf _x >> "side") == _playerSide)}};
 	
-	_nearVehs = (_pos nearObjects ["allVehicles", 1000]) select {!(_x isKindOf "Man") && !(_x isKindOf "Animal") && {(getNumber (_cfgVehicles >> typeOf _x >> "side") == _playerSide)}};
-	
-	AIO_nearRearmVeh = _nearVehs select {_name = getText(_cfgVehicles >> typeOf _x >> "DisplayName");((typeOf _x) in _rearmVeh || {(["ammo", _name] call BIS_fnc_inString) || {(["supply", _name] call BIS_fnc_inString)}})};
+	AIO_nearRearmVeh = _nearVehs select {getAmmoCargo _x > 0};
 		
-	AIO_nearRefuelVeh = _nearVehs select {_name = getText(_cfgVehicles >> typeOf _x >> "DisplayName");((typeOf _x) in _refuelVeh || {(["fuel", _name] call BIS_fnc_inString) || {(["supply", _name] call BIS_fnc_inString)}})};
+	AIO_nearRefuelVeh = _nearVehs select {getFuelCargo _x > 0};
 	
-	AIO_nearRepairVeh = _nearVehs select {_name = getText(_cfgVehicles >> typeOf _x >> "DisplayName");((typeOf _x) in _repairVeh || {(["repair", _name] call BIS_fnc_inString) || {(["supply", _name] call BIS_fnc_inString)}})};
-		
+	AIO_nearRepairVeh = _nearVehs select {getRepairCargo _x > 0};
+	
 	AIO_MAP_Vehicles = (AIO_nearRearmVeh) apply {
 		_cfg = _cfgVehicles >> typeOf _x;
 		_icon = getText (_cfg >> "icon");

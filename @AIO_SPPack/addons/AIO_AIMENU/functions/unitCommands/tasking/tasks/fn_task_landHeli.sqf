@@ -6,8 +6,8 @@ _landPos = [_unit, 0, 1] call AIO_fnc_getTask;
 _veh = vehicle _unit;
 _distance = _veh distance2D _landPos;
 _height = 50;
-_lowSpeed = speed _veh < 10;
-if (_distance < 100) then {_height = _distance/2 max ([30, 0] select _lowSpeed)};
+_lowSpeed = speed _veh < 12.5;
+if (_distance < 100) then {_height = _distance/2 max ([20, 0] select _lowSpeed)};
 _veh setVariable ["AIO_disableControls", false];
 if (_distance > 10 || !_lowSpeed) then {
 	//_veh setVariable ["AIO_disableControls", false];
@@ -26,11 +26,11 @@ if (_distance > 10 || !_lowSpeed) then {
 		_unit setVariable ["AIO_landPad", _landPad];
 		_veh land (["Land", "GET OUT"] select _landMode-1);
 	};
-	if !(isTouchingGround _veh) then {
+	_height = _veh getVariable ["AIO_height", 0];
+	if (_height > 0.1) then {
 		_veh land "GET OUT";
 		_veh flyInHeight 20;
 		_unit setVariable ["AIO_landTimer", -1];
-		_height = _veh getVariable ["AIO_height", 0];
 		call {
 			if (_height <= 5.4) exitWith {
 				_veh setVariable ["AIO_flightHeight", -1];

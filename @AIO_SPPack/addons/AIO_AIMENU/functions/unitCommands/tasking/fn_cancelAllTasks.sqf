@@ -12,7 +12,11 @@ _unit enableAI "MOVE";
 _unit setUnitPos "AUTO";
 
 _veh = vehicle _unit;
-if (_veh isKindOf "Helicopter" && {_unit == effectiveCommander _veh && _veh != AIO_vehiclePlayer}) then {[_veh] call AIO_fnc_disableSuperPilot};
+if (_veh isKindOf "Helicopter") then {
+	_veh setVariable ["AIO_flightHeight", 50];
+	_veh flyInHeight 50;
+	if (_unit == effectiveCommander _veh && _veh != AIO_vehiclePlayer) then {[_veh] call AIO_fnc_disableSuperPilot};
+};
 
 [_unit, 4, [0,objNull,0,0]] call AIO_fnc_setTask;
 

@@ -159,7 +159,7 @@ call {
 			_backpack = backpack _x;
 			if (_backpack != "") then {
 				_baseCfg = (_cfg >> _backpack >> "assembleInfo" >> "base");
-				if (isArray _baseCfg && {!((getArray _baseCfg) isEqualTo [])}) then {
+				if (isArray _baseCfg && {!((getArray _baseCfg) isEqualTo [])}) exitWith {
 					_supports = getArray _baseCfg;
 					_index = AIO_selectedUnits findIf {(backpack _x) in _supports};
 					if (_index != -1) then {
@@ -167,6 +167,16 @@ call {
 						_unit1 = _x; _unit2 = AIO_selectedUnits select _index;
 					} else {
 						_foundBases pushBack [_x, _supports];
+					};
+				};
+				if (isText _baseCfg && {(getText _baseCfg != "")}) then {
+					_support = getText _baseCfg;
+					_index = AIO_selectedUnits findIf {backpack _x == _support};
+					if (_index != -1) then {
+						_foundBoth = true;
+						_unit1 = _x; _unit2 = AIO_selectedUnits select _index;
+					} else {
+						_foundBases pushBack [_x, [_support]];
 					};
 				};
 			};
@@ -206,8 +216,8 @@ call {
 				{
 					_backpack = typeOf _x;
 					_baseCfg = (_cfg >> _backpack >> "assembleInfo" >> "base");
-					//call {
-						if (isArray _baseCfg) then {
+					call {
+						if (isArray _baseCfg) exitWith {
 							_supports = getArray _baseCfg;
 							if !(_supports isEqualTo []) then { //array can be used to find other supports
 								//first search in units
@@ -233,19 +243,32 @@ call {
 								};
 							};
 						};
-						/*
+						
 						if (isText _baseCfg && {(getText _baseCfg != "")}) exitWith {
 							_support = getText _baseCfg;
 							_index = AIO_selectedUnits findIf {backpack _x == _support};
-							if (_index != -1) then {
+							if (_index != -1) then { //unit has the other 
 								_foundBoth = true;
-								_unit1 = _x; _unit2 = AIO_selectedUnits select _index;
+								AIO_selectedUnits = [AIO_selectedUnits select _index];
+								AIO_matchingBackpacks pushBack _x;
 							} else {
-								_foundBases pushBack [_x, [_support]];
+								_weaponHolderIndex = -1;
+								{
+									_names = _x;
+									_index = _names findIf {_x == _support};
+									if (_index != -1) exitWith {_weaponHolderIndex = _foreachindex};
+								} forEach _backpackNames;
+								
+								if (_index != -1) then { //the other backpack is in the same weaponholder
+									_foundBoth = true;
+									AIO_selectedUnits = [([AIO_selectedUnits, [], {_x distance2D _pos}, "ASCEND"] call BIS_fnc_sortBy) select 0];
+									AIO_matchingBackpacks pushBack _x;
+									AIO_matchingBackpacks pushBack ((_nearWeaponHolders select _weaponHolderIndex) select _index); 
+								};
 							};
 						};
-						*/
-					//};
+						
+					};
 					if (_foundBoth) exitWith {};
 				} forEach _backpacks;
 				if (_foundBoth) exitWith {};

@@ -10,7 +10,11 @@ _units pushBack player;
 	_unit setUnconscious false;
 	_unit setCaptive false;
 	_unit setDamage 0;
-	(vehicle _unit) setDamage 0;
+	_veh = vehicle _unit;
+	if (_veh != _unit) then {
+		_veh setDamage 0;
+		_veh setFuel 1;
+	};
 	if (AIO_UseAceMedical) then {
 		_unit setVariable ["ACE_MEDICAL_pain", 0, true];
 		_unit setVariable ["ACE_MEDICAL_morphine", 0, true];

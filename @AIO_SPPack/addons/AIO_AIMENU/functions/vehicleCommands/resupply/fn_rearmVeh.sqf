@@ -49,8 +49,15 @@ if (count _halfFullMags > 0) exitWith {
 _reloadMags = getArray(_cfgVeh >> _type >> "magazines");
 
 if (count _magazines < count _reloadMags) exitWith { //has fewer mags than it should
-	_mag = (_reloadMags select _i);
-	_veh addMagazine [_mag, getNumber (_cfgMags >> _mag >> "Count")];
+	{
+		_mag = _x#0;
+		if (_mag in _reloadMags) then {_veh removeMagazine _mag};
+	} forEach _magazines;
+	
+	{
+		_veh addMagazine [_x, getNumber (_cfgMags >> _x >> "Count")];
+	} forEach _reloadMags;
+	
 	false
 };
 
@@ -87,8 +94,15 @@ if (_count > 0) then {
 	};
 	
 	if (count _turretMags < count _reloadMags) exitWith { //has fewer mags than it should
-		_mag = (_reloadMags select _i);
-		_veh addMagazine [_mag, getNumber (_cfgMags >> _mag >> "Count")];
+		{
+			_mag = _x#0;
+			if (_mag in _reloadMags) then {_veh removeMagazine _mag};
+		} forEach _turretMags;
+		
+		{
+			_veh addMagazine [_mag, getNumber (_cfgMags >> _mag >> "Count")];
+		} forEach _reloadMags;
+		
 		_fullyArmed = false;
 	};
 };

@@ -4,25 +4,24 @@
 	{
 		_veh = _x;
 		_driver = driver _veh;
-		_aliveDriver = if (isNull _driver) then {_veh getVariable ["AIO_landContact", true]} else {alive _driver}; 
+		_hasContact = isTouchingGround _veh;
+		_aliveDriver = alive _driver || {_hasContact || {-1 != (_veh getVariable ["AIO_copilots", []]) findIf {alive (_veh turretUnit _x)}}}; 
 		if (canMove _veh && _aliveDriver && isEngineOn _veh && {time - (_veh getVariable ["AIO_engineOn", 0]) >= 18 || {time >= (_veh getVariable ["AIO_engineReady", 0])}}) then {
 			
 			_fps = diag_fps max 1;
 			_acc = accTime;
 			
-			_weightCoeff = _acc*(_veh getVariable ["AIO_weightCoeff", 1]);
+			_weightCoeff = _acc*(_veh getVariable ["AIO_weightCoeff", 1]); //acceleration coeff
 			_manouverCoeff = _acc*(_veh getVariable ["AIO_manouverCoeff", 1]);
-			_AiCoeff = [1,0.5] select (_veh getVariable ["AIO_AiPilot", false]);
+			_AiCoeff = [1,0.5] select (_veh getVariable ["AIO_AiPilot", false]); //smooth AI movement
 			
-			_controlCoeff = _manouverCoeff*_AiCoeff;
+			_controlCoeff = _manouverCoeff*_AiCoeff; //maneuberability coeff; how fast it can pitch/bank
 			
 			_velocity = _veh getVariable ["AIO_lastVelocity", [0,0,0]];
 			_speed = vectorMagnitude _velocity;
 			
 			_currentCollective = _velocity select 2;
 			_desiredColl = _veh getVariable ["AIO_collective", 0];
-			
-			_hasContact = isTouchingGround _veh;
 			
 			if (_hasContact) then {_desiredColl = _desiredColl max -1};
 			
@@ -90,7 +89,7 @@
 				
 				_cos = ([_vecDirX, _vecDirY,0] vectorCos [_velocityDirX, _velocityDirY, 0]);
 				_bankSpeed = acos(abs _cos);
-				if (str _bankSpeed == "-1.#IND") then {_bankSpeed = 0} else {_bankSpeed = _bankSpeed*(_cos + 1)*_speed/_maxSpeed*3};
+				if (!finite _bankSpeed) then {_bankSpeed = 0} else {_bankSpeed = _bankSpeed*(_cos + 1)*_speed/_maxSpeed*3};
 			};
 			
 			//drawLine3D [_bladeCenter, _bladeCenter vectorAdd (_newVUP apply {_x*10}), [0,0,1,1]];
@@ -103,10 +102,8 @@
 			_factor = linearConversion [0, 0.75*_maxSpeed, _speed, 0, 1, true];
 
 			_newDir = (_desiredDir*7.5*(1-_factor/1.1) - _factor*_turn*_bankSpeed)/_fps;
-			
-			_skids = _veh getVariable ["AIO_skidPoints", []];
-			
 			/*
+			_skids = _veh getVariable ["AIO_skidPoints", []];
 			{
 				_skid = _veh modelToWorldWorld _x;
 				_skidbottom = _skid vectorDiff [0,0,0.38];
@@ -131,7 +128,7 @@
 			};
 			
 			_veh setVariable ["AIO_lastVelocity", _velocity];
-			_veh setVariable ["AIO_landContact", _hasContact];
+			
 			//drawLine3D [_bladeCenter, _bladeCenter vectorAdd _velocity, [1,1,0,1]];
 			
 			if (!(_veh getVariable ["AIO_isBanking", false]) || _hasContact) then {

@@ -50,7 +50,7 @@ _map ctrlAddEventHandler ["MouseButtonDown", {
 				if (_mousePos distance2D (_x select 0) < _dist) exitWith {
 					_param1 = _x select 0; //vehicle
 					if (alive _param1) then {
-						_param2 = if (AIO_lastWaypointMode == 16) then {_x select 6} else {0};
+						_param2 = if (AIO_lastWaypointMode == 16) then {_x select 4} else {0};
 						call AIO_fnc_UI_postFilterUnits; //for mount, we need to post filter
 					};
 				};

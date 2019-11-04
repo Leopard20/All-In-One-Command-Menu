@@ -169,6 +169,14 @@ waitUntil {
 					_unit setVariable ["AIO_rearmTask", _h]
 				};
 			};
+			//-----------------------------------------------------------AssembleUAV-----------------------------------------------------------
+			if (_task == 19) exitWith {
+				call AIO_fnc_task_assembleUAV;
+			};
+			//-----------------------------------------------------------DisassembleUAV---------------------------------------------------------
+			if (_task == 20) exitWith {
+				call AIO_fnc_task_disassembleUAV;
+			};
 		} else {
 			[_unit] call AIO_fnc_cancelAllTasks;
 			if (_task == 4 && {isPlayer ([_unit,0,1] call AIO_fnc_getTask)}) then {

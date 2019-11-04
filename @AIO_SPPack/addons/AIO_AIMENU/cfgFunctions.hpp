@@ -115,6 +115,8 @@ class CfgFunctions
 			class task_disassemble {};
 			class task_resupply {};
 			class task_rearm {};
+			class task_assembleUAV {};
+			class task_disassembleUAV {};
 		};
 		class unit_tasking 
 		{
@@ -150,6 +152,8 @@ class CfgFunctions
 			class disassemble {};
 			class assembleProxy {};
 			class assembleStatic {};
+			class assembleUAV {};
+			class disassembleUAV {};
 		};
 		class unit_medical 
 		{
