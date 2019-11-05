@@ -42,15 +42,15 @@ missionNamespace setVariable ["AIO_UI_StartTime", time];
 _display = (findDisplay 24684);
 ctrlSetFocus (_display displayCtrl 1706);
 
-call AIO_fnc_UI_EH_mouseMoving;
+_display displayAddEventHandler ["MouseMoving", {call AIO_fnc_UI_EH_mouseMoving}];
 
 
 _map = (_display displayCtrl 1210);
 
-call AIO_fnc_UI_EH_draw;
-call AIO_fnc_UI_EH_MBD;
-call AIO_fnc_UI_EH_MBU;
-call AIO_fnc_UI_EH_KeyDown;
+_map ctrlAddEventHandler ["draw", {call AIO_fnc_UI_EH_draw}];
+_map ctrlAddEventHandler ["MouseButtonDown", {call AIO_fnc_UI_EH_MBD}];
+_map ctrlAddEventHandler ["MouseButtonUp", {call AIO_fnc_UI_EH_MBU}];
+_display displayAddEventHandler ["keyDown", {call AIO_fnc_UI_EH_KeyDown}];
 
 
 call AIO_fnc_UI_unitButtons;

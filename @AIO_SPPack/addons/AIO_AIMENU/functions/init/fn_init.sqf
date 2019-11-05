@@ -1,5 +1,7 @@
 if (isNil "AIO_enableMod") then {
 	AIO_enableMod = true;
+	AIO_enableCheats = true;
+	AIO_useVanillaMenus = false;
 	AIO_useVoiceChat = true;
 	AIO_Init_Message = false;
 	AIO_Zeus_Enabled = true;

@@ -9,179 +9,84 @@ if (AIO_enableSuperPilot) then {
 	
 	_id = _display getVariable ["AIO_keyDownID", -1]; 
 	
+	(["All-In-One Command Menu","AIO_AIMENU_MoveF"] call CBA_fnc_getKeybind) params ["", "", "", "", "", "", "", "", ["_keys", []]];
+	_keys params [["_keySet", []]]; 
+	_keySet params [
+		["_key", 17],
+		["_misc", [false, false, false]]
+	];
+	_fncKey = _misc findIf {_x isEqualTo true};
+	AIO_key_W = if (_fncKey != -1) then {([{_shift}, {_ctrl}, {_alt}] select _fncKey)} else {compile format ["%1 == _key", _key]};
+	
+	(["All-In-One Command Menu","AIO_AIMENU_MoveB"] call CBA_fnc_getKeybind) params ["", "", "", "", "", "", "", "", ["_keys", []]];
+	_keys params [["_keySet", []]]; 
+	_keySet params [
+		["_key", 31],
+		["_misc", [false, false, false]]
+	];
+	_fncKey = _misc findIf {_x isEqualTo true};
+	AIO_key_S = if (_fncKey != -1) then {([{_shift}, {_ctrl}, {_alt}] select _fncKey)} else {compile format ["%1 == _key", _key]};
+	
+	(["All-In-One Command Menu","AIO_AIMENU_MoveL"] call CBA_fnc_getKeybind) params ["", "", "", "", "", "", "", "", ["_keys", []]];
+	_keys params [["_keySet", []]]; 
+	_keySet params [
+		["_key", 30],
+		["_misc", [false, false, false]]
+	];
+	_fncKey = _misc findIf {_x isEqualTo true};
+	AIO_key_A = if (_fncKey != -1) then {([{_shift}, {_ctrl}, {_alt}] select _fncKey)} else {compile format ["%1 == _key", _key]};
+	
+	(["All-In-One Command Menu","AIO_AIMENU_MoveR"] call CBA_fnc_getKeybind) params ["", "", "", "", "", "", "", "", ["_keys", []]];
+	_keys params [["_keySet", []]]; 
+	_keySet params [
+		["_key", 32],
+		["_misc", [false, false, false]]
+	];
+	_fncKey = _misc findIf {_x isEqualTo true};
+	AIO_key_D = if (_fncKey != -1) then {([{_shift}, {_ctrl}, {_alt}] select _fncKey)} else {compile format ["%1 == _key", _key]};
+	
+	(["All-In-One Command Menu","AIO_AIMENU_MoveU"] call CBA_fnc_getKeybind) params ["", "", "", "", "", "", "", "", ["_keys", []]];
+	_keys params [["_keySet", []]]; 
+	_keySet params [
+		["_key", 42],
+		["_misc", [false, false, false]]
+	];
+	_fncKey = _misc findIf {_x isEqualTo true};
+	AIO_key_Shift = if (_fncKey != -1) then {([{_shift}, {_ctrl}, {_alt}] select _fncKey)} else {compile format ["%1 == _key", _key]};
+	
+	(["All-In-One Command Menu","AIO_AIMENU_MoveD"] call CBA_fnc_getKeybind) params ["", "", "", "", "", "", "", "", ["_keys", []]];
+	_keys params [["_keySet", []]]; 
+	_keySet params [
+		["_key", 44],
+		["_misc", [false, false, false]]
+	];
+	_fncKey = _misc findIf {_x isEqualTo true};
+	AIO_key_Z = if (_fncKey != -1) then {([{_shift}, {_ctrl}, {_alt}] select _fncKey)} else {compile format ["%1 == _key", _key]};
+	
+	(["All-In-One Command Menu","AIO_AIMENU_TurnL"] call CBA_fnc_getKeybind) params ["", "", "", "", "", "", "", "", ["_keys", []]];
+	_keys params [["_keySet", []]]; 
+	_keySet params [
+		["_key", 16],
+		["_misc", [false, false, false]]
+	];
+	_fncKey = _misc findIf {_x isEqualTo true};
+	AIO_key_Q = if (_fncKey != -1) then {([{_shift}, {_ctrl}, {_alt}] select _fncKey)} else {compile format ["%1 == _key", _key]};
+	
+	(["All-In-One Command Menu","AIO_AIMENU_TurnR"] call CBA_fnc_getKeybind) params ["", "", "", "", "", "", "", "", ["_keys", []]];
+	_keys params [["_keySet", []]]; 
+	_keySet params [
+		["_key", 18],
+		["_misc", [false, false, false]]
+	];
+	_fncKey = _misc findIf {_x isEqualTo true};
+	AIO_key_E = if (_fncKey != -1) then {([{_shift}, {_ctrl}, {_alt}] select _fncKey)} else {compile format ["%1 == _key", _key]};
+	
 	if (_id != -1) then {
 		_display displayRemoveEventHandler ["keyDown", _id];
 		_display setVariable ["AIO_keyDownID", -1]; 
 	};
 	
-	_id = _display displayAddEventHandler ["KeyDown", {
-		params ["_control", "_key", "_shift", "_ctrl", "_alt"]; 
-		
-		_vehiclePlayer = AIO_vehiclePlayer;
-		switch _key do {
-			case 44: //z
-			{
-				if (_vehiclePlayer getVariable ["AIO_forcePitch", false]) then {
-					_height = ((_vehiclePlayer getVariable ["AIO_flightHeight", 50])-5) max 10;
-					[0, formatText ["Flight Height: %1 m", parseText format ["<t color='#FFFF00'>%1", _height]]] call AIO_fnc_customHint;
-					_vehiclePlayer setVariable ["AIO_flightHeight", _height];
-				} else {
-					_vehiclePlayer setVariable ["AIO_collective", ((_vehiclePlayer getVariable ["AIO_collective", 0]) - 1) max -10];
-					
-					_vehiclePlayer setVariable ["AIO_AiPilot", false];
-				};
-			};
-			case 17: //w
-			{
-				_vehiclePlayer setVariable ["AIO_pitch", ((_vehiclePlayer getVariable ["AIO_pitch", 0]) + 1) min 30*(_vehiclePlayer getVariable ["AIO_cyclicCoeff", 1])];
-				
-				_forcePitch = (_vehiclePlayer getVariable ["AIO_forcePitch", false]);
-				
-				if (_forcePitch) then {_vehiclePlayer setVariable ["AIO_forcePitchCoeff", ((_vehiclePlayer getVariable ["AIO_forcePitchCoeff", 1]) + 0.5) min 3]};
-				
-				_vehiclePlayer setVariable ["AIO_controlPitch", true];
-				
-				_vehiclePlayer setVariable ["AIO_AiPilot", false];
-				
-				if (_ctrl && (_vehiclePlayer getVariable ["AIO_loiter", 0]) == 0) then {
-					_vehiclePlayer setVariable ["AIO_forcePitch", !_forcePitch];
-					if !(_forcePitch) then {
-						if ((_vehiclePlayer getVariable ["AIO_flightHeight", 40]) < 25) then {
-							_vehiclePlayer setVariable ["AIO_flightHeight", 25];
-						};
-					};
-				};
-			};
-			case 31: //s
-			{
-				_vehiclePlayer setVariable ["AIO_pitch", ((_vehiclePlayer getVariable ["AIO_pitch", 0]) - 1) max -30*(_vehiclePlayer getVariable ["AIO_cyclicCoeff", 1])];
-				
-				_forcePitch = (_vehiclePlayer getVariable ["AIO_forcePitch", false]);
-				
-				_vehiclePlayer setVariable ["AIO_controlPitch", true];
-				
-				if (_forcePitch) then {_vehiclePlayer setVariable ["AIO_forcePitchCoeff", ((_vehiclePlayer getVariable ["AIO_forcePitchCoeff", 1]) - 0.5) max 1]};
-				
-				_vehiclePlayer setVariable ["AIO_AiPilot", false];
-				
-				if (_ctrl && (_vehiclePlayer getVariable ["AIO_loiter", 0]) == 0) then {
-					_vehiclePlayer setVariable ["AIO_forcePitch", !_forcePitch];
-					if !(_forcePitch) then {
-						if ((_vehiclePlayer getVariable ["AIO_flightHeight", 40]) < 25) then {
-							_vehiclePlayer setVariable ["AIO_flightHeight", 25];
-						};
-					};
-				};
-			};
-			case 30: //a
-			{
-				_LOITER = (_vehiclePlayer getVariable ["AIO_loiter", 0]);
-				
-				if (_ctrl) exitWith {
-					_LOITER = (_LOITER - 1) max -1;
-					_vehiclePlayer setVariable ["AIO_loiter", _LOITER];
-					if (_LOITER == -1) then {
-						"AIO_helicopter_UI" cutFadeOut 0; ("AIO_helicopter_UI" call BIS_fnc_rscLayer) cutRsc ["AIO_loiterUI_left", "PLAIN", -1 , false];
-						((uiNamespace getVariable ["AIO_helicopter_UI", displayNull]) displayCtrl 1307) ctrlSetText "100";
-						_vehiclePlayer setVariable ["AIO_loiterRadius", 100];
-						
-						
-						_vehiclePlayer setVariable ["AIO_forcePitch", true];
-						_vehiclePlayer setVariable ["AIO_forcePitchCoeff", 1];
-						
-						_vehiclePlayer setVariable ["AIO_loiterCenter", ((getPosASLVisual _vehiclePlayer) vectorAdd (([(vectorDirVisual _vehiclePlayer), 90] call BIS_fnc_rotateVector2D) apply {_x*100}))];
-						//TEST_POINTS = [ ((getPosASLVisual _vehiclePlayer) vectorAdd (([(vectorDirVisual _vehiclePlayer), 90] call BIS_fnc_rotateVector2D) apply {_x*100}))];
-						if ((_vehiclePlayer getVariable ["AIO_flightHeight", 40]) < 25) then {
-							_vehiclePlayer setVariable ["AIO_flightHeight", 25];
-						};
-					} else {
-						"AIO_helicopter_UI" cutFadeOut 0; ("AIO_helicopter_UI" call BIS_fnc_rscLayer) cutRsc ["AIO_cruiseUI", "PLAIN", -1 , false];
-						_vehiclePlayer setVariable ["AIO_forcePitch", false];
-						_vehiclePlayer setVariable ["AIO_forcePitchCoeff", 1];
-					};	
-				};
-				
-				if (_LOITER != 0) then {
-					_loiterRadius = (((_vehiclePlayer getVariable ["AIO_loiterRadius", 100])+_LOITER*10) max 50) min 500;
-					_vehiclePlayer setVariable ["AIO_loiterRadius", _loiterRadius];
-					((uiNamespace getVariable ["AIO_helicopter_UI", displayNull]) displayCtrl 1307) ctrlSetText str floor(_loiterRadius);
-				} else {
-					_vehiclePlayer setVariable ["AIO_bank", ((_vehiclePlayer getVariable ["AIO_bank", 0]) + 1) min 50*(_vehiclePlayer getVariable ["AIO_cyclicCoeff", 1])];
-					_vehiclePlayer setVariable ["AIO_isBanking", true];
-					
-					_vehiclePlayer setVariable ["AIO_AiPilot", false];
-				
-				};
-			};
-			case 32: //d
-			{
-				_LOITER = (_vehiclePlayer getVariable ["AIO_loiter", 0]);
-				
-				if (_ctrl) exitWith {
-					_LOITER = (_LOITER + 1) min 1;
-					_vehiclePlayer setVariable ["AIO_loiter", _LOITER];
-					if (_LOITER == 1) then {
-						"AIO_helicopter_UI" cutFadeOut 0; ("AIO_helicopter_UI" call BIS_fnc_rscLayer) cutRsc ["AIO_loiterUI_right", "PLAIN", -1 , false];
-						((uiNamespace getVariable ["AIO_helicopter_UI", displayNull]) displayCtrl 1307) ctrlSetText "100";
-						_vehiclePlayer setVariable ["AIO_loiterRadius", 100];
-						
-						_vehiclePlayer setVariable ["AIO_forcePitch", true];
-						_vehiclePlayer setVariable ["AIO_forcePitchCoeff", 1];
-						
-						_vehiclePlayer setVariable ["AIO_loiterCenter", ((getPosASLVisual _vehiclePlayer) vectorAdd (([(vectorDirVisual _vehiclePlayer), -90] call BIS_fnc_rotateVector2D) apply {_x*100}))];
-						//TEST_POINTS = [ ((getPosASLVisual _vehiclePlayer) vectorAdd (([(vectorDirVisual _vehiclePlayer), -90] call BIS_fnc_rotateVector2D) apply {_x*100}))];
-						if ((_vehiclePlayer getVariable ["AIO_flightHeight", 40]) < 25) then {
-							_vehiclePlayer setVariable ["AIO_flightHeight", 25];
-						};
-					} else {
-						"AIO_helicopter_UI" cutFadeOut 0; ("AIO_helicopter_UI" call BIS_fnc_rscLayer) cutRsc ["AIO_cruiseUI", "PLAIN", -1 , false];
-						_vehiclePlayer setVariable ["AIO_forcePitch", false];
-						_vehiclePlayer setVariable ["AIO_forcePitchCoeff", 1];
-					};	
-				};
-				
-				if (_LOITER != 0) then {
-					_loiterRadius = (((_vehiclePlayer getVariable ["AIO_loiterRadius", 100])-_LOITER*10) max 50) min 500;
-					_vehiclePlayer setVariable ["AIO_loiterRadius", _loiterRadius];
-					((uiNamespace getVariable ["AIO_helicopter_UI", displayNull]) displayCtrl 1307) ctrlSetText str floor(_loiterRadius);
-				} else {
-					_vehiclePlayer setVariable ["AIO_bank", ((_vehiclePlayer getVariable ["AIO_bank", 0]) - 1) max -50*(_vehiclePlayer getVariable ["AIO_cyclicCoeff", 1])];
-					_vehiclePlayer setVariable ["AIO_isBanking", true];
-					
-					_vehiclePlayer setVariable ["AIO_AiPilot", false];
-				};
-				
-				
-			};
-			case 18: //e
-			{
-				_vehiclePlayer setVariable ["AIO_dir", ((_vehiclePlayer getVariable ["AIO_dir", 0]) + 1) min 5];
-				
-				_vehiclePlayer setVariable ["AIO_AiPilot", false];
-			};
-			case 16: //q
-			{
-				_vehiclePlayer setVariable ["AIO_dir", ((_vehiclePlayer getVariable ["AIO_dir", 0]) - 1) max -5];
-				
-				_vehiclePlayer setVariable ["AIO_AiPilot", false];
-			};
-		};
-		if (_shift) then {
-			_vehiclePlayer land "NONE";
-			_vehiclePlayer engineOn true;
-			
-			if (_vehiclePlayer getVariable ["AIO_forcePitch", false]) then {
-				_height = ((_vehiclePlayer getVariable ["AIO_flightHeight", 50])+5) min 500;
-				[0, (formatText ["Flight Height: %1 m", parseText format ["<t color='#FFFF00'>%1", _height]])] call AIO_fnc_customHint;
-				_vehiclePlayer setVariable ["AIO_flightHeight", _height];
-			} else {
-				_vehiclePlayer setVariable ["AIO_collective", ((_vehiclePlayer getVariable ["AIO_collective", 0]) + 1) min 10];
-				
-				_vehiclePlayer setVariable ["AIO_AiPilot", false];
-			};
-		};
-		false
-	}];
+	_id = _display displayAddEventHandler ["KeyDown", {call AIO_fnc_keyDown_SuperPilot}];
 	_display setVariable ["AIO_keyDownID", _id];
 	
 	_id = _display getVariable ["AIO_keyUpID", -1];
@@ -192,40 +97,40 @@ if (AIO_enableSuperPilot) then {
 	};
 	
 	_id = _display displayAddEventHandler ["keyUp", {
-		params ["_control", "_key", "_shift", "_ctrl", "_alt"];
-		switch _key do {
-			case 44: //z
+		params ["", "_key", "_shift", "_ctrl", "_alt"];
+		switch true do {
+			case (call AIO_key_Z): //z
 			{
 				AIO_vehiclePlayer setVariable ["AIO_collective", 0]; 
 			};
-			case 17: //w
+			case (call AIO_key_W): //w
 			{
 				if !(AIO_vehiclePlayer getVariable ["AIO_forcePitch", false]) then {AIO_vehiclePlayer setVariable ["AIO_controlPitch", false]};
 			};
-			case 31: //s
+			case (call AIO_key_S): //s
 			{
 				if !(AIO_vehiclePlayer getVariable ["AIO_forcePitch", false]) then {AIO_vehiclePlayer setVariable ["AIO_controlPitch", false]};
 			};
-			case 30: //a
+			case (call AIO_key_A): //a
 			{
 				AIO_vehiclePlayer setVariable ["AIO_isBanking", false];
 			};
-			case 32: //d
+			case (call AIO_key_D): //d
 			{
 				AIO_vehiclePlayer setVariable ["AIO_isBanking", false];
 			};
-			case 18: //e
+			case (call AIO_key_E): //e
 			{
 				AIO_vehiclePlayer setVariable ["AIO_dir", 0];
 			};
-			case 16: //q
+			case (call AIO_key_Q): //q
 			{
 				AIO_vehiclePlayer setVariable ["AIO_dir", 0];
 			};
-		};
-		
-		if (_shift) then {
-			AIO_vehiclePlayer setVariable ["AIO_collective", 0]; 
+			case (call AIO_key_Shift): //shift
+			{
+				AIO_vehiclePlayer setVariable ["AIO_collective", 0]; 
+			};
 		};
 		
 		false

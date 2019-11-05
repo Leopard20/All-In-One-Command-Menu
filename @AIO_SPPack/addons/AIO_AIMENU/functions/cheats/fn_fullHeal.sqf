@@ -3,9 +3,10 @@ _units pushBack player;
 ["AIO_medicIcon", "onEachFrame"] call BIS_fnc_removeStackedEventHandler;
 {
 	_unit = _x;
-	if (_unit == player && {lifeState player == "INCAPACITATED" || player getVariable ["ACE_isUnconscious", false]}) then {
+	if (isPlayer _unit && {lifeState player == "INCAPACITATED" || player getVariable ["ACE_isUnconscious", false]}) then {
 		("AIO_BlackScreen" call BIS_fnc_rscLayer) cutFadeOut 01;
 		if !(isNil "AIO_ppColor") then {{ppEffectDestroy _x} forEach [AIO_ppColor, AIO_ppVig, AIO_ppDynBlur, AIO_ppRadBlur]};
+		if !(isNil "bis_revive_ppColor") then {{ppEffectDestroy _x} forEach [bis_revive_ppColor, bis_revive_ppVig, bis_revive_ppBlur]};
 	};
 	_unit setUnconscious false;
 	_unit setCaptive false;

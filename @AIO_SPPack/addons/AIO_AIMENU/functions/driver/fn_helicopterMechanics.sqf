@@ -11,7 +11,7 @@
 			_fps = diag_fps max 1;
 			_acc = accTime;
 			
-			_weightCoeff = _acc*(_veh getVariable ["AIO_weightCoeff", 1]); //acceleration coeff
+			_weightCoeff = (_veh getVariable ["AIO_weightCoeff", 1]); //acceleration coeff
 			_manouverCoeff = _acc*(_veh getVariable ["AIO_manouverCoeff", 1]);
 			_AiCoeff = [1,0.5] select (_veh getVariable ["AIO_AiPilot", false]); //smooth AI movement
 			
@@ -25,7 +25,7 @@
 			
 			if (_hasContact) then {_desiredColl = _desiredColl max -1};
 			
-			_verticalVelocity = _currentCollective + _acc/_fps*(_desiredColl - _currentCollective);
+			_verticalVelocity = _currentCollective + 1/_fps*(_desiredColl - _currentCollective);
 			
 			_desiredPitch = _veh getVariable ["AIO_pitch", 0];
 			_desiredBank = _veh getVariable ["AIO_bank", 0];

@@ -1,4 +1,4 @@
-if ((allDisplays isEqualTo [findDisplay 0]) || {is3DEN || !AIO_Zeus_Enabled}) exitWith {};
+if ((allDisplays isEqualTo [findDisplay 0]) || {is3DEN || !AIO_Zeus_Enabled || !AIO_enableMod}) exitWith {};
 
 params [["_mode",1]];
 private ["_sync", "_classes", "_text", "_side", "_curators", "_group"];

@@ -54,6 +54,7 @@ if (isNil "AIO_Ranks_PIC") then {
 };
 
 AIO_Zeus_Enabled_STR = ["0", "1"] select AIO_Zeus_Enabled;
+AIO_Cheats_Enabled_STR = ["0", "1"] select AIO_enableCheats;
 
 AIO_monitoring_disabled = false;
 AIO_Advanced_Ctrl = false;

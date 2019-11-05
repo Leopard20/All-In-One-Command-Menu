@@ -9,7 +9,9 @@ if (count AIO_superHelicopters == 0) then {
 _veh setVariable ["AIO_forcePitch", false];
 _veh setVariable ["AIO_forcePitchCoeff", 1];
 _veh setVariable ["AIO_loiter", 0];
-_veh land "NONE";
 _veh setVariable ["AIO_flightHeight", 40];
 _veh flyInHeight 40;
-_veh engineOn true;
+if !(isTouchingGround _veh) then {
+	_veh engineOn true;
+	_veh land "NONE";
+};

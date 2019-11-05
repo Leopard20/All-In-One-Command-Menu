@@ -26,7 +26,7 @@ if (_mode == 1) then { //enable
 		
 		if (AIO_useAceMedical) then
 		{
-			if (_unit == player) then {
+			if (isPlayer _unit) then {
 				for "_i" from 0 to 10 do {
 					["loadout", _i] call CBA_fnc_removePlayerEventHandler;
 				};

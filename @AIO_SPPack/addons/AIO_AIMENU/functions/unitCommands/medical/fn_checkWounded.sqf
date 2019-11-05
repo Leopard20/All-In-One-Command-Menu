@@ -26,7 +26,7 @@ _medics = (units group player) select {
 	(lifeState _x != "INCAPACITATED") && {!(_x getVariable ["ACE_isUnconscious", false]) && {(_x != leader group player) && {"Medikit" in _items || {{_x == "FirstAidKit" || {_x == "ACE_fieldDressing" || {_x == "ACE_morphine"}}} count _items >= _cntWounded || {_cntSpecial != 0 && {{_x == "ACE_epinephrine"} count _items >= _cntSpecial}}}}}}
 };
 
-if (count _medics > 1) then {_medics = _medics select {_x != player}};
+if (count _medics > 1) then {_medics = _medics select {!isPlayer _x}};
 
 _unattended = [];
 _toCover = [];
@@ -69,7 +69,7 @@ if (_cntMedic != 0) then {
 			_queuePos = [0,1] select (_task == 4);
 			[_medic, [4,_patient,time+90*_perMedic,0], _queuePos] call AIO_fnc_pushToQueue;
 			_patient setVariable ["AIO_medic", _medic];
-			if (_patient != player) then {
+			if (!isPlayer _patient) then {
 				if (behaviour _patient == "Combat") then {
 					_toCover pushBack _patient;
 				} else {

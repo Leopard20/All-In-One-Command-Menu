@@ -40,6 +40,7 @@ if (player != hcLeader _group) then {
 	player hcSetGroup [_group];
 };
 
+_zeusShortcut = if (AIO_enableCheats) then {([[10], [10, 73]] select _useNumpad)} else {([[9], [9, 72]] select _useNumpad)};
 
 AIO_MENU_GroupCommunication = 
 [
@@ -55,8 +56,8 @@ AIO_MENU_GroupCommunication =
 	[parseText"<img color='#f94a4a' image='\A3\ui_f\data\IGUI\Cfg\simpleTasks\types\takeoff_ca.paa'/><t font='PuristaBold'> Unstick Unit", ([[7], [7, 77]] select _useNumpad), "", -5, [["expression", "[(groupSelectedUnits player)] spawn AIO_fnc_unstickUnit "]], "1", "1"],
 	["", [], "", -1, [["expression", ""]], "1", "0"],
 	[parseText"<img image='AIO_AIMENU\pictures\advance1.paa'/><t font='PuristaBold'> Commanding Menus", ([[8], [8, 71]] select _useNumpad), "#USER:AIO_command_subMenus", -5, [["expression", ""]], "1", "1"],
-	[parseText"<img image='\A3\ui_f\data\IGUI\Cfg\simpleTasks\types\documents_ca.paa'/><t font='PuristaBold'> Cheats", ([[9], [9, 72]] select _useNumpad), "", -5, [["expression", "[groupSelectedUnits player] spawn AIO_fnc_createCheatsMenu"]], "1", "1"],
-	[parseText"<img color='#5c3fd9' image='AIO_AIMENU\pictures\zeus.paa'/><t font='PuristaBold'> Add/Refresh Zeus", ([[10], [10, 73]] select _useNumpad), "", -5, [["expression", "[0] call AIO_fnc_zeus"]], AIO_Zeus_Enabled_STR, "1"]
+	[parseText"<img image='\A3\ui_f\data\IGUI\Cfg\simpleTasks\types\documents_ca.paa'/><t font='PuristaBold'> Cheats", ([[9], [9, 72]] select _useNumpad), "", -5, [["expression", "[groupSelectedUnits player] spawn AIO_fnc_createCheatsMenu"]], AIO_Cheats_Enabled_STR, "1"],
+	[parseText"<img color='#5c3fd9' image='AIO_AIMENU\pictures\zeus.paa'/><t font='PuristaBold'> Add/Refresh Zeus", _zeusShortcut, "", -5, [["expression", "[0] call AIO_fnc_zeus"]], AIO_Zeus_Enabled_STR, "1"]
 ];
 
 //-----------------------------------------------------------------------------------------------------------------------------------
