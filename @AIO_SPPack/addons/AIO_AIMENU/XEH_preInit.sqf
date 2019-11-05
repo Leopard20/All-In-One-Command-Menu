@@ -10,7 +10,7 @@
     1, // "global" flag. Set this to true to always have this setting synchronized between all clients in multiplayer
     {
     } // function that will be executed once on mission start && every time the setting is changed.
-] call CBA_Settings_fnc_init;
+] call CBA_fnc_addSetting;
 */
 
 /*
@@ -52,8 +52,6 @@
 
 */
 
-
-//init
 ["AIO_enableMod", "CHECKBOX", "Enable All-in-One Command Menu", ["All-In-One Command Menu", "Initialization"] ,true, 1, {}, true] call CBA_Settings_fnc_init;
 ["AIO_Init_Message", "CHECKBOX", "Show Initialization Message", ["All-In-One Command Menu", "Initialization"] ,false, 1] call CBA_Settings_fnc_init;
 ["AIO_HC_Module_Enabled", "CHECKBOX", "Create High Command Module", ["All-In-One Command Menu", "Initialization"], false, 1, {}, true] call CBA_Settings_fnc_init;
@@ -62,6 +60,7 @@
 ["AIO_copyExactStance", "CHECKBOX", ["Use Exact Copy Stance", "Units follow the exact stance of player, including intermediate ones"], ["All-In-One Command Menu", "Initialization"] ,true, 0] call CBA_Settings_fnc_init;
 ["AIO_useNumpadKeys", "LIST", ["Menu selection mode", "Choose the prefered method for selecting menu items"], ["All-In-One Command Menu", "Initialization"] ,[[false, true], ["Numeric Keys", "Numeric and Numpad Keys"], 0], 0] call CBA_Settings_fnc_init;
 ["AIO_useVanillaMenus", "CHECKBOX", ["Use Vanilla Menus", "Uses vanilla menus in the Root Menu instead of Custom ones"], ["All-In-One Command Menu", "Initialization"] ,false, 0] call CBA_Settings_fnc_init;
+["AIO_enableCheats", "CHECKBOX", ["Enable Cheats", "Enables the cheats menu"], ["All-In-One Command Menu", "Initialization"], true, 1, {AIO_Cheats_Enabled_STR = ["0", "1"] select AIO_enableCheats}, false] call CBA_Settings_fnc_init;
 
 //medic
 ["AIO_autoMedicEnabled", "CHECKBOX", "Enable Auto-Medic", ["All-In-One Command Menu", "Medic"] ,false, 0] call CBA_Settings_fnc_init;
@@ -79,7 +78,6 @@
 ["AIO_autoEnableSuperPilot", "CHECKBOX", ["Use Super Pilot automatically", "Enables Super Pilot for helicopters when landing/slingloading/resupplying"], ["All-In-One Command Menu", "Pilot Mode"] ,true, 0] call CBA_Settings_fnc_init;
 ["AIO_pilot_holdCtrl", "LIST", ["Direct Flight Control Mode", "Gives direct vehicle control to player"], ["All-In-One Command Menu", "Pilot Mode"] ,[[false, true], ["Toggle", "Hold"], 0], 0] call CBA_Settings_fnc_init;
 ["AIO_FixedWatchDir", "LIST", ["Player Watch Direction During Direct Flight Ctrl", "Should the player look directly ahead (toward direction of movement) during Direct Ctrl. mode?"], ["All-In-One Command Menu", "Pilot Mode"] ,[[false, true], ["Watch Ahead", "Fixed"], 0], 0] call CBA_Settings_fnc_init;
-
 
 
 if !(AIO_enableMod) exitWith {};
@@ -149,3 +147,12 @@ if !(AIO_enableMod) exitWith {};
 	if (count _units == 0) then {_units = (units group player) - [player]};
 	[_units, 2] call AIO_fnc_setBehaviour;
 }, "", [DIK_F, [true, true, false]], false] call CBA_fnc_addKeybind;
+
+["All-In-One Command Menu","AIO_AIMENU_MoveF", "Pilot - Move Forward", "", "", [17, [false, false, false]], false] call CBA_fnc_addKeybind;
+["All-In-One Command Menu","AIO_AIMENU_MoveB", "Pilot - Move Backward", "", "", [31, [false, false, false]], false] call CBA_fnc_addKeybind;
+["All-In-One Command Menu","AIO_AIMENU_MoveL", "Pilot - Move Left", "", "", [30, [false, false, false]], false] call CBA_fnc_addKeybind;
+["All-In-One Command Menu","AIO_AIMENU_MoveR", "Pilot - Move Right", "", "", [32, [false, false, false]], false] call CBA_fnc_addKeybind;
+["All-In-One Command Menu","AIO_AIMENU_MoveU", "Pilot - Raise Collective", "", "", [42, [true, false, false]], false] call CBA_fnc_addKeybind;
+["All-In-One Command Menu","AIO_AIMENU_MoveD", "Pilot - Lower Collective", "", "", [44, [false, false, false]], false] call CBA_fnc_addKeybind;
+["All-In-One Command Menu","AIO_AIMENU_TurnL", "Pilot - Left Pedal", "", "", [16, [false, false, false]], false] call CBA_fnc_addKeybind;
+["All-In-One Command Menu","AIO_AIMENU_TurnR", "Pilot - Right Pedal", "", "", [18, [false, false, false]], false] call CBA_fnc_addKeybind;
