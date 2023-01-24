@@ -3,7 +3,7 @@ By Leopard20
 ________
 This is a remake of the popular -but sadly abandoned- WW AI Menu mod for ARMA 3 by WindWalking, with lots of improvements and new features!
 
-[BI Forum Link](https://forums.bohemia.net/forums/topic/210548-all-in-one-ai-command-menu/)
+[BI Forum Thread](https://forums.bohemia.net/forums/topic/210548-all-in-one-ai-command-menu/)
 
 # Installation:
 1. [Download the latest build](https://github.com/leopard20/All-In-One-Command-Menu/releases/latest) from the Releases tab. 
@@ -14,14 +14,14 @@ This is a remake of the popular -but sadly abandoned- WW AI Menu mod for ARMA 3 
 
 # Want to contribute?
 You can contribute to the project by:
-1. Fixing bugs and making pull requests
-2. Submitting issues and bugs
-3. Submitting feature requests
+* Fixing bugs and making pull requests
+* Submitting issues and bugs
+* Submitting feature requests
 
 Fixing bugs is always welcome! If you want to add a new feature yourself, be sure to:
-1. Remember the limitations of the mod. This mod uses simple CommandingMenus and not all features can be implemented.
-2. Create a Feature Request in the issues section, and mention the changes you want to make.
-3. Make minimal changes to the original scripts (those made by WindWalking)
+* Remember the limitations of the mod. This mod uses simple CommandingMenus and not all features can be implemented.
+* Create a Feature Request in the issues section, and mention the changes you want to make.
+* Make minimal changes to the original scripts (those made by WindWalking)
 
 # Build Instructions:
 **Required Tools:**
