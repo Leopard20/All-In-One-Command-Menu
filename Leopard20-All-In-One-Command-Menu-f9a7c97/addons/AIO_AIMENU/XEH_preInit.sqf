@@ -51,7 +51,7 @@ Finally, to bind your function to a key, call CBA_fnc_addKeybind:
 */
 
 
-["AIO_useVoiceChat", "CHECKBOX", "Use Voice Chat", "All-In-One Command Menu" ,false, 1] call CBA_Settings_fnc_init;
+["AIO_useVoiceChat", "CHECKBOX", "Use Voice Chat", "All-In-One Command Menu" ,true, 1] call CBA_Settings_fnc_init;
 ["AIO_Init_Message", "CHECKBOX", "Show Initialization Message", "All-In-One Command Menu" ,true, 1] call CBA_Settings_fnc_init;
 ["AIO_Zeus_Enabled", "CHECKBOX", "Create Zeus Module", "All-In-One Command Menu" ,true, 1] call CBA_Settings_fnc_init;
 ["AIO_HC_Module_Enabled", "CHECKBOX", "Create High Command Module", "All-In-One Command Menu", false, 1] call CBA_Settings_fnc_init;
@@ -68,7 +68,7 @@ Finally, to bind your function to a key, call CBA_fnc_addKeybind:
 ["AIO_useExactStanceCopy", "LIST", "Copy My Stance Mode", "All-In-One Command Menu" ,[[true, false], ["Exact Stance", "Standard Stance"], 0], 1] call CBA_Settings_fnc_init;
 
 ["All-In-One Command Menu","AIO_AIMenu_initKey", "Show Menu", {_this call AIO_keyspressed}, "", [21, [false, false, false]], false] call CBA_fnc_addKeybind;
-["All-In-One Command Menu","AIO_follow_stance_key", "Toggle Copy My Stance", {if !(AIO_copy_my_stance) then {[] spawn AIO_copy_my_stance_fnc} else {AIO_copy_my_stance = false; {_x setUnitPos "AUTO"} forEach ((units group player) - [player]);}}, "", [DIK_C, [true, true, false]], false] call CBA_fnc_addKeybind;
+["All-In-One Command Menu","AIO_follow_stance_key", "Toggle Copy My Stance", {if !(AIO_copy_my_stance) then {[(groupSelectedUnits player)] spawn AIO_copy_my_stance_fnc} else {AIO_copy_my_stance = false; {_x setUnitPos "AUTO"} forEach ((units group player) - [player]);}}, "", [DIK_C, [true, true, false]], false] call CBA_fnc_addKeybind;
 ["All-In-One Command Menu","AIO_driver_move_forward_key", "Driver - Command Forward", {if (AIO_driver_mode_enabled && !AIO_Advanced_Ctrl) then {[0] call AIO_driver_call_fnc}}, {}, [DIK_W, [false, false, false]], false] call CBA_fnc_addKeybind;
 ["All-In-One Command Menu","AIO_driver_move_left_key", "Driver - Command Left", {if (AIO_driver_mode_enabled && !AIO_Advanced_Ctrl) then {[2] call AIO_driver_call_fnc}}, {}, [DIK_A, [false, false, false]], false] call CBA_fnc_addKeybind;
 ["All-In-One Command Menu","AIO_driver_move_right_key", "Driver - Command Right", {if (AIO_driver_mode_enabled && !AIO_Advanced_Ctrl) then {[3] call AIO_driver_call_fnc}}, {}, [DIK_D, [false, false, false]], false] call CBA_fnc_addKeybind;

@@ -33,7 +33,7 @@ class AIO_stanceSubMenu {
       command=-5;  
 	  class Params
 			{
-            expression = "if (AIO_copy_my_stance) then {AIO_copy_my_stance = false} else {[] spawn AIO_copy_my_stance_fnc}"; 
+            expression = "if (AIO_copy_my_stance) then {AIO_copy_my_stance = false} else {[(groupSelectedUnits player)] spawn AIO_copy_my_stance_fnc}"; 
 			};
       speechId=0;
     };
