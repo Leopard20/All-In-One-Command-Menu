@@ -5,8 +5,6 @@ _AIO_switchWeapon_fnc =
 	params ["_unit", "_weapon"];
 	_unit disableAI "TARGET";
 	_unit disableAI "AUTOTARGET";
-	_unit doTarget objNull;
-	_unit doWatch objNull;
 	_stance = stance _unit;
 	_ln_STAND_NON_Anim = "amovpercmstpsraswlnrdnon";
 	_ln_PRONE_NON_Anim = "amovppnemstpsraswrfldnon";

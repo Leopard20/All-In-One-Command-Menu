@@ -26,6 +26,7 @@ AIO_fireOnMyLead =
 		_tempGrp setCombatMode "YELLOW";
 		[_unit] joinSilent (group player);
 		_unit assignTeam _assignedTeam;
+		_unit enableAI "AUTOTARGET";
 		 deleteGroup _tempGrp;
 	} forEach AIO_unitsToHoldFire;
 	
@@ -112,7 +113,7 @@ switch (_mode) do
 			if ((_currentComm select _i) select 0 == 2) then {(_units select _i) doMove ((_currentComm select _i) select 1)};
 		};
 		{
-			if !(_x in AIO_unitsToHoldFire) then {AIO_unitsToHoldFire = AIO_unitsToHoldFire + [_x]};
+			AIO_unitsToHoldFire pushBackUnique _x;
 		} forEach _units;
 		_commStr = ["Wait for my shot.", "Fire on my lead.", "Open fire on my command."];
 		//player groupRadio "SentCeaseFireInsideGroup";
@@ -133,6 +134,7 @@ switch (_mode) do
 			_unit disableAI "AUTOCOMBAT";
 			_unit doWatch objNull;
 			_unit doTarget objNull;
+			(_units select _i) setVariable ["AIO_targetting_disabled", true];
 		};
 		private _behav = [];
 		for "_i" from 0 to ((count _units) -1) do
@@ -142,23 +144,24 @@ switch (_mode) do
 
 		_commStr = ["Cancel target.", "Disengage.", "Ignore all targets.", "Fire at my targets only.", "I'll call the targets."];
 		player groupChat (selectRandom _commStr);
-		AIO_targetting_disabled = true;
 		[_units, _behav] spawn {
 		params ["_units","_behav"];
 		private _remUnits = _units;
 		private _delUnits = [];
-		while {count _remUnits != 0 && AIO_targetting_disabled} do {
+		waitUntil {
+			sleep 1;
 			for "_i" from 0 to (count _units) do
 			{
-				if (!(alive (_units select _i)) OR (behaviour (_units select _i) == "COMBAT") OR (behaviour (_units select _i) != (_behav select _i))) then 
+				if (!(alive (_units select _i)) || (behaviour (_units select _i) == "COMBAT") || (behaviour (_units select _i) != (_behav select _i)) || !(_unit getVariable ["AIO_targetting_disabled", false])) then 
 				{
 					(_units select _i) enableAI "AUTOCOMBAT";
 					(_units select _i) enableAI "AUTOTARGET";
+					(_units select _i) setVariable ["AIO_targetting_disabled", false];
 					_delUnits = _delUnits + [(_units select _i)];
 				};
 			};
 			_remUnits = _remUnits - _delUnits;
-			sleep 1.5;
+			(count _remUnits == 0)
 		};
 		_commStr = ["Check for targets.", "Auto-targetting allowed.", "Target the enemy at will."];
 		player groupChat (selectRandom _commStr);
@@ -166,18 +169,19 @@ switch (_mode) do
 	};
 	case 4:
 	{
-		AIO_targetting_disabled = false;
 		for "_i" from 0 to ((count _units) -1) do
 		{
 			_unit = _units select _i;
 			_unit enableAI "AUTOCOMBAT";
 			_unit enableAI "AUTOTARGET";
+			_unit setVariable ["AIO_targetting_disabled", false];
 		};
 		_commStr = ["Check for targets.", "Auto-targetting allowed.", "Target the enemy at will."];
 		player groupChat (selectRandom _commStr);
 	};
 	case 5:
 	{
+		if (count _units == 0) then {_units = units group player - [player]};
 		for "_i" from 0 to ((count _units) -1) do
 		{
 			_unit = _units select _i;
@@ -185,13 +189,14 @@ switch (_mode) do
 			_tempGrp = createGroup (side _unit);
 			[_unit] joinSilent _tempGrp;
 			_unit enableAI "ALL";
-			if ((getPosATL _unit select 2) < 0) then {_unit setPosATL [getPosATL _unit select 0, getPosATL _unit select 1, 0];};
 			[_unit] joinSilent (group player);
 			_unit assignTeam _assignedTeam;
 			 deleteGroup _tempGrp;
 			 _unit setUnitPos "AUTO";
 		};
+		AIO_unitsToHoldFire = AIO_unitsToHoldFire - _units;
 		player doFollow player;
-		if !(isNil "AIO_fireOnMyLeadEvent") then {player removeEventHandler ["fired", AIO_fireOnMyLeadEvent]};
+		_EH = player getVariable ["AIO_fireOnMyLeadEvent", -1];
+		if (_EH != -1 && count AIO_unitsToHoldFire == 0) then {player removeEventHandler ["fired", _EH]};
 	};
 };

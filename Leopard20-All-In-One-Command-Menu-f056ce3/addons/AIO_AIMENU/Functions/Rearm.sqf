@@ -13,7 +13,7 @@ AIO_rearmList_fnc =
 	_rearmTargets = [];
 	{
 		private _unit = _x;
-		_allWeapons = nearestObjects [_unit, ["ReammoBox_F", "Car", "Tank", "Helicopter", "Plane"], 100];
+		_allWeapons = nearestObjects [_unit, ["ReammoBox_F", "Car", "Tank", "Helicopter", "Plane", "WeaponHolderSimulated","LandVehicle","CAManbase"], 100];
 		for "_i" from 0 to ((count _allWeapons) -1) do {
 			_cond = (count (weaponsItemsCargo (_allWeapons select _i)) > 0 OR count ((getMagazineCargo (_allWeapons select _i)) select 0) > 0);
 			if (!((_allWeapons select _i) in _rearmTargets) && _cond) then {
@@ -49,18 +49,16 @@ AIO_rearmList_fnc =
 AIO_getName_weapons_fnc = 
 {
 	private _unit = (_this select 0) select 0;
-	AIO_Rifle_subMenu = nil;
-	AIO_Hgun_subMenu = nil;
-	AIO_launcher_subMenu = nil;
-	private _allWeapons = nearestObjects [_unit, ["ReammoBox", "ReammoBox_F"], 200];
+	AIO_menuLoadingDone = false;
+	private _allWeapons = nearestObjects [_unit, ["ReammoBox", "ReammoBox_F", "WeaponHolderSimulated","LandVehicle","CAManbase"], 200];
 	_allWeapons = [_allWeapons,[],{player distance _x},"ASCEND"] call BIS_fnc_sortBy;
 	//_allWeapons = _allWeapons apply {((weaponsItemsCargo _x) select 0) select 0};
 	AIO_weaponType_subMenu =
 	[
-	["Take Weapon",true],
-	["Rifle", [2], "#USER:AIO_Rifle_subMenu", -5, [["expression", ""]], "1", "1"],
-	["Handgun", [3], "#USER:AIO_Hgun_subMenu", -5, [["expression", ""]], "1", "1"],
-	["Launcher", [4], "#USER:AIO_launcher_subMenu", -5, [["expression", ""]], "1", "1"]
+		["Take Weapon",true],
+		["Rifle", [2], "#USER:AIO_Rifle_subMenu", -5, [["expression", ""]], "1", "1"],
+		["Handgun", [3], "#USER:AIO_Hgun_subMenu", -5, [["expression", ""]], "1", "1"],
+		["Launcher", [4], "#USER:AIO_launcher_subMenu", -5, [["expression", ""]], "1", "1"]
 	];
 	AIO_nearRifle = [_allWeapons, count _allWeapons, 0] call AIO_getName_weapons;
 	AIO_Rifle_subMenu =
@@ -98,9 +96,10 @@ AIO_getName_weapons_fnc =
 			[(AIO_selectedunits select 0), AIO_nearLaunch select %1] execVM ""AIO_AIMENU\takeWeapon.sqf"" ']], '1', '1']", _i];
 			call compile _text;
 		};
+		if (_i == 12) then {AIO_menuLoadingDone = true};
 	};
 	[] spawn { 
-		waitUntil {!(isNil "AIO_Rifle_subMenu") && !(isNil "AIO_Hgun_subMenu") && !(isNil "AIO_launcher_subMenu")};
+		waitUntil {AIO_menuLoadingDone};
 		{
 		player groupSelectUnit [_x, true];
 		} forEach AIO_selectedunits;

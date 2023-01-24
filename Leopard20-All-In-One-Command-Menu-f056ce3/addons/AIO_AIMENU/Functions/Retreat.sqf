@@ -43,7 +43,7 @@ AIO_retreatMapCMD =
 	
 	{
 	_x spawn {
-		while {!(moveToCompleted _this) && (alive _this) && (currentCommand _this == "STOP")} do {sleep 1};
+		waitUntil {sleep 1; !(!(moveToCompleted _this) && (alive _this) && (currentCommand _this == "STOP"))};
 		[[_this], 0] execVM "AIO_AIMENU\sprintModeFull.sqf";
 		_this enableAI "AUTOCOMBAT";
 		_this enableAI "AUTOTARGET";

@@ -27,12 +27,8 @@ if (count _selectedUnits == 1) then {
 		_unit moveTo _tarPos;
 		_unit doWatch _target;
 		sleep 0.2;
-		while {!moveToCompleted _unit} do 
-		{
-			if (!alive _unit OR currentCommand _unit != "STOP") exitWith {};
-			sleep 1;
-		};
-	_unit doWatch objNull;
+		waitUntil {sleep 1; if (!alive _unit OR currentCommand _unit != "STOP") exitWith {}; (moveToCompleted _unit)};
+		_unit doWatch objNull;
 	};
 	_unit doMove (getPos _unit);
 	sleep 0.1;

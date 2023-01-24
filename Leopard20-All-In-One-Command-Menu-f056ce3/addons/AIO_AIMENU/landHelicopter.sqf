@@ -130,15 +130,19 @@ AIO_landHeli =
 	} else {_temp = (_taxiPos select 0)};
 	_script_land = [_heli, _temp] spawn AIO_Plane_Taxi_fnc;
 	waitUntil {scriptDone _script_land OR !alive _heli};
-	private _fuel = fuel _heli;
-	_heli setFuel 0;
+	
+	[_pilot, _heli] spawn {
+		params ["_pilot", "_heli"];
+		_pilot disableAI "MOVE";
+		waitUntil {sleep 1; currentCommand _pilot != "STOP" || vehicle _pilot != _heli || !alive _pilot};
+		_pilot enableAI "MOVE";
+	};
+	
 	sleep 2;
 	_heli setPos (_taxiPos select 0);
 	_heli setDir (_taxiPos select 1);
 	doStop _pilot;
 	deleteMarker _markerName;
-	while {currentCommand _pilot == "STOP" && vehicle _pilot == _heli && alive _pilot} do {sleep 2};
-	_heli setFuel _fuel;
 	};
 };
 

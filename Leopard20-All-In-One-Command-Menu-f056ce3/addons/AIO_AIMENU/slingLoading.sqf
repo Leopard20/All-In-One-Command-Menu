@@ -70,7 +70,8 @@ AIO_slingLoadFnc =
 	_resetDirFnc =
 	{
 		params ["_unit", "_cargo"];
-		private ["_newDir", "_dir", "_right", "_adjust", "_vd" , "_vehPos" , "_carPos", "_cond", "_multi"];
+		private ["_newDir", "_dir", "_right", "_vd" , "_vehPos" , "_carPos", "_txt"];
+		_unit setVariable ["AIO_resetDir_done", false];
 		_veh = vehicle _unit;
 		_vehPos = (getPos _veh);
 		_vehPos set [2, 0];
@@ -81,26 +82,23 @@ AIO_slingLoadFnc =
 		if (_newDir < 0) then {_newDir = 360 + _newDir}; //_dir range from 0 to 360
 		_relDir = _veh getRelDir _carPos;
 		_dir = getDir _veh;
-		_right = true;
-		_cond = false;
-		if ((_newDir - _dir) > 180 && (_newDir - _dir) < 360) then {_cond = true};
+		_right = 1;
 
-		if (_relDir > 180) then {
-			_right = false;
-		};
-		_adjust = true;
-		while {_adjust} do {
-		_multi = accTime;
-		if (_multi == 1) then {_multi = 1.6};
-		if (!(alive _veh) OR !(alive _unit) OR ((getPosATL _veh) select 2) < 8 OR (_newDir == _dir)) exitWith {};
-			if (_right) then {
-				_veh setDir ((getDir _veh) + 0.4*_multi/1.6);
-			} else {
-				_veh setDir ((getDir _veh) - 0.4*_multi/1.6);
+		if (_relDir > 180) then {_right = -1};
+		if (_newDir == _dir) exitWith {_unit setVariable ["AIO_resetDir_done", true]};
+		
+		_txt = format ["AIO_heli%1_rotation", ([_unit] call AIO_getUnitNumber)];
+		[_txt, "onEachFrame", {
+			params ["_unit", "_veh", "_newDir", "_right", "_txt"];
+			if (abs((round (getDir _veh)) - (round _newDir)) < 1 || !(alive _veh) OR !(alive _unit) OR ((getPosATL _veh) select 2) < 8) exitWith {
+				_unit setVariable ["AIO_resetDir_done", true];
+				if ((alive _veh) && (alive _unit) && ((getPosATL _veh) select 2) > 8) then {_veh setDir _newDir};
+				[_txt, "onEachFrame"] call BIS_fnc_removeStackedEventHandler;
 			};
-			sleep 0.01;
-			if ((round (getDir _veh)) == (round _newDir)) then {_adjust = false};
-		};
+			_multi = accTime;
+			if (_multi == 1) then {_multi = 1.6};
+			_veh setDir ((getDir _veh) + _right*0.4*_multi/1.6);
+		}, [_unit, _veh, _newDir, _right, _txt]] call BIS_fnc_addStackedEventHandler;
 	};
 
 	if (((getPosATL _veh) select 2) > 30) then {_inAir = true;};
@@ -148,8 +146,8 @@ AIO_slingLoadFnc =
 		_lastDir = _currentDir;
 		_currentDir = (vectorDirVisual _veh) select 2;
 	};
-	_script_handle = [_unit, _cargo] spawn _resetDirFnc;
-	waitUntil {(scriptDone _script_handle) OR (_veh getVariable ["AIO_Heli_SlingLoadingAborted", 0]) == 1 OR !(alive _veh) OR !(alive _cargo) OR !(alive _unit) OR (vehicle _unit == _unit)};
+	_script_handle = [_unit, _cargo] call _resetDirFnc;
+	waitUntil {(_unit getVariable ["AIO_resetDir_done", false]) OR (_veh getVariable ["AIO_Heli_SlingLoadingAborted", 0]) == 1 OR !(alive _veh) OR !(alive _cargo) OR !(alive _unit) OR (vehicle _unit == _unit)};
 	_failed = [] call _checkFail;
 	if ((_veh getVariable ["AIO_Heli_SlingLoadingAborted", 0]) == 1) exitWith {_veh setVariable ["AIO_Heli_SlingLoadingAborted", 0]; _unit doMove (getPos _unit);};
 	doStop _veh;
