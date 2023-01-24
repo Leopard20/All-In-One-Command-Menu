@@ -35,7 +35,11 @@ AIO_fireOnMyLead =
 		if ((_currentComm select _i) select 0 == 2) then {(AIO_unitsToHoldFire select _i) doMove ((_currentComm select _i) select 1)};
 	};
 	player groupRadio format["SentOpenFire%1",(selectRandom _commStr)];
-	player removeEventHandler ["fired", AIO_fireOnMyLeadEvent];
+	[] spawn {
+		_EH = player getVariable "AIO_fireOnMyLeadEvent";
+		player removeEventHandler ["fired", _EH];
+		player setVariable ["AIO_fireOnMyLeadEvent", -1];
+	};
 	AIO_unitsToHoldFire = [];
 };
 
@@ -114,7 +118,11 @@ switch (_mode) do
 		//player groupRadio "SentCeaseFireInsideGroup";
 		player groupRadio "SentHoldFireInCombat";
 		player groupChat (selectRandom _commStr);
-		AIO_fireOnMyLeadEvent = player addeventhandler ["fired",{_this call AIO_fireOnMyLead}];
+		_EH = player getVariable ["AIO_fireOnMyLeadEvent", -1];
+		if (_EH == -1) then {
+			_EH = player addeventhandler ["fired",{_this call AIO_fireOnMyLead}];
+			player setVariable ["AIO_fireOnMyLeadEvent", _EH];
+		};
 	};
 	case 3:
 	{
