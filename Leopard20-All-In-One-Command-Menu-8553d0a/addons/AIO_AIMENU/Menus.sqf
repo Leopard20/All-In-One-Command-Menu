@@ -90,8 +90,10 @@ AIO_flyAround_subMenu =
 AIO_switchweapon_subMenu =
 [
 	["Switch Weapon",true],
+	["Reload", [], "", -5, [["expression", "[(groupSelectedUnits player), 0] execVM ""AIO_AIMENU\switchweapon.sqf"" "]], "1", "1"],
 	["Rifle", [2], "", -5, [["expression", "[(groupSelectedUnits player), 1] execVM ""AIO_AIMENU\switchweapon.sqf"" "]], "1", "1"],
-	["Handgun", [3], "", -5, [["expression", "[(groupSelectedUnits player), 2] execVM ""AIO_AIMENU\switchweapon.sqf"" "]], "1", "1"]
+	["Handgun", [3], "", -5, [["expression", "[(groupSelectedUnits player), 2] execVM ""AIO_AIMENU\switchweapon.sqf"" "]], "1", "1"],
+	["Launcher", [4], "", -5, [["expression", "[(groupSelectedUnits player), 4] execVM ""AIO_AIMENU\switchweapon.sqf"" "]], "1", "1"]
 ];
 
 AIO_unitTargeting_subMenu =
