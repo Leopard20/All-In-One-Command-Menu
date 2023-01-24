@@ -4,7 +4,7 @@
 AIO_driver_move = {
 	params ["_keyPressed", "_driver"];
 	private ["_veh", "_dir", "_pos", "_displacement", "_movePos", "_distance", "_stop", "_angl"];
-	_veh = vehicle player;
+	_veh = vehicle AIO_selectedDriver;
 	if (_veh isKindOf "Air") then {_distance = 2000; _stop = 100} else {
 		if (AIO_driver_urban_mode) then {_distance = 70} else {_distance = 200};
 		_stop = (speed _veh)/3.6;
@@ -47,15 +47,16 @@ AIO_driver_move = {
 	};
 	_movePos = _pos vectorAdd _displacement;
 	if (AIO_use_HC_driver) then {
-		_veh commandMove _movePos; AIO_driverGroup setSpeedMode "FULL"
+		AIO_selectedDriver commandMove _movePos; AIO_driverGroup setSpeedMode "FULL"
 	} else {
 		if (AIO_use_doMove_command) then {
-			if (player == effectiveCommander _veh) then {_veh moveTo _movePos} else {_veh doMove _movePos};
+			if (player == effectiveCommander _veh) then {_veh moveTo _movePos} else {AIO_selectedDriver doMove _movePos};
 		} else {
-			_driver commandMove _movePos;
+			AIO_selectedDriver commandMove _movePos;
 		};
 	};
 };
+
 
 //Called by Menu -> Vehicle Commands -> Create Driver; Creates a driver
 AIO_create_HC_Driver =

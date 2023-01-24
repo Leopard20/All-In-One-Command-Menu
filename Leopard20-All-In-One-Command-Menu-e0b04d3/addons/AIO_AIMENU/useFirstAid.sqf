@@ -3,7 +3,7 @@ private ["_unit","_target", "_cover", "_tarPos", "_combat", "_pos", "_dest", "_c
 _unit = _this select 0;
 _target = _this select 1;
 _cover = _this select 2;
-
+_behav = behaviour _unit;
 _target setVariable["AIO_beingHealed",1];
 
 if (_cover == 1) then {_combat = true} else {_combat = false}; //enables combat healing in Combat Modes other than "Combat"
@@ -33,7 +33,7 @@ _unit assignTeam _assignedTeam1;
 _tarPos = getPos _target;
 _vehT = vehicle _target;
 
-if (vehicle _target != _target && _target != player) then {
+if (vehicle _target != _target && !(isPlayer _target)) then {
 	doGetOut _target; 
 	waitUntil {!alive _target OR vehicle _target == _target};
 	sleep 1;
@@ -104,7 +104,7 @@ if (alive _unit && _unit distance _tarPos < 2.5) then {
 };
 sleep 2;
 _unit doWatch objNull;
-if (_target != player) then {
+if !(isPlayer _target) then {
 	_target forcespeed -1;
 	if (_target getVariable ["AIO_unitInCover", 0] == 0) then {
 		_target doFollow player;

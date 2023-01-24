@@ -1,6 +1,5 @@
 params ["_unit", "_AmmoBoxA"];
 private ["_tarPos", "_weapon", "_AmmoBox", "_size", "_modelPos", "_weaponName"];
-
 doStop _unit;
 sleep 0.2;
 _AmmoBox = _AmmoBoxA select 1;
@@ -19,6 +18,9 @@ if (_weaponName == "") then {
 };
 //if (isNil "_weaponName") then {_weaponName = ""};
 if (_weaponName == "") then {_weaponName = "weapon"};
+if (AIO_useVoiceChat) then {
+	player groupRadio "SentCmdTakeWeapon";
+};
 player groupChat (format ["Take that %1.", _weaponName]);
 while {!moveToCompleted _unit OR _unit distance _tarPos > (_size/3 + 5)} do 
 {
